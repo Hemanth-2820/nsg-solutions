@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import heroBg from '../../assets/hero_bg.png';
 
 const VerticalCarousel = () => {
   const col1 = [
@@ -9,49 +10,50 @@ const VerticalCarousel = () => {
     { img: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=500&q=80", title: "Digital Marketing" },
     { img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500&q=80", title: "Smart Classroom" }
   ];
-  
+
   const col2 = [
     { img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80", title: "E-Commerce" },
     { img: "https://images.unsplash.com/photo-1557992260-ec58e38d363c?w=500&q=80", title: "Surveillance" },
-    { img: "https://images.unsplash.com/photo-1538108149393-cebb47ac17e9?w=500&q=80", title: "Healthcare" },
-    { img: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=500&q=80", title: "EduQuiz" }
+    { img: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&q=80", title: "Healthcare" },
+    { img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=500&q=80", title: "EduQuiz" }
   ];
 
   return (
-    <div className="relative w-full h-[600px] overflow-hidden flex gap-4 justify-center items-center rounded-2xl shadow-2xl p-4 bg-white/5 backdrop-blur-sm border border-white/10">
-      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-[#6ca0d6] to-transparent z-10 pointer-events-none"></div>
-      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#6ca0d6] to-transparent z-10 pointer-events-none"></div>
+    <div className="relative w-full h-[650px] overflow-hidden flex gap-6 p-2 lg:p-6 bg-white/5 backdrop-blur-[20px] rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
+      {/* Decorative Orbs */}
+      <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/20 blur-[80px] rounded-full"></div>
+      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-500/20 blur-[80px] rounded-full"></div>
 
-      <motion.div 
+      <motion.div
         className="flex flex-col w-1/2"
         animate={{ y: ["0%", "-50%"] }}
-        transition={{ repeat: Infinity, ease: "linear", duration: 15 }}
+        transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
       >
         {[...col1, ...col1].map((item, i) => (
-          <div key={`c1-${i}`} className="w-full pb-4">
-            <div className="relative w-full h-48 rounded-xl overflow-hidden shadow-md group">
-              <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 z-10">
-                 <span className="text-white font-bold font-sans text-lg tracking-wide inline-block">{item.title}</span>
+          <div key={`c1-${i}`} className="w-full pb-6">
+            <div className="relative w-full h-52 rounded-3xl overflow-hidden shadow-2xl group border border-white/5">
+              <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+              <div className="absolute bottom-5 left-6">
+                <span className="text-white font-bold text-xl tracking-tight opacity-90 group-hover:opacity-100 transition-opacity">{item.title}</span>
               </div>
             </div>
           </div>
         ))}
       </motion.div>
 
-      <motion.div 
-        className="flex flex-col w-1/2"
-        animate={{ y: ["0%", "-50%"] }}
-        transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
+      <motion.div
+        className="flex flex-col w-1/2 pt-12"
+        animate={{ y: ["-50%", "0%"] }}
+        transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
       >
         {[...col2, ...col2].map((item, i) => (
-          <div key={`c2-${i}`} className="w-full pb-4">
-            <div className="relative w-full h-48 rounded-xl overflow-hidden shadow-md group">
-              <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 z-10">
-                 <span className="text-white font-bold font-sans text-lg tracking-wide inline-block">{item.title}</span>
+          <div key={`c2-${i}`} className="w-full pb-6">
+            <div className="relative w-full h-52 rounded-3xl overflow-hidden shadow-2xl group border border-white/5">
+              <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+              <div className="absolute bottom-5 left-6">
+                <span className="text-white font-bold text-xl tracking-tight opacity-90 group-hover:opacity-100 transition-opacity">{item.title}</span>
               </div>
             </div>
           </div>
@@ -66,92 +68,133 @@ const HeroSection = () => {
 
   const slides = [
     {
-      preTitle: "NSG Solutions",
-      title: "Delivering Innovative, High-Quality, and Affordable Solutions",
+      preTitle: "Transforming Business",
+      title: "Delivering Innovative Digital Solutions",
+      highlight: "Digital Solutions",
       btnText: "KNOW MORE",
       link: "/services"
     },
     {
-      preTitle: "Our Vision",
-      title: "Becoming Your Trusted Global Technology Partner",
+      preTitle: "Global Excellence",
+      title: "Your Trusted Technology Partner",
+      highlight: "Technology Partner",
       btnText: "EXPLORE SERVICES",
       link: "/services"
     },
     {
-      preTitle: "Core Expertise",
-      title: "Leading IT Services, Video Production, and Digital Marketing",
+      preTitle: "Multi-Vertical Expertise",
+      title: "Impactful IT and Media Strategies",
+      highlight: "Media Strategies",
       btnText: "VIEW PORTFOLIO",
       link: "/portfolio"
     }
   ];
 
-  // Auto-slide functionality
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 8000);
     return () => clearInterval(timer);
   }, [slides.length]);
 
   return (
-    <section className="relative w-full min-h-screen flex items-center bg-[#6ca0d6] overflow-hidden pt-24 md:pt-0">
-      <div className="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/hexellence.png')] opacity-30 mix-blend-multiply transition-all duration-1000"></div>
+    <section className="relative w-full min-h-screen flex items-center bg-[#050b18] overflow-hidden pt-28 md:pt-0">
 
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full relative z-10 flex flex-col md:flex-row justify-between items-center h-full gap-10">
-        
-        {/* Dynamic Text Column */}
-        <div className="md:w-1/2 flex flex-col items-start xl:pt-16 mt-16 md:mt-0 relative min-h-[300px]">
+      {/* PREMIUM BACKGROUND LAYER */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0"
+        >
+          <img
+            src={heroBg}
+            alt="NSG Background"
+            className="w-full h-full object-cover opacity-60 mix-blend-soft-light filter brightness-75 scale-110"
+          />
+        </motion.div>
+
+        {/* Dynamic Mesh Gradient Glows */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#1e3a8a]/30 blur-[150px] rounded-full mix-blend-screen animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#5bb8e4]/20 blur-[150px] rounded-full mix-blend-screen animate-pulse delay-700"></div>
+
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050b18] via-[#050b18]/80 to-[#050b18]/40"></div>
+
+        {/* High-Tech Grid Pattern Overlay */}
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay"></div>
+      </div>
+
+      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full relative z-10 flex flex-col lg:flex-row justify-between items-center h-full gap-20">
+
+        {/* TEXT CONTENT COLUMN */}
+        <div className="lg:w-1/2 flex flex-col justify-center items-start min-h-[500px] lg:min-h-screen">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-              className="w-full flex flex-col items-start absolute top-0"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full flex flex-col items-start py-20"
             >
-              <div className="hidden md:flex flex-col items-start mb-6">
-                <span className="text-white text-[16px] font-bold tracking-widest mb-1.5">{slides[currentSlide].preTitle.split(' ')[0]}</span>
-                <div className="w-[3rem] h-[3px] bg-white mb-1.5"></div>
-                <span className="text-white text-[16px] font-bold tracking-widest">{slides[currentSlide].preTitle.split(' ').slice(1).join(' ')}</span>
+              {/* Animated Label */}
+              <div className="flex items-center gap-4 mb-8 overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: 60 }}
+                  className="h-[3px] bg-blue-500 rounded-full"
+                ></motion.div>
+                <span className="text-white text-[14px] font-bold tracking-[0.4em] uppercase opacity-70">
+                  {slides[currentSlide].preTitle}
+                </span>
               </div>
 
-              <div className="flex flex-col mb-10 w-full max-w-[900px]">
-                <h1 className="text-[3rem] md:text-[4rem] lg:text-[4.5rem] xl:text-[5.5rem] font-infosys-heading text-white leading-[1.05] tracking-tight drop-shadow-sm pb-2">
-                  {slides[currentSlide].title}
-                </h1>
-              </div>
+              {/* Bold Typography Title */}
+              {/* Bold Typography Title - Sleek & Compact */}
+              <h1 className="text-[2.2rem] md:text-[3rem] lg:text-[3.8rem] xl:text-[4.5rem] font-extrabold text-white leading-[1.05] tracking-tight mb-12">
+                {slides[currentSlide].title.split(' ').map((word, index) => (
+                  <span key={index} className={slides[currentSlide].highlight.includes(word) ? "block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-blue-600" : "inline-block mr-4"}>
+                    {word}{' '}
+                  </span>
+                ))}
+              </h1>
 
-              <Link to={slides[currentSlide].link} className="btn-outline border-[2px] mt-4 shadow-lg hover:shadow-xl cursor-pointer">
-                {slides[currentSlide].btnText}
-              </Link>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Visual Column */}
-        <div className="md:w-[45%] lg:w-[45%] xl:w-[40%] flex justify-center items-center md:h-[600px] relative mt-10 md:mt-0 w-full mb-20 md:mb-0">
+        {/* VISUAL CAROUSEL COLUMN */}
+        <div className="lg:w-[45%] xl:w-[42%] w-full flex justify-center items-center py-10 lg:py-0">
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
-            className="w-full h-full min-h-[400px]"
+            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full relative group"
           >
+            {/* Background Glow behind Carousel */}
+            <div className="absolute inset-0 bg-blue-600/30 blur-[120px] rounded-full scale-75 group-hover:scale-100 transition-transform duration-1000"></div>
+
             <VerticalCarousel />
           </motion.div>
         </div>
       </div>
 
-      {/* Interactive Pagination Dots */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
+      {/* MODERN PAGINATION INDICATORS */}
+      <div className="absolute bottom-12 right-12 flex flex-col gap-6 z-20">
         {slides.map((_, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             onClick={() => setCurrentSlide(i)}
-            className={`w-4 h-4 rounded-full cursor-pointer transition-all duration-300 flex items-center justify-center ${currentSlide === i ? 'bg-white shadow-[0_0_15px_rgba(255,255,255,0.8)] scale-110' : 'border-2 border-white/60 hover:border-white opacity-60 hover:opacity-100 scale-100'}`}
-          ></div>
+            className="group cursor-pointer flex items-center gap-4"
+          >
+            <span className={`text-[10px] font-bold tracking-widest transition-all duration-500 ${currentSlide === i ? 'text-white opacity-100' : 'text-white/30 group-hover:text-white/60 opacity-0 group-hover:opacity-100'}`}>
+              0{i + 1}
+            </span>
+            <div className={`h-16 w-[3px] rounded-full transition-all duration-700 ${currentSlide === i ? 'bg-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.8)] h-24' : 'bg-white/10 group-hover:bg-white/30'}`}></div>
+          </div>
         ))}
       </div>
+
     </section>
   );
 };

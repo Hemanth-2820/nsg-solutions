@@ -46,7 +46,7 @@ const Navbar = () => {
     <nav className={`fixed w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-gradient-to-br from-[#1e3a8a]/95 to-[#0f172a]/95 backdrop-blur-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3' : 'bg-transparent py-6'}`}>
       <div className="max-w-[1500px] mx-auto px-6 w-full relative">
         <div className="flex items-center justify-between">
-          
+
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 z-[110] relative group flex items-center">
             <img src={logo} alt="NSG Solutions Logo" className="h-[46px] w-auto relative z-10 brightness-[1.1] drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]" />
@@ -55,8 +55,8 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex flex-1 justify-center items-center space-x-10">
             {mainLinks.map((link) => (
-              <div 
-                key={link.name} 
+              <div
+                key={link.name}
                 className="relative group h-full py-4 flex items-center"
                 onMouseEnter={() => link.hasDropdown && setIsServicesHovered(true)}
                 onMouseLeave={() => link.hasDropdown && setIsServicesHovered(false)}
@@ -83,9 +83,9 @@ const Navbar = () => {
                       >
                         <div className="py-2">
                           {serviceSubLinks.map((sub, i) => (
-                            <Link 
-                              key={i} 
-                              to="/services" 
+                            <Link
+                              key={i}
+                              to="/services"
                               className="block px-6 py-3 text-sm text-[#334155] font-medium hover:bg-[#f8fafc] hover:text-[#007cc3] hover:pl-8 transition-all duration-300 relative group/sub"
                             >
                               {sub}
@@ -106,16 +106,16 @@ const Navbar = () => {
             <button className="text-white hover:text-[#5bb8e4] transition-colors hidden lg:block group">
               <Search size={22} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
             </button>
-            
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
+
+            <button
+              onClick={() => setIsOpen(!isOpen)}
               className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#1e3a8a] transition-all duration-300 shadow-sm"
             >
-               {isOpen ? <X size={24} strokeWidth={2.5} /> : <div className="flex flex-col gap-[5px]">
-                  <span className="block w-5 h-[2px] bg-current"></span>
-                  <span className="block w-5 h-[2px] bg-current"></span>
-                  <span className="block w-5 h-[2px] bg-current"></span>
-               </div>}
+              {isOpen ? <X size={24} strokeWidth={2.5} /> : <div className="flex flex-col gap-[5px]">
+                <span className="block w-5 h-[2px] bg-current"></span>
+                <span className="block w-5 h-[2px] bg-current"></span>
+                <span className="block w-5 h-[2px] bg-current"></span>
+              </div>}
             </button>
           </div>
 
@@ -123,7 +123,7 @@ const Navbar = () => {
       </div>
 
       {/* Fullscreen Mobile Navigation Overlay */}
-      <div 
+      <div
         className={`fixed inset-0 bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] z-[105] transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen pointer-events-none"></div>
