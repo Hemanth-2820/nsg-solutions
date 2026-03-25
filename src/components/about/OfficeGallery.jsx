@@ -1,4 +1,9 @@
 import React from 'react';
+import Meetingroom from "./Meetingroom.jpg";
+import Workingarea from "./Workingarea.jpg";
+import goal from "./goal.jpg";
+
+const images = [Meetingroom, Workingarea, goal];
 
 const OfficeGallery = () => {
   return (
@@ -17,9 +22,14 @@ const OfficeGallery = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="w-full h-[300px] bg-white/5 rounded-2xl flex items-center justify-center border border-dashed border-white/20 hover:bg-white/10 hover:border-[#5bb8e4] hover:-translate-y-2 transition-all duration-500 cursor-pointer overflow-hidden">
-               <span className="text-[#cbd5e1] font-bold tracking-widest text-[11px] uppercase">[ OFFICE / WORK ENVIRONMENT ]</span>
+          {images.map((img, index) => (
+            <div key={index} className="group overflow-hidden rounded-2xl">
+              <img
+                src={img} 
+                alt="Office"
+                className="w-full h-[300px] object-cover 
+                group-hover:scale-110 transition-transform duration-[1.5s] ease-out"
+              />
             </div>
           ))}
         </div>
