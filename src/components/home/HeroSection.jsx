@@ -4,17 +4,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const VerticalCarousel = () => {
   const col1 = [
-    { img: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=500&q=80", title: "Cloud Architecture" },
-    { img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80", title: "Enterprise Dev" },
-    { img: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=500&q=80", title: "Data Analytics" },
-    { img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&q=80", title: "Cybersecurity" }
+    { img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&q=80", title: "IT Services" },
+    { img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&q=80", title: "Video Production" },
+    { img: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=500&q=80", title: "Digital Marketing" },
+    { img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500&q=80", title: "Smart Classroom" }
   ];
   
   const col2 = [
-    { img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=500&q=80", title: "AI & Machine Learning" },
-    { img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&q=80", title: "IoT Integraion" },
-    { img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=500&q=80", title: "UI/UX Engineering" },
-    { img: "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=500&q=80", title: "IT Consulting" }
+    { img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80", title: "E-Commerce" },
+    { img: "https://images.unsplash.com/photo-1557992260-ec58e38d363c?w=500&q=80", title: "Surveillance" },
+    { img: "https://images.unsplash.com/photo-1538108149393-cebb47ac17e9?w=500&q=80", title: "Healthcare" },
+    { img: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=500&q=80", title: "EduQuiz" }
   ];
 
   return (
@@ -66,22 +66,22 @@ const HeroSection = () => {
 
   const slides = [
     {
-      preTitle: "Navigate your next",
-      title: "Architecting the Future of Digital, Intelligence, and Innovation",
+      preTitle: "NSG Solutions",
+      title: "Delivering Innovative, High-Quality, and Affordable Solutions",
       btnText: "KNOW MORE",
       link: "/services"
     },
     {
-      preTitle: "AI & Data Engineering",
-      title: "Empowering Enterprises with Actionable Data Intelligence",
-      btnText: "EXPLORE AI",
-      link: "/solutions"
+      preTitle: "Our Vision",
+      title: "Becoming Your Trusted Global Technology Partner",
+      btnText: "EXPLORE SERVICES",
+      link: "/services"
     },
     {
-      preTitle: "Cloud Transformation",
-      title: "Seamless Scalability for the Next Generation of Apps",
-      btnText: "DISCOVER CLOUD",
-      link: "/services"
+      preTitle: "Core Expertise",
+      title: "Leading IT Services, Video Production, and Digital Marketing",
+      btnText: "VIEW PORTFOLIO",
+      link: "/portfolio"
     }
   ];
 

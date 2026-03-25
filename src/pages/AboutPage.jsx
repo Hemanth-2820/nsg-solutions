@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Target, Flag, Users, Activity, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { gsap } from 'gsap';
+import FounderSection from '../components/about/FounderSection';
+import TeamSection from '../components/about/TeamSection';
+import OfficeGallery from '../components/about/OfficeGallery';
 
 const InnerPageHero = ({ title, subtitle, bgImage }) => (
   <section className="relative w-full h-[600px] flex items-center bg-[#111]">
@@ -119,6 +122,11 @@ const AboutPage = () => {
             </div>
          </div>
       </section>
+
+      {/* Placeholders handled by the Developer (Rahul) */}
+      <FounderSection />
+      <TeamSection />
+      <OfficeGallery />
     </div>
   );
 };
