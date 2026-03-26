@@ -9,18 +9,18 @@ export default function ClientAuth() {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [message, setMessage] = useState({ type: '', text: '' });
-  
+
   const navigate = useNavigate();
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     setMessage({ type: '', text: '' });
-    
+
     // Check against localStorage or a demo credential
     const savedUser = JSON.parse(localStorage.getItem('nsg_client_user'));
-    
-    if ((savedUser && email === savedUser.email && password === savedUser.password) || 
-        (email === 'demo@nsg.com' && password === 'demo123')) {
+
+    if ((savedUser && email === savedUser.email && password === savedUser.password) ||
+      (email === 'demo@nsg.com' && password === 'demo123')) {
       navigate('/submit-review');
     } else {
       setMessage({ type: 'error', text: 'Invalid email or password. Please try again.' });
@@ -30,11 +30,11 @@ export default function ClientAuth() {
   const handleSignupSubmit = (e) => {
     e.preventDefault();
     setMessage({ type: '', text: '' });
-    
+
     // Save to localStorage
     const newUser = { fullName, email, password };
     localStorage.setItem('nsg_client_user', JSON.stringify(newUser));
-    
+
     // Switch to login 
     setIsLogin(true);
     setPassword('');
