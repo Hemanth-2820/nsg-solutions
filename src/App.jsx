@@ -16,6 +16,11 @@ import ClientLoginPage from './pages/ClientLoginPage';
 import SubmitReviewPage from './pages/SubmitReviewPage';
 import BlogPage from './pages/BlogPage';
 
+import ITServices from './components/solutions/ITServices';
+import VideoProduction from './components/solutions/VideoProduction';
+import DigitalMarketing from './components/solutions/DigitalMarketing';
+import Publishing from './components/solutions/Publishing';
+
 import { ReactLenis } from '@studio-freight/react-lenis';
 
 const ScrollToTop = () => {
@@ -53,6 +58,12 @@ function App() {
               <Route path="/client-login" element={<ClientLoginPage />} />
               <Route path="/submit-review" element={<SubmitReviewPage />} />
               <Route path="/blog" element={<BlogPage />} />
+              
+              {/* Solution sub-pages */}
+              <Route path="/solutions/itservices" element={<ITServices />} />
+              <Route path="/solutions/videoproduction" element={<VideoProduction />} />
+              <Route path="/solutions/digitalmarketing" element={<DigitalMarketing />} />
+              <Route path="/solutions/publishing" element={<Publishing />} />
             </Routes>
           </main>
           <Footer />

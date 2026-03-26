@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const solutionsData = [
   { 
@@ -59,23 +60,131 @@ const solutionsData = [
   }
 ];
 
+const projectsData = [
+  { id: 1, title: 'IT Services', img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80', path: '/solutions/itservices' },
+  { id: 2, title: 'Video Production', img: 'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=800&q=80', path: '/solutions/videoproduction' },
+  { id: 3, title: 'Digital Marketing', img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80', path: '/solutions/digitalmarketing' },
+  { id: 4, title: 'Publishing', img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&q=80', path: '/solutions/publishing' }
+];
+
 const TCSStyleSolutions = () => {
   const scrollRef = useRef(null);
+  const sectionRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Root Page level swipe navigation implementation logic
+  useEffect(() => {
+    let isNavigated = false;
+    let touchStartX = 0;
+    const mountTime = Date.now();
+    
+    const handleSwipeNavigation = (direction) => {
+      if (isNavigated) return;
+      // Critical block: Trackpad inertia keeps firing scroll events for ~1000ms after the physical swipe ends.
+      // Ignoring wheel/swipe events instantly after mounting prevents 'skipping' through multiple pages at once!
+      if (Date.now() - mountTime < 1000) return;
+
+      isNavigated = true;
+      if (direction === 'next') navigate('/solutions/itservices');
+      if (direction === 'prev') navigate('/services');
+    };
+
+    const handleSwipeWheel = (e) => {
+      // Vital: If user is actively hovering over our inner horizontal scroll 
+      // container, return instantly to block sudden unexpected routing behavior!
+      if (scrollRef.current && scrollRef.current.contains(e.target)) return;
+
+      if (Math.abs(e.deltaX) > 40 && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        if (e.deltaX > 0) handleSwipeNavigation('next');
+        else handleSwipeNavigation('prev');
+      }
+    };
+
+    const handleSwipeTouchStart = (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    };
+    
+    const handleSwipeTouchEnd = (e) => {
+        if (scrollRef.current && scrollRef.current.contains(e.target)) return;
+
+        const touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) handleSwipeNavigation('next');
+        else if (touchEndX > touchStartX + 50) handleSwipeNavigation('prev');
+    };
+
+    window.addEventListener('wheel', handleSwipeWheel, { passive: true });
+    window.addEventListener('touchstart', handleSwipeTouchStart, { passive: true });
+    window.addEventListener('touchend', handleSwipeTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleSwipeWheel);
+      window.removeEventListener('touchstart', handleSwipeTouchStart);
+      window.removeEventListener('touchend', handleSwipeTouchEnd);
+    };
+  }, [navigate]);
+
+  useEffect(() => {
+    // Find the 'Scroll to explore' text element from the Hero section
+    // We attach the event listener here to strictly adhere to the instruction
+    // of ONLY modifying the src/components/solutions directory.
+    const spans = document.querySelectorAll('span');
+    let scrollButtonContainer = null;
+    
+    for (const span of Array.from(spans)) {
+      if (span.textContent.trim().toLowerCase() === 'scroll to explore') {
+        scrollButtonContainer = span.parentElement;
+        break;
+      }
+    }
+
+    const handleScrollClick = () => {
+      if (sectionRef.current) {
+        // Native scroll into view cleanly respecting scroll-margin-top
+        sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+
+    if (scrollButtonContainer) {
+        scrollButtonContainer.style.cursor = 'pointer';
+        scrollButtonContainer.style.pointerEvents = 'auto'; // Ensure it captures clicks
+        scrollButtonContainer.addEventListener('click', handleScrollClick);
+    }
+
+    return () => {
+      if (scrollButtonContainer) {
+        scrollButtonContainer.removeEventListener('click', handleScrollClick);
+        scrollButtonContainer.style.cursor = '';
+      }
+    };
+  }, []);
 
   const scrollLeft = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: -400, behavior: 'smooth' });
+    if (scrollRef.current && scrollRef.current.firstElementChild) {
+        const cardWidth = scrollRef.current.firstElementChild.clientWidth;
+        const gap = parseInt(window.getComputedStyle(scrollRef.current).gap) || 24;
+        scrollRef.current.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
+    }
   };
 
   const scrollRight = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: 400, behavior: 'smooth' });
+    if (scrollRef.current && scrollRef.current.firstElementChild) {
+        const cardWidth = scrollRef.current.firstElementChild.clientWidth;
+        const gap = parseInt(window.getComputedStyle(scrollRef.current).gap) || 24;
+        scrollRef.current.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
+    }
   };
 
   return (
-    <section className="bg-white py-24 pb-32">
+    <>
+      <section 
+        ref={sectionRef} 
+        className="bg-white pt-4 pb-8 relative" 
+        style={{ scrollMarginTop: '80px' }}
+      >
       <div className="max-w-[1600px] mx-auto px-6 lg:px-12">
         
         {/* Header exact match to TCS layout */}
-        <div className="flex justify-between items-center mb-10 w-full">
+        <div className="flex justify-between items-center mb-4 w-full">
             <h2 className="text-[2.5rem] md:text-[3.2rem] text-[#111] font-sans font-light tracking-tight">
                 Our solutions
             </h2>
@@ -102,7 +211,7 @@ const TCSStyleSolutions = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ delay: index * 0.1, duration: 0.6 }}
-                    className="min-w-[85vw] md:min-w-[380px] h-[520px] rounded-[1.2rem] relative overflow-hidden flex-shrink-0 snap-start group cursor-pointer"
+                    className="w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(25%-18px)] h-[380px] md:h-[400px] lg:h-[420px] xl:h-[440px] rounded-[1.2rem] relative overflow-hidden flex-shrink-0 snap-start group cursor-pointer"
                 >
                     {/* Background Image Image */}
                     <img 
@@ -118,11 +227,11 @@ const TCSStyleSolutions = () => {
                     <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                     {/* Content Block forced to bottom */}
-                    <div className="absolute bottom-0 left-0 w-full p-8 md:p-10 z-20 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                        <h3 className="text-white text-[1.8rem] md:text-[2.2rem] font-sans font-medium mb-3 tracking-tight">
+                    <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 z-20 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                        <h3 className="text-white text-[1.5rem] md:text-[1.8rem] lg:text-[2rem] font-sans font-medium mb-2 tracking-tight">
                             {item.title}
                         </h3>
-                        <p className="text-white/80 text-[1.05rem] md:text-[1.1rem] font-light leading-[1.6]">
+                        <p className="text-white/80 text-[0.95rem] md:text-[1rem] font-light leading-[1.6]">
                             {item.desc}
                         </p>
                     </div>
@@ -139,7 +248,57 @@ const TCSStyleSolutions = () => {
           display: none;
         }
       `}} />
-    </section>
+      </section>
+
+      <section className="bg-white border-t border-gray-100 pt-10 pb-24 px-6 md:px-12">
+        <div className="max-w-[1500px] mx-auto font-sans">
+            <div className="flex items-center gap-4 mb-6">
+                <div className="w-8 h-[2px] bg-[#1e3a8a]"></div>
+                <span className="text-[#1e3a8a] font-bold tracking-[0.3em] text-[11px] uppercase">what we did</span>
+            </div>
+            <h2 className="text-[2.8rem] md:text-[3.5rem] font-infosys-heading font-medium tracking-tight mb-16 leading-tight text-[#111] capitalize">
+                projects we had done till now
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {projectsData.map((project, idx) => (
+                  <Link to={project.path} key={project.id} className="block w-full outline-none">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-50px" }}
+                        transition={{ delay: idx * 0.1, duration: 0.6 }}
+                        // Swapped portrait aspect-[3/4] to landscape aspect-video / aspect-[4/3] to look great in 2-column spread.
+                        className="relative w-full aspect-video md:aspect-[4/3] lg:aspect-[16/10] rounded-2xl overflow-hidden group cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300"
+                    >
+                        {/* Background Image */}
+                        <img 
+                            src={project.img} 
+                            alt={project.title} 
+                            className="absolute inset-0 w-full h-full object-cover transform scale-[1.03] group-hover:scale-[1.12] transition-transform duration-[1.5s] ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+                        />
+
+                        {/* Gradient Overlay for Readability */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90"></div>
+                        
+                        {/* Title text resting at bottom */}
+                        <div className="absolute bottom-8 left-8 right-8 z-20 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                            <h3 className="text-white text-[1.4rem] md:text-[1.6rem] font-sans font-medium tracking-tight leading-snug">
+                                {project.title}
+                            </h3>
+                            <div className="mt-4 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                                <span className="text-white/90 font-bold tracking-[0.1em] font-sans uppercase text-[10px] flex items-center gap-2 group-hover:gap-3 transition-all">
+                                    Explore Project <ArrowRight size={14} strokeWidth={2.5} />
+                                </span>
+                            </div>
+                        </div>
+                    </motion.div>
+                  </Link>
+                ))}
+            </div>
+        </div>
+      </section>
+    </>
   );
 };
 
