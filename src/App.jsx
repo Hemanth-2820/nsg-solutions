@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Navbar from './components/Navbar';
@@ -35,7 +35,7 @@ function App() {
   }, []);
 
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <div className="flex flex-col min-h-screen font-sans">
         <Navbar />
@@ -43,7 +43,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/services/*" element={<ServicesPage />} />
               <Route path="/solutions" element={<SolutionsPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/case-studies" element={<InsightsPage />} />
@@ -56,7 +56,7 @@ function App() {
           </main>
           <Footer />
       </div>
-    </Router>
+    </>
   );
 }
 
