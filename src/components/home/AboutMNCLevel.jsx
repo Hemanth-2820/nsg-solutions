@@ -1,119 +1,126 @@
-import React from 'react';
-import { ArrowRight, Zap, Globe, TrendingUp, ShieldCheck } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { motion, useInView, useSpring, useTransform } from 'framer-motion';
+
+const Counter = ({ value, duration = 3 }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  
+  const spring = useSpring(0, {
+    mass: 1,
+    stiffness: 80, // Slightly slower, more deliberate for "MNC" feel
+    damping: 30,
+  });
+
+  const display = useTransform(spring, (current) => 
+    Math.round(current).toLocaleString()
+  );
+
+  useEffect(() => {
+    if (isInView) {
+      spring.set(value);
+    }
+  }, [isInView, spring, value]);
+
+  return <span ref={ref}><motion.span>{display}</motion.span></span>;
+};
+
+const stats = [
+  { 
+    num: 50, 
+    suffix: "+",
+    label: "CLIENTS", 
+    color: "bg-[#a35e00]", // Brownish Orange
+    icon: (
+      <svg width="100" height="100" viewBox="0 0 100 100" className="absolute bottom-4 right-4 opacity-20 text-white fill-none stroke-current stroke-[2px]">
+        <circle cx="30" cy="30" r="10" />
+        <path d="M10,60 Q30,40 50,60 T90,60" />
+        <rect x="20" y="20" width="60" height="40" rx="4" />
+      </svg>
+    )
+  },
+  { 
+    num: 200, 
+    suffix: "+",
+    label: "PROJECTS", 
+    color: "bg-[#0069b4]", // Corporate Blue
+    icon: (
+      <svg width="100" height="100" viewBox="0 0 100 100" className="absolute bottom-4 right-4 opacity-20 text-white fill-none stroke-current stroke-[2px]">
+        <circle cx="50" cy="40" r="12" />
+        <circle cx="30" cy="70" r="12" />
+        <circle cx="70" cy="70" r="12" />
+        <path d="M50,40 L30,70 M50,40 L70,70" />
+      </svg>
+    )
+  },
+  { 
+    num: 15, 
+    suffix: "+",
+    label: "YEARS EXP.", 
+    color: "bg-[#007b5d]", // Deep Teal
+    icon: (
+      <svg width="100" height="100" viewBox="0 0 100 100" className="absolute bottom-4 right-4 opacity-20 text-white fill-none stroke-current stroke-[2px]">
+        <path d="M20,80 L80,80 L50,20 Z" />
+        <path d="M35,80 L35,60 M65,80 L65,60" />
+        <circle cx="50" cy="20" r="5" />
+      </svg>
+    )
+  },
+  { 
+    num: 95, 
+    suffix: "%",
+    label: "SATISFACTION", 
+    color: "bg-[#c1391d]", // Terracotta Red
+    icon: (
+      <svg width="100" height="100" viewBox="0 0 100 100" className="absolute bottom-4 right-4 opacity-20 text-white fill-none stroke-current stroke-[2px]">
+        <path d="M30,30 Q50,10 70,30 T90,30" />
+        <circle cx="50" cy="50" r="30" />
+        <path d="M40,45 L45,50 L60,40" />
+      </svg>
+    )
+  }
+];
 
 const AboutMNCLevel = () => (
-  <section className="bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] py-32 relative overflow-hidden">
-    {/* Radial Overlay Layer (MNC Secret) */}
-    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.1),transparent)] z-0 pointer-events-none"></div>
-    {/* Deep Background Gradient / Noise Layer */}
-    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-15 mix-blend-screen pointer-events-none"></div>
-    <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#5bb8e4] blur-[250px] opacity-20 rounded-full z-0 pointer-events-none"></div>
+  <section className="bg-[#f1f5f9] py-28 relative overflow-hidden">
+    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 relative z-10 transition-all">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: i * 0.15 }}
+            className={`relative ${stat.color} aspect-[4/3] p-10 flex flex-col justify-between overflow-hidden group cursor-default shadow-2xl hover:-translate-y-4 transition-all duration-700 rounded-sm`}
+          >
+            {/* Background Texture Pattern */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none">
+              <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0,0 L100,100" stroke="white" strokeWidth="0.1" />
+                <path d="M0,50 L50,0 T100,50" fill="none" stroke="white" strokeWidth="0.1" />
+              </svg>
+            </div>
 
-    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 relative z-10">
-      
-      {/* TEXT & IMAGE SPLIT */}
-      <div className="flex flex-col lg:flex-row gap-20 items-center mb-32">
-        
-        {/* Left Side: Content */}
-        <motion.div 
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1, ease: "easeOut" }}
-          className="lg:w-1/2"
-        >
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-10 h-[2px] bg-[#5bb8e4]"></div>
-            <span className="text-[#5bb8e4] font-bold tracking-[0.3em] text-[13px] uppercase">Who We Are</span>
-          </div>
-          
-          <h2 className="text-[3.5rem] lg:text-[4.5rem] font-infosys-heading text-white leading-[1.1] tracking-tight mb-8 drop-shadow-md">
-            Engineering Digital <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5bb8e4] to-white">Transformation</span> at Scale
-          </h2>
-          
-          <p className="text-[#cbd5e1] text-[1.25rem] font-light leading-[1.8] mb-12 border-l-[3px] border-[#5bb8e4] pl-8">
-            NSG Solutions is a global leader in next-generation digital services and consulting. We enable clients across the world to navigate their digital transformation, applying AI-first frameworks and enterprise-grade architecture to achieve breakthrough results.
-          </p>
+            {/* Content Display */}
+            <div className="relative z-10">
+              <h4 className="text-white text-[1.5rem] font-black tracking-[0.05em] leading-none mb-4 uppercase">
+                {stat.label}
+              </h4>
+              <div className="w-12 h-[4px] bg-white/30 rounded-full group-hover:w-20 transition-all duration-700"></div>
+            </div>
 
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12 border-y border-white/20 py-8">
-            {[
-              { num: "50+", label: "Countries" },
-              { num: "100+", label: "Projects" },
-              { num: "10+", label: "Years Exp." },
-              { num: "95%", label: "Satisfaction" }
-            ].map((stat, i) => (
-              <div key={i} className="flex flex-col group cursor-default">
-                 <span className="text-[2.5rem] font-infosys-heading font-bold text-white mb-1 group-hover:text-[#5bb8e4] transition-colors duration-300 drop-shadow-md">{stat.num}</span>
-                 <span className="text-[12px] text-[#93c5fd] uppercase tracking-widest font-bold">{stat.label}</span>
-              </div>
-            ))}
-          </div>
+            <div className="relative z-10">
+              <span className="text-white text-[4rem] lg:text-[4.8rem] font-black tracking-tighter leading-none flex items-baseline">
+                <Counter value={stat.num} />
+                <span className="text-[2.5rem] opacity-70 ml-1 font-bold">{stat.suffix}</span>
+              </span>
+            </div>
 
-          <Link to="/about" className="inline-flex items-center gap-3 bg-white text-[#1e3a8a] px-10 py-4 rounded-full font-bold tracking-widest uppercase text-[13px] shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.6)] hover:bg-[#5bb8e4] hover:text-white hover:scale-105 transition-all duration-300">
-            Discover our DNA <ArrowRight size={18} strokeWidth={3} />
-          </Link>
-        </motion.div>
-
-        {/* Right Side: Image Group */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="lg:w-1/2 relative group w-full"
-        >
-          {/* Animated Glowing Orb / Shadow behind image */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#5bb8e4] to-transparent opacity-30 group-hover:opacity-60 transition-opacity duration-700 blur-[60px] rounded-full"></div>
-          
-          <div className="relative rounded-3xl overflow-hidden border border-white/20 shadow-[0_30px_60px_rgba(0,0,0,0.8)] bg-[#111]">
-            <img 
-              src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=80" 
-              alt="NSG Innovation Center" 
-              className="w-full h-[600px] object-cover transform group-hover:scale-110 transition-transform duration-[2s] ease-[cubic-bezier(0.16,1,0.3,1)] filter grayscale-[20%]" 
-            />
-            {/* Dark overlay at bottom so image blends gracefully */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-transparent to-transparent opacity-60"></div>
-          </div>
-        </motion.div>
-        
+            {/* Decorative Logo Art Layer */}
+            {stat.icon}
+          </motion.div>
+        ))}
       </div>
-
-      {/* WHY NSG - MINI SECTION */}
-      <div>
-        <div className="text-center mb-16">
-           <h3 className="text-[3rem] font-infosys-heading text-white tracking-tight drop-shadow-sm">
-             The <span className="text-[#5bb8e4]">NSG</span> Advantage
-           </h3>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {[
-            { icon: <Zap size={32} strokeWidth={1.5} />, title: "AI-Driven Solutions", desc: "Predictive analytics and machine learning embedded directly into your core systems." },
-            { icon: <Globe size={32} strokeWidth={1.5} />, title: "Cloud-Native", desc: "Elastic, scalable application architectures deployed seamlessly across multi-cloud." },
-            { icon: <TrendingUp size={32} strokeWidth={1.5} />, title: "Scalable Systems", desc: "Enterprise-grade frameworks strictly designed to handle massive data velocity." },
-            { icon: <ShieldCheck size={32} strokeWidth={1.5} />, title: "End-to-End", desc: "From ideation strategy to full-stack deployment, we engineer every milestone." }
-          ].map((card, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
-              className="bg-white/10 backdrop-blur-[10px] border border-white/20 p-10 rounded-2xl hover:bg-white/20 hover:border-[#5bb8e4] hover:-translate-y-3 transition-all duration-500 group shadow-[0_20px_40px_rgba(0,0,0,0.3)] flex flex-col items-start"
-            >
-              <div className="text-[#5bb8e4] mb-8 bg-white/10 p-4 rounded-xl drop-shadow-[0_0_15px_rgba(91,184,228,0.5)] transform group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500">
-                 {card.icon}
-              </div>
-              <h4 className="text-[1.3rem] font-bold text-white mb-4 tracking-wide font-sans">{card.title}</h4>
-              <p className="text-[#e2e8f0] font-light leading-relaxed">{card.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-
     </div>
   </section>
 );

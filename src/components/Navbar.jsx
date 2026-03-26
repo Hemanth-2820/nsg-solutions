@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, X, ChevronDown } from 'lucide-react';
+import { Search, X, ChevronDown, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/logo.png';
 
@@ -43,10 +43,10 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-gradient-to-br from-[#1e3a8a]/95 to-[#0f172a]/95 backdrop-blur-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed w-full z-[100] transition-all duration-500 overflow-x-hidden ${scrolled ? 'bg-gradient-to-br from-[#0f172a]/95 to-[#0f172a]/95 backdrop-blur-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3' : 'bg-transparent py-6'}`}>
       <div className="max-w-[1500px] mx-auto px-6 w-full relative">
         <div className="flex items-center justify-between">
-          
+
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 z-[110] relative group flex items-center">
             <img src={logo} alt="NSG Solutions Logo" className="h-[46px] w-auto relative z-10 brightness-[1.1] drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]" />
@@ -55,8 +55,8 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex flex-1 justify-center items-center space-x-10">
             {mainLinks.map((link) => (
-              <div 
-                key={link.name} 
+              <div
+                key={link.name}
                 className="relative group h-full py-4 flex items-center"
                 onMouseEnter={() => link.hasDropdown && setIsServicesHovered(true)}
                 onMouseLeave={() => link.hasDropdown && setIsServicesHovered(false)}
@@ -83,9 +83,9 @@ const Navbar = () => {
                       >
                         <div className="py-2">
                           {serviceSubLinks.map((sub, i) => (
-                            <Link 
-                              key={i} 
-                              to="/services" 
+                            <Link
+                              key={i}
+                              to="/services"
                               className="block px-6 py-3 text-sm text-[#334155] font-medium hover:bg-[#f8fafc] hover:text-[#007cc3] hover:pl-8 transition-all duration-300 relative group/sub"
                             >
                               {sub}
@@ -99,6 +99,15 @@ const Navbar = () => {
                 )}
               </div>
             ))}
+
+            {/* Client Login CTA - Prominent but integrated */}
+            <Link 
+              to="/client-login" 
+              className="ml-6 px-6 py-2 border border-white/20 text-white rounded-full text-[13px] font-bold tracking-widest uppercase hover:bg-white hover:text-[#0f172a] transition-all duration-[400ms] flex items-center gap-2 group backdrop-blur-sm"
+            >
+              Client Login
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
 
           {/* Right Icons */}
@@ -106,16 +115,16 @@ const Navbar = () => {
             <button className="text-white hover:text-[#5bb8e4] transition-colors hidden lg:block group">
               <Search size={22} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
             </button>
-            
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
-              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#1e3a8a] transition-all duration-300 shadow-sm"
+
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#0f172a] transition-all duration-300 shadow-sm"
             >
-               {isOpen ? <X size={24} strokeWidth={2.5} /> : <div className="flex flex-col gap-[5px]">
-                  <span className="block w-5 h-[2px] bg-current"></span>
-                  <span className="block w-5 h-[2px] bg-current"></span>
-                  <span className="block w-5 h-[2px] bg-current"></span>
-               </div>}
+              {isOpen ? <X size={24} strokeWidth={2.5} /> : <div className="flex flex-col gap-[5px]">
+                <span className="block w-5 h-[2px] bg-current"></span>
+                <span className="block w-5 h-[2px] bg-current"></span>
+                <span className="block w-5 h-[2px] bg-current"></span>
+              </div>}
             </button>
           </div>
 
@@ -123,8 +132,8 @@ const Navbar = () => {
       </div>
 
       {/* Fullscreen Mobile Navigation Overlay */}
-      <div 
-        className={`fixed inset-0 bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] z-[105] transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
+      <div
+        className={`fixed inset-0 bg-gradient-to-br from-[#0f172a] to-[#0f172a] z-[105] transform transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen pointer-events-none"></div>
         <div className="pt-32 px-10 flex flex-col gap-6 max-w-[1400px] mx-auto h-full overflow-y-auto pb-20 relative z-10">
@@ -132,7 +141,7 @@ const Navbar = () => {
             <div key={link.name} className="flex flex-col border-b border-white/10 pb-4">
               <Link
                 to={link.path}
-                className={`text-[2.2rem] font-infosys-heading text-white hover:text-[#5bb8e4] transition-colors`}
+                className={`text-[1.8rem] xs:text-[2.2rem] font-infosys-heading text-white hover:text-[#5bb8e4] transition-colors leading-tight break-words`}
               >
                 {link.name}
               </Link>
@@ -145,8 +154,19 @@ const Navbar = () => {
               )}
             </div>
           ))}
-          <div className="mt-8 flex items-center gap-6">
-            <button className="text-[#1e3a8a] p-4 bg-white shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-full hover:scale-105 transition-transform"><Search size={28} strokeWidth={1.5} /></button>
+
+          {/* Mobile Client Login */}
+          <div className="mt-8 flex flex-col gap-6">
+            <Link 
+              to="/client-login" 
+              className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-xl text-center font-bold tracking-widest uppercase text-sm shadow-xl flex items-center justify-center gap-2"
+              onClick={() => setIsOpen(false)}
+            >
+              Client Login <ArrowRight size={16} />
+            </Link>
+            <div className="flex items-center gap-6 justify-center">
+              <button className="text-[#0f172a] p-4 bg-white shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-full hover:scale-105 transition-transform"><Search size={28} strokeWidth={1.5} /></button>
+            </div>
           </div>
         </div>
       </div>
