@@ -1,28 +1,52 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import founderImg from "./rahul-infosys.jpg";
 
 const FounderSection = () => {
   return (
-    <section className="py-24 bg-[#f5f7fa]">
+    <section className="py-24 bg-gradient-to-br from-[#0f172a] to-black text-white relative overflow-hidden">
+
+      {/* Glow */}
+      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-blue-500/20 blur-[100px]" />
+
       <div className="max-w-[1400px] mx-auto px-6">
-        <div className="flex flex-col md:flex-row gap-12 items-center">
-          <div className="md:w-1/2 relative group">
-            <div className="w-full h-[550px] bg-gray-300 rounded-3xl flex items-center justify-center border-[3px] border-dashed border-gray-400 overflow-hidden shadow-lg">
-               <span className="text-gray-500 font-bold tracking-[0.2em] font-sans">[ FOUNDER & CEO IMAGE PLACEHOLDER ]</span>
-            </div>
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#007cc3] rounded-full blur-[50px] opacity-30 pointer-events-none"></div>
-          </div>
-          <div className="md:w-1/2">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-8 h-[2px] bg-[#007cc3]"></div>
-              <span className="text-[#007cc3] font-bold tracking-[0.2em] text-[12px] uppercase">Leadership</span>
-            </div>
-            <h2 className="text-[3rem] lg:text-[4rem] font-infosys-heading text-[#111] leading-[1.1] tracking-tight mb-8 drop-shadow-sm">
-              Visionary <br/><span className="text-[#007cc3]">Leadership</span>
-            </h2>
-            <p className="text-[#64748b] text-[1.1rem] font-light leading-[1.8] mb-8 border-l-[3px] border-[#007cc3] pl-6">
-              [ Placeholder Text: Add information about the founder, their vision for NSG Solutions, and their commitment to delivering innovative, high-quality digital solutions to clients globally. ]
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+          {/* IMAGE */}
+          <motion.div
+            whileHover={{ scale: 1.05, rotateY: 5 }}
+            style={{ transformStyle: "preserve-3d", perspective: 1000 }}
+            className="group overflow-hidden rounded-2xl"
+          >
+            <img
+              src={founderImg}
+              alt="Founder"
+              className="w-full h-[450px] object-cover 
+              group-hover:scale-110 transition duration-[1.5s]"
+            />
+          </motion.div>
+
+          {/* CONTENT */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+          >
+            <p className="text-xs uppercase tracking-[0.3em] text-blue-400 mb-4">
+              LEADERSHIP
             </p>
-          </div>
+
+            <h2 className="text-4xl font-semibold mb-6">
+              Visionary <span className="text-blue-400">Leadership</span>
+            </h2>
+
+            <p className="text-gray-400 leading-relaxed border-l-2 border-blue-400 pl-6">
+              Our founder is a visionary leader inspired by innovation and integrity.
+              He builds scalable solutions that create real business value and drives
+              the company toward excellence in the digital era.
+            </p>
+          </motion.div>
+
         </div>
       </div>
     </section>
