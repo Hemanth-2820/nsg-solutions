@@ -16,7 +16,6 @@ import ClientLoginPage from './pages/ClientLoginPage';
 import SubmitReviewPage from './pages/SubmitReviewPage';
 import BlogPage from './pages/BlogPage';
 
-import { ReactLenis } from '@studio-freight/react-lenis';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
