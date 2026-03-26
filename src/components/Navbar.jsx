@@ -43,7 +43,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-gradient-to-br from-[#1e3a8a]/95 to-[#0f172a]/95 backdrop-blur-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed w-full z-[100] transition-all duration-500 overflow-x-hidden ${scrolled ? 'bg-gradient-to-br from-[#1e3a8a]/95 to-[#0f172a]/95 backdrop-blur-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3' : 'bg-transparent py-6'}`}>
       <div className="max-w-[1500px] mx-auto px-6 w-full relative">
         <div className="flex items-center justify-between">
 
@@ -132,7 +132,7 @@ const Navbar = () => {
             <div key={link.name} className="flex flex-col border-b border-white/10 pb-4">
               <Link
                 to={link.path}
-                className={`text-[2.2rem] font-infosys-heading text-white hover:text-[#5bb8e4] transition-colors`}
+                className={`text-[1.8rem] xs:text-[2.2rem] font-infosys-heading text-white hover:text-[#5bb8e4] transition-colors leading-tight break-words`}
               >
                 {link.name}
               </Link>
