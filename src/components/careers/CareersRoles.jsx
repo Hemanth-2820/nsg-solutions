@@ -1,130 +1,122 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, MapPin, Clock, Briefcase } from 'lucide-react';
+import { MapPin, Clock, ArrowRight, Zap } from 'lucide-react';
+import ApplicationFormModal from './ApplicationFormModal';
 
 const roles = [
-  { title: 'Senior AI/ML Engineer',         dept: 'Engineering',      loc: 'Hyderabad / Remote',  type: 'Full-time', tag: 'HOT' },
-  { title: 'Cloud Architect (AWS/Azure)',    dept: 'Cloud Services',   loc: 'Bengaluru / Remote',  type: 'Full-time', tag: '' },
-  { title: 'Full Stack Developer (React)',   dept: 'Product',          loc: 'Remote',              type: 'Full-time', tag: 'NEW' },
-  { title: 'Data Scientist – NLP',          dept: 'AI & Data',        loc: 'Mumbai',              type: 'Full-time', tag: 'HOT' },
-  { title: 'UI/UX Lead Designer',           dept: 'Design',           loc: 'Remote',              type: 'Full-time', tag: 'NEW' },
-  { title: 'DevOps / SRE Engineer',         dept: 'Infrastructure',   loc: 'Hyderabad',           type: 'Full-time', tag: '' },
-  { title: 'Business Analyst – FinTech',    dept: 'Consulting',       loc: 'Delhi / Remote',      type: 'Full-time', tag: '' },
-  { title: 'IT Strategy Consultant',        dept: 'Consulting',       loc: 'Global',              type: 'Full-time', tag: 'NEW' },
-  { title: 'Marketing Technology Lead',     dept: 'Marketing',        loc: 'Remote',              type: 'Contract',  tag: '' },
+  { title: 'Principal Systems Architect', loc: 'Hyderabad / Hybrid', type: 'Full-time', stack: ['Go', 'Kubernetes', 'gRPC'], salary: '$120k - $180k' },
+  { title: 'Senior AI Research Engineer', loc: 'Bengaluru / Remote', type: 'Full-time', stack: ['PyTorch', 'CUDA', 'Python'], salary: '$140k - $200k' },
+  { title: 'Lead Frontend Engineer', loc: 'Remote', type: 'Full-time', stack: ['React', 'Three.js', 'Framer'], salary: '$110k - $160k' },
+  { title: 'Cloud Infrastructure Lead', loc: 'Hyderabad', type: 'Full-time', stack: ['AWS', 'Terraform', 'Ansible'], salary: '$130k - $190k' },
+  { title: 'Security Operations Head', loc: 'Remote', type: 'Full-time', stack: ['PenTesting', 'SIEM', 'CloudSec'], salary: '$150k - $220k' },
+  { title: 'Data Engineering Lead', loc: 'Mumbai', type: 'Full-time', stack: ['Spark', 'Kafka', 'Scala'], salary: '$125k - $175k' },
 ];
 
-const depts = ['All', 'Engineering', 'Cloud Services', 'Product', 'AI & Data', 'Design', 'Consulting', 'Marketing', 'Infrastructure'];
+const RoleCard = ({ role, index, onApply }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, delay: index * 0.1 }}
+    whileHover={{ y: -10 }}
+    className="bg-white border border-black/5 rounded-[2rem] p-8 flex flex-col justify-between group transition-all duration-500 hover:shadow-2xl relative overflow-hidden"
+  >
+    <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      <Zap size={20} className="text-[#007cc3]" />
+    </div>
 
-const tagColors = {
-  HOT: 'bg-red-50 text-red-600 border-red-100',
-  NEW: 'bg-emerald-50 text-emerald-600 border-emerald-100',
-};
+    <div>
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
+        {role.stack.map((s, i) => (
+          <span key={i} className="px-3 py-1 bg-[#f5f7fa] text-[#007cc3] text-[9px] font-bold uppercase tracking-widest rounded-full">
+            {s}
+          </span>
+        ))}
+      </div>
+
+      <h3 className="text-2xl font-bold text-gray-900 mb-4 font-infosys-heading group-hover:text-[#007cc3] transition-colors duration-500">
+        {role.title}
+      </h3>
+
+      <div className="flex items-center gap-6 text-black/40 text-[11px] font-bold uppercase tracking-widest mb-8 flex-wrap">
+        <span className="flex items-center gap-2"><MapPin size={12} /> {role.loc}</span>
+        <span className="flex items-center gap-2"><Clock size={12} /> {role.type}</span>
+      </div>
+    </div>
+
+    <div className="pt-8 border-t border-black/5 flex items-center justify-between">
+      <div className="flex flex-col">
+        <span className="text-[9px] text-black/30 font-bold uppercase tracking-widest mb-1">Estimated Base</span>
+        <span className="text-sm font-bold text-gray-900">{role.salary}</span>
+      </div>
+      <motion.button
+        whileHover={{ x: 5 }}
+        onClick={() => onApply(role.title)}
+        className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center group-hover:bg-[#007cc3] transition-colors duration-500"
+      >
+        <ArrowRight size={20} />
+      </motion.button>
+    </div>
+  </motion.div>
+);
 
 const CareersRoles = () => {
-  const [filter, setFilter] = useState('All');
-  const visible = roles.filter(r => filter === 'All' || r.dept === filter);
+  const [formOpen, setFormOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('');
+
+  const openForm = (roleTitle) => {
+    setSelectedRole(roleTitle);
+    setFormOpen(true);
+  };
 
   return (
-    <section className="bg-[#f5f7fa] py-28 overflow-hidden">
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-12">
+    <>
+      <ApplicationFormModal
+        isOpen={formOpen}
+        onClose={() => setFormOpen(false)}
+        prefilledRole={selectedRole}
+      />
 
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
-          <div>
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-[2px] bg-[#1e3a8a]"></div>
-              <span className="text-[#1e3a8a] font-bold tracking-[0.3em] uppercase text-[11px]">Open Positions</span>
+      <section id="careers-roles" className="py-24 px-6 bg-[#f5f7fa]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+            <div className="max-w-xl text-left">
+              <motion.span
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[11px] mb-4 block"
+              >
+                Current Openings
+              </motion.span>
+              <h2 className="text-4xl md:text-6xl font-bold text-gray-900 font-infosys-heading italic">
+                Join The <span className="text-[#007cc3]">Core Team</span>
+              </h2>
             </div>
-            <h2 className="text-[2.8rem] md:text-[4rem] font-infosys-heading text-[#111] tracking-tight leading-tight">
-              Find your <span className="text-[#007cc3]">next role</span>
-            </h2>
+            <p className="text-black/50 font-medium max-w-sm text-lg leading-relaxed">
+              We are looking for the 1% who thrive on complexity and deterministic engineering excellence.
+            </p>
           </div>
-          <p className="text-[#64748b] font-light text-[1.05rem] max-w-md">
-            We're hiring across all disciplines. Every role is an opportunity to shape the future of digital.
-          </p>
-        </div>
 
-        {/* Dept Filter Pills */}
-        <div className="flex flex-wrap gap-3 mb-12">
-          {depts.map(d => (
-            <button
-              key={d}
-              onClick={() => setFilter(d)}
-              className={`px-6 py-2.5 rounded-full text-[12px] font-bold tracking-widest uppercase transition-all duration-300 border ${
-                filter === d
-                  ? 'bg-[#1e3a8a] text-white border-[#1e3a8a] shadow-[0_4px_20px_rgba(30,58,138,0.2)]'
-                  : 'bg-white text-[#475569] border-gray-200 hover:border-[#1e3a8a] hover:text-[#1e3a8a]'
-              }`}
-            >
-              {d}
-            </button>
-          ))}
-        </div>
-
-        {/* Roles List */}
-        <div className="flex flex-col gap-4">
-          {visible.map((role, i) => (
-            <motion.div
-              key={role.title}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: i * 0.06 }}
-              className="group flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-gray-100 rounded-2xl px-8 py-6 hover:shadow-[0_10px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-[#007cc3]/30 transition-all duration-400 cursor-pointer"
-            >
-              {/* Left: Title + Meta */}
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <h3 className="text-[1.2rem] font-infosys-heading font-bold text-[#111] group-hover:text-[#007cc3] transition-colors">
-                    {role.title}
-                  </h3>
-                  {role.tag && (
-                    <span className={`text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full border ${tagColors[role.tag]}`}>
-                      {role.tag}
-                    </span>
-                  )}
-                </div>
-                <div className="flex items-center gap-5 flex-wrap">
-                  <span className="flex items-center gap-1.5 text-[#64748b] text-[13px]">
-                    <Briefcase size={13} className="text-[#007cc3]" /> {role.dept}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-[#64748b] text-[13px]">
-                    <MapPin size={13} className="text-[#007cc3]" /> {role.loc}
-                  </span>
-                  <span className="flex items-center gap-1.5 text-[#64748b] text-[13px]">
-                    <Clock size={13} className="text-[#007cc3]" /> {role.type}
-                  </span>
-                </div>
-              </div>
-
-              {/* Right: CTA */}
-              <div className="shrink-0">
-                <span className="inline-flex items-center gap-2 text-[#007cc3] font-bold uppercase tracking-widest text-[12px] group-hover:gap-4 transition-all duration-300">
-                  Apply Now <ArrowRight size={15} strokeWidth={3} />
-                </span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {visible.length === 0 && (
-          <div className="text-center py-20 text-[#94a3b8] font-bold uppercase tracking-widest">
-            No open roles in this category right now.
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {roles.map((role, i) => (
+              <RoleCard key={i} role={role} index={i} onApply={openForm} />
+            ))}
           </div>
-        )}
 
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <p className="text-[#64748b] text-[1.05rem] mb-6">
-            Don't see the right fit? We're always looking for exceptional talent.
-          </p>
-          <button className="border-[2px] border-[#1e3a8a] text-[#1e3a8a] px-12 py-4 rounded-full font-bold tracking-widest uppercase text-[12px] hover:bg-[#1e3a8a] hover:text-white hover:shadow-[0_10px_30px_rgba(30,58,138,0.25)] hover:scale-105 transition-all duration-300">
-            Send Speculative Application
-          </button>
+          <div className="mt-20 text-center">
+            <p className="text-black/40 text-[11px] font-bold uppercase tracking-widest">
+              Don't see your role?{' '}
+              <span
+                className="text-[#007cc3] cursor-pointer hover:underline underline-offset-4"
+                onClick={() => openForm('Other / Speculative Application')}
+              >
+                Send a Speculative Application
+              </span>
+            </p>
+          </div>
         </div>
-
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

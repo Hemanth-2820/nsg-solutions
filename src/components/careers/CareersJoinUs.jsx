@@ -1,5 +1,4 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import joinUsImg from '../../assets/external/careers_collaboration_hero.jpg';
 
 const CareersJoinUs = () => (
   <section id="join-us" className="bg-white py-0 overflow-hidden">
@@ -16,7 +15,7 @@ const CareersJoinUs = () => (
         >
           <div className="rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.1)]">
             <img
-              src="https://images.unsplash.com/photo-1521737852567-6949f3f9f2b5?w=900&q=80"
+              src={joinUsImg}
               alt="NSG Team collaboration"
               className="w-full h-[480px] object-cover hover:scale-105 transition-transform duration-[2s]"
             />

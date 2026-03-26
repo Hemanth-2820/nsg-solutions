@@ -1,120 +1,96 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import nsgCareers from '../../assets/nsg-careers.jpeg';
+import ApplicationFormModal from './ApplicationFormModal';
 
 const CareersHero = () => {
-  const rings = [
-    { count: 18, r: 55,  size: 5,  color: '#86efac', dur: 22 },
-    { count: 28, r: 100, size: 6,  color: '#34d399', dur: 28 },
-    { count: 38, r: 150, size: 7,  color: '#2dd4bf', dur: 35 },
-    { count: 50, r: 205, size: 7,  color: '#5eead4', dur: 42 },
-    { count: 64, r: 265, size: 8,  color: '#a3e635', dur: 50 },
-    { count: 80, r: 330, size: 8,  color: '#86efac', dur: 60 },
-    { count: 96, r: 400, size: 9,  color: '#4ade80', dur: 70 },
-  ];
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const [showForm, setShowForm] = useState(false);
+
+  const title = "Engineering The Next Digital Frontier";
+  const words = title.split(" ");
+
+  const scrollToRoles = () => {
+    const el = document.getElementById('careers-roles');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const scrollToLife = () => {
+    const el = document.getElementById('careers-life');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
-    <section
-      className="relative w-full bg-black overflow-hidden"
-      style={{ height: '90vh', minHeight: '560px' }}
-    >
-      <style>{`
-        @keyframes nsg-spin-cw  { to { transform: rotate(360deg);  } }
-        @keyframes nsg-spin-ccw { to { transform: rotate(-360deg); } }
-      `}</style>
+    <>
+      <ApplicationFormModal isOpen={showForm} onClose={() => setShowForm(false)} />
 
-      {/* Ring container — centred absolutely inside the section */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 0,
-          height: 0,
-          pointerEvents: 'none',
-        }}
-      >
-        {rings.map((ring, ri) => {
-          const ccw = ri % 2 === 1;
-          return (
-            <div
-              key={ri}
-              style={{
-                position: 'absolute',
-                width: ring.r * 2,
-                height: ring.r * 2,
-                top: -ring.r,
-                left: -ring.r,
-                animation: `${ccw ? 'nsg-spin-ccw' : 'nsg-spin-cw'} ${ring.dur}s linear infinite`,
-              }}
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        {/* Background Image with Parallax */}
+        <motion.div style={{ y: y1 }} className="absolute inset-0 z-0">
+          <img src={nsgCareers} alt="Careers at NSG" className="w-full h-full object-cover scale-110" />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+        </motion.div>
+
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+          <div className="overflow-hidden mb-6 flex flex-wrap justify-center gap-x-4">
+            {words.map((word, i) => (
+              <motion.span
+                key={i}
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 1, delay: i * 0.1, ease: [0.33, 1, 0.68, 1] }}
+                className="text-5xl md:text-8xl font-bold text-white font-infosys-heading block"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12 font-light leading-relaxed"
+          >
+            Join a league of extraordinary engineers building the world's most complex digital ecosystems. Your journey to mastery starts here.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 1.5 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+          >
+            {/* Explore Roles → scrolls to roles section */}
+            <button
+              onClick={scrollToRoles}
+              className="px-12 py-5 bg-[#007cc3] text-white font-bold rounded-full shadow-[0_20px_40px_rgba(0,124,195,0.3)] hover:bg-[#005fa3] hover:-translate-y-1 transition-all uppercase tracking-widest text-[13px]"
             >
-              {Array.from({ length: ring.count }).map((_, di) => {
-                const angle = (di / ring.count) * 360;
-                const rad   = (angle * Math.PI) / 180;
-                const x     = ring.r + ring.r * Math.cos(rad) - ring.size / 2;
-                const y     = ring.r + ring.r * Math.sin(rad) - ring.size / 2;
-                const op    = 0.4 + 0.55 * Math.abs(Math.sin((di / ring.count) * Math.PI * 3));
-                return (
-                  <span
-                    key={di}
-                    style={{
-                      position: 'absolute',
-                      width: ring.size,
-                      height: ring.size,
-                      left: x,
-                      top: y,
-                      borderRadius: '50%',
-                      backgroundColor: ring.color,
-                      opacity: op,
-                    }}
-                  />
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
+              Explore Roles
+            </button>
+            {/* Life at NSG → scrolls to life/culture section */}
+            <button
+              onClick={scrollToLife}
+              className="px-12 py-5 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-full hover:bg-white/20 transition-all uppercase tracking-widest text-[13px]"
+            >
+              Life at NSG
+            </button>
+          </motion.div>
+        </div>
 
-      {/* Centre text overlay */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-10">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="text-[#34d399] font-bold tracking-[0.35em] uppercase text-[12px] mb-6"
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          Careers at NSG
-        </motion.p>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.15 }}
-          className="text-[3.5rem] md:text-[5rem] lg:text-[6rem] font-infosys-heading text-white leading-[1.0] tracking-tight max-w-4xl"
-        >
-          Where talent<br />meets purpose
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.3 }}
-          className="mt-6 text-white/60 text-[1.15rem] font-light max-w-xl"
-        >
-          Join a team engineering the future of digital for the world's leading enterprises.
-        </motion.p>
-
-        <motion.a
-          href="#join-us"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, delay: 0.45 }}
-          className="mt-10 bg-[#2dd4bf] text-black font-bold px-10 py-4 rounded-full uppercase tracking-widest text-[12px] hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg inline-block"
-        >
-          Explore Careers
-        </motion.a>
-      </div>
-    </section>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-[#007cc3] to-transparent" />
+        </motion.div>
+      </section>
+    </>
   );
 };
 

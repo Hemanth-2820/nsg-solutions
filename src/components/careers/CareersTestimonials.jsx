@@ -1,114 +1,77 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+
+// Using absolute paths for generated avatars
+import avatar1 from '../../assets/generated/testimonial_avatar_1_1774529449165.png';
+import avatar2 from '../../assets/generated/testimonial_avatar_2_1774529467420.png';
+import avatar3 from '../../assets/generated/testimonial_avatar_3_1774529482337.png';
 
 const testimonials = [
   {
-    quote: "NSG gave me the opportunity to work on AI solutions deployed at a global scale. The learning curve is steep — and that's exactly what I wanted. The mentorship culture here is unmatched.",
+    quote: "At NSG, we've solved concurrency issues that would stop most teams in their tracks. It's a sanctuary for those who value deterministic results over 'just making it work'.",
     name: 'Priya Shankar',
-    role: 'Senior AI Engineer, Hyderabad',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80',
+    role: 'Principal Systems Lead',
+    img: avatar1
   },
   {
-    quote: "Three years in and I have led cloud migration projects across four continents. The exposure NSG gives early-career professionals is something you simply cannot find anywhere else.",
-    name: 'Marcus Webb',
-    role: 'Cloud Architect, London',
-    avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80',
-  },
-  {
-    quote: "The culture of belonging here is real — not just a poster on the wall. I feel valued for who I am as much as what I deliver. That makes all the difference.",
-    name: 'Aisha Morten',
-    role: 'UX Design Lead, Remote',
-    avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80',
-  },
-  {
-    quote: "Moving from a startup to NSG felt like leveling up in every dimension — the projects are bigger, the team is sharper, and the impact is real. Best career decision I ever made.",
+    quote: "The computational resources and the sheer engineering pedigree here are unmatched. We're not just implementing AI; we're redefining its enterprise utility.",
     name: 'Rohan Mehta',
-    role: 'DevOps Engineer, Bengaluru',
-    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&q=80',
+    role: 'Senior AI Architect',
+    img: avatar2
   },
+  {
+    quote: "Ownership isn't a buzzword here; it's the core. I've had the autonomy to architect cloud infrastructures that power massive global transformations.",
+    name: 'Aisha Morten',
+    role: 'Cloud Engineering Head',
+    img: avatar3
+  }
 ];
 
 const CareersTestimonials = () => {
-  const [idx, setIdx] = useState(0);
-  const prev = () => setIdx(i => (i - 1 + testimonials.length) % testimonials.length);
-  const next = () => setIdx(i => (i + 1) % testimonials.length);
-
-  const t = testimonials[idx];
-
   return (
-    <section className="bg-gradient-to-br from-[#0f172a] to-[#1e3a8a] py-28 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen pointer-events-none"></div>
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#0d9488] blur-[300px] opacity-10 rounded-full pointer-events-none"></div>
-
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 relative z-10">
-        {/* Header */}
-        <div className="mb-16 text-center">
-          <div className="flex items-center justify-center gap-3 mb-5">
-            <div className="w-8 h-[2px] bg-[#2dd4bf]"></div>
-            <span className="text-[#2dd4bf] font-bold tracking-[0.3em] uppercase text-[11px]">Our People</span>
-            <div className="w-8 h-[2px] bg-[#2dd4bf]"></div>
-          </div>
-          <h2 className="text-[2.8rem] md:text-[4rem] font-infosys-heading text-white tracking-tight leading-tight">
-            Hear from the <span className="text-[#2dd4bf]">team</span>
-          </h2>
+    <section className="py-32 px-6 bg-[#fdfaf6] overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-24">
+          <motion.span 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[11px] mb-4 block"
+          >
+            Voice of the Team
+          </motion.span>
+          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-infosys-heading italic">Direct From The <span className="text-[#007cc3]">Core</span></h2>
+          <p className="text-black/50 text-xl font-medium max-w-2xl mx-auto italic">"We are defined by the quality of our people and the depth of our puzzles."</p>
         </div>
-
-        {/* Testimonial Card */}
-        <div className="max-w-4xl mx-auto">
-          <AnimatePresence mode="wait">
+        
+        <div className="grid md:grid-cols-3 gap-12">
+          {testimonials.map((t, i) => (
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-12 md:p-16 text-center"
+              key={i}
+              initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
+              whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: i * 0.2, ease: "easeOut" }}
+              whileHover={{ y: -10 }}
+              className="bg-white border border-black/5 rounded-[3rem] p-10 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col justify-between group"
             >
-              {/* Avatar */}
-              <div className="w-20 h-20 rounded-full overflow-hidden mx-auto mb-8 ring-4 ring-[#2dd4bf]/40 shadow-lg">
-                <img src={t.avatar} alt={t.name} className="w-full h-full object-cover" />
+              <div>
+                <div className="text-[#007cc3] text-6xl font-serif mb-6 opacity-20">"</div>
+                <p className="text-gray-900 font-medium italic mb-12 leading-relaxed text-lg">
+                  {t.quote}
+                </p>
               </div>
-
-              {/* Quote mark */}
-              <div className="text-[#2dd4bf] text-[5rem] font-serif leading-none -mt-4 mb-2 opacity-40">"</div>
-
-              <p className="text-white/90 text-[1.25rem] md:text-[1.4rem] font-light leading-[1.8] mb-10 italic">
-                {t.quote}
-              </p>
-
-              <p className="text-white font-bold text-[1.1rem]">{t.name}</p>
-              <p className="text-[#2dd4bf] text-[13px] uppercase tracking-widest font-bold mt-1">{t.role}</p>
+              
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-[#007cc3]/10">
+                  <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <p className="font-bold text-gray-900 font-infosys-heading text-lg">{t.name}</p>
+                  <p className="text-[#007cc3] text-[10px] font-bold uppercase tracking-widest mt-1">{t.role}</p>
+                </div>
+              </div>
             </motion.div>
-          </AnimatePresence>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-6 mt-10">
-            <button
-              onClick={prev}
-              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 hover:border-white/40 transition-all"
-            >
-              <ChevronLeft size={20} />
-            </button>
-
-            {/* Dots */}
-            <div className="flex gap-3">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setIdx(i)}
-                  className={`rounded-full transition-all duration-300 ${i === idx ? 'bg-[#2dd4bf] w-8 h-3' : 'bg-white/30 w-3 h-3 hover:bg-white/60'}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={next}
-              className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 hover:border-white/40 transition-all"
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
+          ))}
         </div>
       </div>
     </section>

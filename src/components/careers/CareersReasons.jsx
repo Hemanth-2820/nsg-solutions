@@ -2,36 +2,42 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus } from 'lucide-react';
 
+import reason1 from '../../assets/external/careers_reason_1.jpg';
+import reason2 from '../../assets/external/careers_reason_2.jpg';
+import reason3 from '../../assets/external/careers_reason_3.jpg';
+import reason4 from '../../assets/external/careers_reason_4.jpg';
+import reason5 from '../../assets/external/careers_reason_5.jpg';
+
 const reasons = [
   {
     num: '1',
     title: 'Our people & culture',
     desc: 'We foster a culture of belonging where every voice is valued. At NSG, you will work alongside brilliant minds who are passionate about solving the world\'s toughest digital challenges.',
-    img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80',
+    img: reason1,
   },
   {
     num: '2',
     title: 'Culture of belonging',
     desc: 'Inclusion is not a program — it is our operating model. We celebrate difference and build teams where authenticity drives innovation.',
-    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80',
+    img: reason2,
   },
   {
     num: '3',
     title: 'Cutting-edge innovation',
     desc: 'Work on real AI, cloud, and data engineering challenges at a global scale. At NSG, innovation is not a buzzword — it is what we do every day.',
-    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
+    img: reason3,
   },
   {
     num: '4',
     title: 'Global impact',
     desc: 'Our work spans 50+ countries and touches industries from finance to healthcare. Every project you lead creates measurable impact at a massive scale.',
-    img: 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80',
+    img: reason4,
   },
   {
     num: '5',
     title: 'Growth & development',
     desc: 'Structured learning paths, mentorship programs, and access to top-tier certifications. We invest in your growth because your success is our success.',
-    img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&q=80',
+    img: reason5,
   },
 ];
 

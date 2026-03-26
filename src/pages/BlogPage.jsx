@@ -1,14 +1,28 @@
-import React from 'react';
-import BlogCard from '../components/blog/BlogCard';
+import React, { useState } from 'react';
+import BlogsHero from "../components/blog/BlogsHero";
+import BlogsFeatured from "../components/blog/BlogsFeatured";
+import BlogsCategories from "../components/blog/BlogsCategories";
+import BlogsGrid from "../components/blog/BlogsGrid";
+import BlogsTrending from "../components/blog/BlogsTrending";
+import BlogsTopics from "../components/blog/BlogsTopics";
+import BlogsAuthors from "../components/blog/BlogsAuthors";
+import BlogsSubscribe from "../components/blog/BlogsSubscribe";
+import BlogsCTA from "../components/blog/BlogsCTA";
 
 const BlogPage = () => {
+  const [activeCategory, setActiveCategory] = useState('All');
+
   return (
-    <div className="min-h-screen bg-white pt-32 px-6">
-      <h1 className="text-4xl font-infosys-heading text-center text-[#111] mb-10">NSG Solutions Blog</h1>
-      <p className="text-center text-gray-500 mb-10">Developer 5: Build the blog listing page and categories here!</p>
-      <div className="max-w-4xl mx-auto flex justify-center">
-         <BlogCard />
-      </div>
+    <div className="min-h-screen bg-[#0a0f16] text-white font-sans">
+      <BlogsHero />
+      <BlogsFeatured />
+      <BlogsCategories active={activeCategory} setActive={setActiveCategory} />
+      <BlogsGrid activeCategory={activeCategory} />
+      <BlogsTrending />
+      <BlogsTopics />
+      <BlogsAuthors />
+      <BlogsSubscribe />
+      <BlogsCTA />
     </div>
   );
 };
