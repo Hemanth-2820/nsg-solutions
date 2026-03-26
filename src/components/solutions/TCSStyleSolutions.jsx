@@ -123,6 +123,50 @@ const TCSStyleSolutions = () => {
     };
   }, [navigate]);
 
+  // Two-Phase Tour Sequence Effect for the "Explore Solutions" button
+  useEffect(() => {
+    const exploreLinks = document.querySelectorAll('a[href="/solutions#explore"], a[href="#explore"]');
+    
+    const handleExploreClick = (e) => {
+      e.preventDefault();
+      
+      const viewportHeight = window.innerHeight;
+      const totalScrollHeight = document.body.scrollHeight;
+      const totalSteps = Math.ceil(totalScrollHeight / viewportHeight) - 1; 
+
+      let currentStep = 1;
+
+      // Recursive function to step down the page showcasing "each content once"
+      const executeNextTourStep = () => {
+        if (currentStep <= totalSteps) {
+           // Scroll exactly one viewport slice down smoothly
+           const yOffset = currentStep * viewportHeight;
+           window.scrollTo({ top: yOffset, behavior: 'smooth' });
+           
+           currentStep++;
+           
+           // Enforce a hard 1.5-second sequence pause per content slice
+           setTimeout(executeNextTourStep, 1500); 
+        } else {
+           // Upon finishing the entire full-page tour sequentially, snap to the final section required
+           setTimeout(() => {
+             const whatWeDidSection = document.getElementById('what-we-did');
+             if (whatWeDidSection) {
+               const sectionTarget = whatWeDidSection.getBoundingClientRect().top + window.scrollY - 80;
+               window.scrollTo({ top: sectionTarget, behavior: 'smooth' });
+             }
+           }, 800); // Slight delay at the very bottom
+        }
+      };
+
+      // Initiate the 1.5-second sequential step tour starting exactly below the active hero banner
+      executeNextTourStep();
+    };
+
+    exploreLinks.forEach(link => link.addEventListener('click', handleExploreClick));
+    return () => exploreLinks.forEach(link => link.removeEventListener('click', handleExploreClick));
+  }, []);
+
   useEffect(() => {
     // Find the 'Scroll to explore' text element from the Hero section
     // We attach the event listener here to strictly adhere to the instruction
@@ -250,7 +294,7 @@ const TCSStyleSolutions = () => {
       `}} />
       </section>
 
-      <section className="bg-white border-t border-gray-100 pt-10 pb-24 px-6 md:px-12">
+      <section id="what-we-did" className="bg-white border-t border-gray-100 pt-10 pb-24 px-6 md:px-12">
         <div className="max-w-[1500px] mx-auto font-sans">
             <div className="flex items-center gap-4 mb-6">
                 <div className="w-8 h-[2px] bg-[#1e3a8a]"></div>
