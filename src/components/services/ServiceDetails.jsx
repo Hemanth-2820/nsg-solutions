@@ -1,102 +1,92 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import {
+  Code,
+  Cloud,
+  Brain,
+  Briefcase,
+  ShoppingCart
+} from "lucide-react";
 
 const ServiceDetails = ({ service, onBack }) => {
-  const [activeSubService, setActiveSubService] = useState(null);
+  const [activeSub, setActiveSub] = useState(null);
 
   if (!service) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="mt-20 bg-white rounded-3xl p-10 shadow-xl"
-    >
-      {/* BACK BUTTON */}
+    <div className="mt-20 bg-white rounded-3xl p-10 shadow-xl">
+
+      {/* BACK */}
       <button
         onClick={onBack}
-        className="mb-6 text-[#007cc3] text-[12px] uppercase font-bold tracking-[0.2em]"
+        className="mb-6 text-[#007cc3] text-[12px] uppercase font-bold"
       >
         ← Back
       </button>
 
       {/* TITLE */}
-      <h3 className="text-[2rem] md:text-[3rem] font-infosys-heading mb-10 text-[#111]">
+      <h2 className="text-[2.5rem] font-infosys-heading mb-10">
         {service.title}
-      </h3>
+      </h2>
 
-      {/* SUB SERVICES GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {service.subServices?.map((item, index) => (
-          <div
-            key={index}
-            onClick={() => setActiveSubService(item)}
-            className="p-6 bg-[#f5f7fa] rounded-xl cursor-pointer 
-            hover:-translate-y-2 hover:shadow-xl transition-all duration-300"
-          >
-            <h4 className="text-[1.1rem] font-semibold text-[#111]">
-              {item.name}
-            </h4>
+      {/* GRID */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-            <p className="text-[#64748b] text-[13px] mt-2">
-              {item.desc}
-            </p>
-          </div>
-        ))}
+        {service.subServices?.map((item, index) => {
+          const Icon = item.icon;
+
+          return (
+            <motion.div
+              key={index}
+              onClick={() => setActiveSub(item)}
+              className="cursor-pointer rounded-2xl p-10 text-white
+              bg-gradient-to-br from-[#007cc3] to-[#00c6ff]
+              hover:scale-[1.05] transition-all duration-300"
+            >
+
+              {Icon && <Icon size={28} className="mb-4" />}
+
+              <h4 className="text-[1.3rem] font-semibold">
+                {item.name}
+              </h4>
+
+            </motion.div>
+          );
+        })}
+
       </div>
 
-      {/* 🔥 SUB-SERVICE DETAILS PANEL */}
-      {activeSubService && (
+      {/* 🔥 SHOW CONTENT WHEN CLICKED */}
+      {activeSub && (
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           className="mt-16 bg-[#0a0f16] text-white rounded-3xl p-10"
         >
+
           <button
-            onClick={() => setActiveSubService(null)}
-            className="mb-6 text-[#5bb8e4] text-[12px] uppercase font-bold tracking-[0.2em]"
+            onClick={() => setActiveSub(null)}
+            className="mb-6 text-[#5bb8e4] text-[12px] uppercase font-bold"
           >
             ← Back
           </button>
 
-          <h3 className="text-[2rem] md:text-[3rem] font-infosys-heading mb-6">
-            {activeSubService.name}
+          <h3 className="text-[2rem] mb-6">
+            {activeSub.name}
           </h3>
 
-          <p className="text-gray-300 leading-[1.8] max-w-[800px]">
-            {activeSubService.desc}
-          </p>
+          {/* 🔥 CONTENT (YOUR DATA) */}
+          <ul className="space-y-3 text-gray-300">
+            <li>✔ High quality development</li>
+            <li>✔ Scalable architecture</li>
+            <li>✔ Enterprise level performance</li>
+            <li>✔ Secure & optimized</li>
+          </ul>
 
-          {/* FEATURES */}
-          <div className="mt-8 grid md:grid-cols-2 gap-6">
-
-            <div className="bg-white/5 p-6 rounded-xl">
-              <h4 className="text-[#5bb8e4] font-bold mb-3">
-                Key Features
-              </h4>
-              <ul className="space-y-2 text-sm">
-                {activeSubService.details?.map((d, i) => (
-                  <li key={i}>✔ {d}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="bg-white/5 p-6 rounded-xl">
-              <h4 className="text-[#5bb8e4] font-bold mb-3">
-                Business Impact
-              </h4>
-              <ul className="space-y-2 text-sm">
-                <li>✔ Faster Delivery</li>
-                <li>✔ Better Scalability</li>
-                <li>✔ Cost Optimization</li>
-              </ul>
-            </div>
-
-          </div>
         </motion.div>
       )}
 
-    </motion.div>
+    </div>
   );
 };
 
