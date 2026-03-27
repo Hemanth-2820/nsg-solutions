@@ -3,31 +3,27 @@ import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
 const ServicesHero = ({ title, subtitle }) => (
-  <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center bg-[#0a0f16] overflow-hidden">
+  <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center bg-[#E8CECE] overflow-hidden pt-20 shadow-inner">
+    {/* Subtle texture for light theme */}
+    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/white-diamond.png')] opacity-20"></div>
 
-    <div className="absolute inset-0">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f16] to-[#050505]"></div>
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/hexellence.png')] opacity-10"></div>
-    </div>
-
-    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 relative z-10">
-
+    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 relative z-10 w-full">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-3 mb-6"
+        className="flex items-center gap-3 mb-8"
       >
-        <Sparkles size={16} className="text-[#5bb8e4]" />
-        <span className="text-[#5bb8e4] font-bold tracking-[0.3em] text-[12px] uppercase">
+        <Sparkles size={16} className="text-[#007cc3]" />
+        <span className="text-[#007cc3] font-bold tracking-[0.3em] text-[12px] uppercase">
           Enterprise Services
         </span>
       </motion.div>
 
-      <h1 className="text-[3rem] md:text-[5rem] font-infosys-heading text-white leading-tight">
+      <h1 className="text-[3.5rem] md:text-[5.5rem] font-infosys-heading text-[#0f172a] leading-tight mb-8">
         {title}
       </h1>
 
-      <p className="mt-6 text-[#cbd5e1] text-[1.2rem] leading-[1.6] max-w-2xl">
+      <p className="text-[#334155] text-[1.3rem] leading-relaxed max-w-3xl border-l-[4px] border-[#007cc3] pl-8 font-light">
         {subtitle}
       </p>
     </div>

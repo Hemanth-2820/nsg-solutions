@@ -173,20 +173,20 @@ const ITServices = () => {
       {/* Project Details Modal Popup */}
       <AnimatePresence>
         {selectedProject && (
-          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 sm:p-6 md:p-12 pt-28">
+          <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-6 md:p-12 pt-28">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedProject(null)}
-              className="absolute inset-0 bg-black/70 backdrop-blur-sm cursor-pointer"
+              className="absolute inset-0 bg-black/80 backdrop-blur-md cursor-pointer"
             ></motion.div>
             
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-5xl bg-white rounded-3xl overflow-hidden shadow-2xl z-10 flex flex-col md:flex-row max-h-[75vh] md:max-h-[80vh]"
+              className="relative w-full max-w-5xl bg-white rounded-3xl overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] z-10 flex flex-col md:flex-row max-h-[75vh] md:max-h-[85vh]"
             >
               {/* Close Button */}
               <button 

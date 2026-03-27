@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search, X, ChevronDown, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import logo from '../assets/logo.png';
-
+import logonavbar from "../assets/logonavbar.png";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -27,98 +26,114 @@ const Navbar = () => {
     { name: 'About', path: '/about' },
     { name: 'Services', path: '/services', hasDropdown: true },
     { name: 'Solutions', path: '/solutions' },
-    { name: 'Insights', path: '/case-studies' }, // Insights usually map to Case Studies/Blogs
+    { name: 'Portfolio', path: '/portfolio' },
+    { name: 'Blog', path: '/blog' },
     { name: 'Careers', path: '/careers' },
     { name: 'Contact', path: '/contact' }
   ];
 
   const serviceSubLinks = [
-    'Digital Engineering',
-    'Software Development',
-    'Cloud',
-    'AI & Data',
-    'Marketing',
-    'Design',
-    'E-commerce'
+    { name: 'IT Services', path: '/services?service=it' },
+    { name: 'Video Production', path: '/services?service=creative' },
+    { name: 'Digital Marketing', path: '/services?service=marketing' },
+    { name: 'Publishing Solutions', path: '/services?service=publishing' },
+    { name: 'Enterprise Strategy', path: '/services?service=enterprise' }
   ];
 
+  const forceDarkNav = ['/portfolio', '/client-login', '/services'].includes(location.pathname) || location.pathname.startsWith('/solutions/');
+
   return (
-    <nav className={`fixed w-full z-[100] transition-all duration-500 overflow-x-hidden ${scrolled ? 'bg-gradient-to-br from-[#0f172a]/95 to-[#0f172a]/95 backdrop-blur-[10px] shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3' : 'bg-transparent py-6'}`}>
+    <nav
+      className={`fixed w-full z-[1000] transition-all duration-700 ${scrolled || forceDarkNav ? 'shadow-[0_15px_40px_rgba(0,0,0,0.6)] py-3' : 'bg-transparent py-6'}`}
+      style={(scrolled || forceDarkNav) ? {
+        background: 'linear-gradient(135deg, #0B0F2F, #1A1F5A, #2C1983)',
+        backgroundSize: '200% 200%',
+        animation: 'gradient-shift 15s ease infinite alternate'
+      } : {}}
+    >
       <div className="max-w-[1500px] mx-auto px-6 w-full relative">
         <div className="flex items-center justify-between">
 
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 z-[110] relative group flex items-center">
-            <img src={logo} alt="NSG Solutions Logo" className="h-[46px] w-auto relative z-10 brightness-[1.1] drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]" />
+            <img src={logonavbar} alt="NSG Solutions Logo" className="h-[75px] w-auto relative z-10 brightness-[1.1] drop-shadow-[0_2px_15px_rgba(255,255,255,0.15)] transition-transform duration-300 group-hover:scale-105" />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex flex-1 justify-center items-center space-x-10">
-            {mainLinks.map((link) => (
-              <div
-                key={link.name}
-                className="relative group h-full py-4 flex items-center"
-                onMouseEnter={() => link.hasDropdown && setIsServicesHovered(true)}
-                onMouseLeave={() => link.hasDropdown && setIsServicesHovered(false)}
-              >
-                <Link
-                  to={link.path}
-                  className="text-[14px] font-medium text-white/90 hover:text-white transition-colors duration-300 flex items-center gap-1 font-sans tracking-wide hover-underline pb-[2px]"
+          {/* Desktop Navigation - Combined and Re-aligned for precision */}
+          <div className="hidden xl:flex flex-1 justify-center items-center">
+            <div className="flex items-center space-x-6">
+              {mainLinks.map((link, idx) => (
+                <div
+                  key={idx}
+                  className="relative group/nav"
+                  onMouseEnter={() => link.hasDropdown && setIsServicesHovered(true)}
+                  onMouseLeave={() => link.hasDropdown && setIsServicesHovered(false)}
                 >
-                  {link.name}
-                  {link.hasDropdown && <ChevronDown size={14} className={`transform transition-transform duration-300 ${isServicesHovered ? 'rotate-180' : ''}`} />}
+                  <Link
+                    to={link.path}
+                    className="text-white/80 font-bold tracking-widest uppercase text-[12px] hover:text-[#38bdf8] transition-colors flex items-center gap-1.5"
+                  >
+                    {link.name}
+                    {link.hasDropdown && <ChevronDown size={14} className={`group-hover/nav:rotate-180 transition-transform duration-300 ${isServicesHovered ? 'rotate-180' : ''}`} />}
+                  </Link>
+
+                  {/* Dropdown Indicator Line */}
+                  <div className="absolute -bottom-1 left-0 w-0 h-[2px] bg-[#38bdf8] transition-all duration-300 group-hover/nav:w-full"></div>
+
+                  {/* Dropdown Menu - Premium Dark Theme & No Clipping */}
+                  {link.hasDropdown && (
+                    <AnimatePresence>
+                      {isServicesHovered && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                          transition={{ duration: 0.3 }}
+                          className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[280px] bg-[#0f172a] border border-white/20 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.6)] z-[999]"
+                        >
+                          <div className="p-3">
+                            {serviceSubLinks.map((sub, i) => (
+                              <Link
+                                key={i}
+                                to={sub.path}
+                                className="group/sub relative flex items-center justify-between px-5 py-4 text-[13px] text-white/70 hover:text-white hover:bg-white/5 transition-all duration-300 rounded-xl"
+                              >
+                                <span className="font-bold tracking-wide">{sub.name}</span>
+                                <ArrowRight size={14} className="opacity-0 group-hover/sub:opacity-100 group-hover/sub:translate-x-1 transition-all text-[#38bdf8]" />
+                              </Link>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  )}
+                </div>
+              ))}
+
+              {/* Professional Divider */}
+              <div className="h-6 w-[1px] bg-white/10 mx-2"></div>
+
+              {/* Utility Section: Search & Login */}
+              <div className="flex items-center gap-6">
+                <button className="text-white/50 hover:text-[#38bdf8] transition-all duration-300 hover:scale-110">
+                  <Search size={18} strokeWidth={2} />
+                </button>
+                <Link
+                  to="/client-login"
+                  className="px-6 py-2 bg-white/5 border border-white/10 text-white rounded-full text-[12px] font-bold tracking-widest uppercase hover:bg-white hover:text-[#0f172a] transition-all duration-[400ms] flex items-center gap-2 group backdrop-blur-sm"
+                >
+                  Login
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
-
-                {/* Dropdown Menu (GSAP/Framer style slide up/down) */}
-                {link.hasDropdown && (
-                  <AnimatePresence>
-                    {isServicesHovered && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 15, rotateX: 15 }}
-                        animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                        exit={{ opacity: 0, y: 15, rotateX: 15 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
-                        className="absolute top-[100%] left-1/2 -translate-x-1/2 mt-0 w-[240px] bg-white rounded-xl shadow-[0_20px_40px_rgba(0,0,0,0.3)] border border-gray-100 overflow-hidden"
-                        style={{ transformOrigin: "top center" }}
-                      >
-                        <div className="py-2">
-                          {serviceSubLinks.map((sub, i) => (
-                            <Link
-                              key={i}
-                              to="/services"
-                              className="block px-6 py-3 text-sm text-[#334155] font-medium hover:bg-[#f8fafc] hover:text-[#007cc3] hover:pl-8 transition-all duration-300 relative group/sub"
-                            >
-                              {sub}
-                              <span className="absolute left-0 bottom-0 top-0 w-1 bg-[#007cc3] transform scale-y-0 group-hover/sub:scale-y-100 transition-transform origin-center duration-300 line-clamp-1 h-full"></span>
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                )}
               </div>
-            ))}
-
-            {/* Client Login CTA - Prominent but integrated */}
-            <Link 
-              to="/client-login" 
-              className="ml-6 px-6 py-2 border border-white/20 text-white rounded-full text-[13px] font-bold tracking-widest uppercase hover:bg-white hover:text-[#0f172a] transition-all duration-[400ms] flex items-center gap-2 group backdrop-blur-sm"
-            >
-              Client Login
-              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
+            </div>
           </div>
 
-          {/* Right Icons */}
-          <div className="flex items-center space-x-6 z-[110]">
-            <button className="text-white hover:text-[#5bb8e4] transition-colors hidden lg:block group">
-              <Search size={22} strokeWidth={2.5} className="group-hover:scale-110 transition-transform" />
-            </button>
-
+          {/* Mobile Menu Toggle */}
+          <div className="flex items-center xl:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#0f172a] transition-all duration-300 shadow-sm"
+              className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-white hover:text-[#0f172a] transition-all duration-300 shadow-sm z-[110]"
             >
               {isOpen ? <X size={24} strokeWidth={2.5} /> : <div className="flex flex-col gap-[5px]">
                 <span className="block w-5 h-[2px] bg-current"></span>
@@ -148,7 +163,7 @@ const Navbar = () => {
               {link.hasDropdown && (
                 <div className="flex flex-col mt-4 gap-3 pl-4 border-l-2 border-[#5bb8e4]/50">
                   {serviceSubLinks.map((sub, j) => (
-                    <Link key={j} to="/services" className="text-white/70 text-lg hover:text-white transition-colors">{sub}</Link>
+                    <Link key={j} to={sub.path} onClick={() => setIsOpen(false)} className="text-white/70 text-lg hover:text-white transition-colors">{sub.name}</Link>
                   ))}
                 </div>
               )}
@@ -157,12 +172,13 @@ const Navbar = () => {
 
           {/* Mobile Client Login */}
           <div className="mt-8 flex flex-col gap-6">
-            <Link 
-              to="/client-login" 
-              className="w-full py-4 bg-white/10 border border-white/20 text-white rounded-xl text-center font-bold tracking-widest uppercase text-sm shadow-xl flex items-center justify-center gap-2"
+            <Link
+              to="/client-login"
               onClick={() => setIsOpen(false)}
+              className="w-full flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-xl"
             >
-              Client Login <ArrowRight size={16} />
+              <span className="text-white font-bold tracking-widest uppercase text-sm">Login</span>
+              <ArrowRight size={18} className="text-[#38bdf8]" />
             </Link>
             <div className="flex items-center gap-6 justify-center">
               <button className="text-[#0f172a] p-4 bg-white shadow-[0_0_20px_rgba(255,255,255,0.4)] rounded-full hover:scale-105 transition-transform"><Search size={28} strokeWidth={1.5} /></button>

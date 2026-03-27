@@ -3,7 +3,7 @@ import ProjectCard from '../components/portfolio/ProjectCard';
 
 const PortfolioPage = () => {
   return (
-    <div className="min-h-screen bg-white w-full">
+    <div className="min-h-screen bg-[#f1f5f9] w-full">
       <div className="pt-10 md:pt-12 px-6 md:px-0">
         <ProjectCard />
       </div>

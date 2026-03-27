@@ -52,16 +52,7 @@ const BlogsHero = () => {
       </div>
       
       <div className="relative z-20 max-w-7xl mx-auto px-6 text-center">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="mb-8"
-        >
-          <span className="text-[#007cc3] font-bold uppercase tracking-[0.4em] text-[11px] bg-white/10 py-2 px-5 rounded-full border border-white/20 backdrop-blur-md">
-            The NSG Journal
-          </span>
-        </motion.div>
+
 
         <h1 className="text-5xl md:text-9xl font-bold text-white tracking-tight leading-tight mb-8 font-infosys-heading italic">
           {words.map((word, i) => (

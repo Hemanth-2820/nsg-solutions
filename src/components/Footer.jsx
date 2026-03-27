@@ -5,55 +5,73 @@ import logo from '../assets/logo.png';
 
 const Footer = () => {
   return (
-    <footer className="bg-infosys-gray text-infosys-dark pt-24 pb-12 snap-section flex flex-col justify-end">
+    <footer className="bg-infosys-gray text-infosys-dark pt-28 pb-12 snap-section flex flex-col justify-end border-t border-gray-200">
       <div className="max-w-[1600px] w-full mx-auto px-6 lg:px-12">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16 border-b border-gray-300 pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16 border-b border-gray-300 pb-20">
           
           <div className="lg:col-span-2">
-            <Link to="/" className="inline-block mb-6 group">
-              <img src={logo} alt="NSG Solutions Logo" className="h-[46px] w-auto group-hover:scale-105 transition-transform duration-300" />
+            <Link to="/" className="inline-block mb-8 group">
+              <img src={logo} alt="NSG Solutions Logo" className="h-[110px] w-auto group-hover:scale-105 transition-transform duration-300 brightness-[0.95]" />
             </Link>
-            <p className="text-gray-600 font-light text-lg leading-relaxed max-w-sm mb-6">
-              Navigate your next in enterprise digital transformation globally.
+            <p className="text-gray-600 font-light text-[1.1rem] leading-relaxed max-w-sm mb-8">
+              Driving digital transformation and high-end creative solutions for enterprises globally. Engineered for scale, secured for the future.
             </p>
-            <div className="flex space-x-6 text-infosys-blue">
-              <a href="#" className="hover:text-black transition-colors duration-300"><Linkedin size={24} /></a>
-              <a href="#" className="hover:text-black transition-colors duration-300"><Twitter size={24} /></a>
-              <a href="#" className="hover:text-black transition-colors duration-300"><Facebook size={24} /></a>
-              <a href="#" className="hover:text-black transition-colors duration-300"><Instagram size={24} /></a>
+            <div className="flex space-x-6 text-[#007cc3]">
+              <a href="#" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Linkedin size={26} /></a>
+              <a href="#" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Twitter size={26} /></a>
+              <a href="#" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Facebook size={26} /></a>
+              <a href="#" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Instagram size={26} /></a>
             </div>
           </div>
 
           <div>
-            <h4 className="text-sm font-bold mb-6 text-gray-500 uppercase tracking-widest">Company</h4>
+            <h4 className="text-[12px] font-black mb-8 text-gray-500 uppercase tracking-[0.2em]">Explore</h4>
             <ul className="space-y-4 font-bold text-sm">
-              {['Navigate your next', 'About Us', 'Careers', 'Investors'].map((link) => (
-                <li key={link} className="flex items-center gap-2 text-infosys-dark hover:text-infosys-blue cursor-pointer transition-colors duration-300">
-                  <ArrowRight size={14} className="opacity-0 -ml-4 transition-all duration-300" />
-                  <Link to={link === 'About Us' ? '/about' : '#'}>{link}</Link>
+              {[
+                { name: 'Home', path: '/' },
+                { name: 'About Us', path: '/about' },
+                { name: 'Portfolio', path: '/portfolio' },
+                { name: 'Blog', path: '/blog' },
+                { name: 'Careers', path: '/careers' },
+                { name: 'Contact Us', path: '/contact' }
+              ].map((link) => (
+                <li key={link.name} className="flex items-center text-infosys-dark hover:text-[#007cc3] cursor-pointer transition-all duration-300">
+                  <Link to={link.path}>{link.name}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-sm font-bold mb-6 text-gray-500 uppercase tracking-widest">Subsidiaries</h4>
+            <h4 className="text-[12px] font-black mb-8 text-gray-500 uppercase tracking-[0.2em]">Our Services</h4>
             <ul className="space-y-4 font-bold text-sm">
-              {['EdgeVerve Systems', 'Infosys BPM', 'Infosys Consulting', 'Infosys Public Services'].map((link) => (
-                <li key={link} className="text-infosys-dark hover:text-infosys-blue cursor-pointer transition-colors duration-300">
-                  {link.replace('Infosys', 'NSG')}
+              {[
+                { name: 'IT Services', path: '/services?service=it' },
+                { name: 'Video Production', path: '/services?service=creative' },
+                { name: 'Digital Marketing', path: '/services?service=marketing' },
+                { name: 'Publishing Solutions', path: '/services?service=publishing' },
+                { name: 'Enterprise Strategy', path: '/services?service=enterprise' }
+              ].map((service) => (
+                <li key={service.name} className="flex items-center text-infosys-dark hover:text-[#007cc3] cursor-pointer transition-all duration-300">
+                  <Link to={service.path}>{service.name}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-sm font-bold mb-6 text-gray-500 uppercase tracking-widest">Programs</h4>
+            <h4 className="text-[12px] font-black mb-8 text-gray-500 uppercase tracking-[0.2em]">Quick Links</h4>
             <ul className="space-y-4 font-bold text-sm">
-              {['Innovation Fund', 'Knowledge Institute', 'Springboard'].map((link) => (
-                <li key={link} className="text-infosys-dark hover:text-infosys-blue cursor-pointer transition-colors duration-300">
-                  {link}
+              {[
+                'Global Locations',
+                'Leadership Team',
+                'Client Stories',
+                'Newsroom',
+                'Sustainability'
+              ].map((item) => (
+                <li key={item} className="text-infosys-dark hover:text-[#007cc3] cursor-pointer transition-all duration-300">
+                  {item}
                 </li>
               ))}
             </ul>
@@ -61,13 +79,13 @@ const Footer = () => {
 
         </div>
         
-        <div className="flex flex-col md:flex-row justify-between items-center text-xs font-bold text-gray-500 tracking-widest uppercase">
-          <p>Copyright &copy; {new Date().getFullYear()} NSG Solutions Ltd.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-             <span className="hover:text-infosys-blue cursor-pointer">Terms of Use</span>
-             <span className="hover:text-infosys-blue cursor-pointer">Privacy Statement</span>
-             <span className="hover:text-infosys-blue cursor-pointer">Cookie Policy</span>
-             <span className="hover:text-infosys-blue cursor-pointer">Safe Harbour Provision</span>
+        <div className="flex flex-col md:flex-row justify-between items-center text-[10px] font-black text-gray-400 tracking-[0.1em] uppercase">
+          <p>Copyright &copy; {new Date().getFullYear()} NSG Solutions Ltd. All Rights Reserved.</p>
+          <div className="flex gap-8 mt-6 md:mt-0">
+             <span className="hover:text-[#007cc3] cursor-pointer transition-colors">Terms of Use</span>
+             <span className="hover:text-[#007cc3] cursor-pointer transition-colors">Privacy Policy</span>
+             <span className="hover:text-[#007cc3] cursor-pointer transition-colors">Cookie Policy</span>
+             <span className="hover:text-[#007cc3] cursor-pointer transition-colors">Safe Harbour</span>
           </div>
         </div>
 

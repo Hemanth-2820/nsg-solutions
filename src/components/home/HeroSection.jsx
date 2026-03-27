@@ -98,7 +98,10 @@ const HeroSection = () => {
   }, [slides.length]);
 
   return (
-    <section className="relative w-full min-h-screen flex items-center bg-[#050b18] overflow-hidden pt-28 md:pt-0">
+    <section
+      className="relative w-full min-h-screen flex items-center overflow-hidden pt-28 md:pt-0"
+      style={{ background: 'linear-gradient(135deg, #0B0F2F, #1A1F5A, #2C1983)' }}
+    >
 
       {/* PREMIUM BACKGROUND LAYER */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -118,7 +121,8 @@ const HeroSection = () => {
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#1e3a8a]/30 blur-[150px] rounded-full mix-blend-screen animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#5bb8e4]/20 blur-[150px] rounded-full mix-blend-screen animate-pulse delay-700"></div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050b18] via-[#050b18]/80 to-[#050b18]/40"></div>
+        {/* Subtle Gradient Overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0F2F]/80 via-[#0B0F2F]/40 to-transparent"></div>
 
         {/* High-Tech Grid Pattern Overlay */}
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay"></div>

@@ -94,7 +94,7 @@ const ProjectCard = () => {
   // Optimized form handler with specialized validation Logic
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     // VALIDATION: First Name & Last Name (Allow only letters and spaces)
     if (name === 'firstName' || name === 'lastName') {
       const cleanValue = value.replace(/[^a-zA-Z\s]/g, ''); // Strips symbols & numbers
@@ -450,20 +450,20 @@ const ProjectCard = () => {
             {/* MANDATORY: NSG Solutions Privacy Statement & Data Processing Agreement */}
             <div className="flex items-start space-y-2 mt-4">
               <div className="flex items-start space-x-3 group cursor-pointer">
-              <input
-                type="checkbox"
-                name="privacyAgreed"
-                required
-                checked={formData.privacyAgreed}
-                onChange={handleChange}
-                id="privacy-checkbox"
-                className="mt-1 accent-[#007cc3] w-4 h-4 cursor-pointer"
-              />
-              <label htmlFor="privacy-checkbox" className="text-gray-500 text-sm font-sans leading-[1.6] cursor-pointer group-hover:text-[#111] transition-colors">
-                I agree to the use or processing of my personal information by NSG Solutions for the purpose of fulfilling this request and in accordance with NSG Solutions Privacy Statement.
-              </label>
+                <input
+                  type="checkbox"
+                  name="privacyAgreed"
+                  required
+                  checked={formData.privacyAgreed}
+                  onChange={handleChange}
+                  id="privacy-checkbox"
+                  className="mt-1 accent-[#007cc3] w-4 h-4 cursor-pointer"
+                />
+                <label htmlFor="privacy-checkbox" className="text-gray-500 text-sm font-sans leading-[1.6] cursor-pointer group-hover:text-[#111] transition-colors">
+                  I agree to the use or processing of my personal information by NSG Solutions for the purpose of fulfilling this request and in accordance with NSG Solutions Privacy Statement.
+                </label>
+              </div>
             </div>
-          </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col md:flex-row gap-4 pt-6">

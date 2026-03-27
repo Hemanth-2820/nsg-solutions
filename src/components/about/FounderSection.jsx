@@ -4,26 +4,22 @@ import founderImg from "./rahul-infosys.jpg";
 
 const FounderSection = () => {
   return (
-    <section className="py-24 bg-gradient-to-br from-[#0f172a] to-black text-white relative overflow-hidden">
-
-      {/* Glow */}
-      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-blue-500/20 blur-[100px]" />
-
+    <section className="py-24 bg-white text-[#0f172a] relative overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6">
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
 
           {/* IMAGE */}
           <motion.div
-            whileHover={{ scale: 1.05, rotateY: 5 }}
-            style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-            className="group overflow-hidden rounded-2xl"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className="relative group rounded-3xl overflow-hidden shadow-2xl shadow-blue-900/10"
           >
             <img
               src={founderImg}
               alt="Founder"
-              className="w-full h-[450px] object-cover 
-              group-hover:scale-110 transition duration-[1.5s]"
+              className="w-full h-[550px] object-cover 
+              group-hover:scale-105 transition-transform duration-[2s] ease-out"
             />
           </motion.div>
 
@@ -31,20 +27,27 @@ const FounderSection = () => {
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <p className="text-xs uppercase tracking-[0.3em] text-blue-400 mb-4">
+            <div className="inline-block px-4 py-1 bg-blue-50 text-[#007cc3] text-[11px] font-bold uppercase tracking-[0.3em] rounded-full mb-6">
               LEADERSHIP
-            </p>
+            </div>
 
-            <h2 className="text-4xl font-semibold mb-6">
-              Visionary <span className="text-blue-400">Leadership</span>
+            <h2 className="text-[3rem] font-medium mb-8 text-[#0f172a] leading-tight font-infosys-heading">
+              Visionary <br /> <span className="text-[#007cc3]">Leadership</span>
             </h2>
 
-            <p className="text-gray-400 leading-relaxed border-l-2 border-blue-400 pl-6">
-              Our founder is a visionary leader inspired by innovation and integrity.
-              He builds scalable solutions that create real business value and drives
-              the company toward excellence in the digital era.
-            </p>
+            <div className="space-y-6">
+              <p className="text-xl text-[#334155] font-light leading-relaxed pl-8 border-l-4 border-[#007cc3] italic">
+                "Our founder is a visionary leader inspired by innovation and integrity."
+              </p>
+              
+              <p className="text-lg text-[#64748b] leading-relaxed font-light">
+                He builds scalable solutions that create real business value and drives
+                the company toward excellence in the digital era. With a focus on engineering 
+                perfection, he steer complex organizations into the future securely.
+              </p>
+            </div>
           </motion.div>
 
         </div>

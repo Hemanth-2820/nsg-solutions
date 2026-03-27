@@ -99,24 +99,24 @@ const AboutPage = () => {
         </div>
       </section>
 
-      <section className="bg-[#111] text-white py-24">
-         <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20 font-sans">
-            <div className="group cursor-pointer">
-               <div className="mb-8 p-6 bg-white/5 inline-block rounded-sm group-hover:bg-[#007cc3] transition-colors duration-500">
-                  <Target size={40} className="text-[#5bb8e4] group-hover:text-white transition-colors"/>
+      <section className="bg-[#f8fafc] py-24 border-y border-gray-100">
+         <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 font-sans">
+            <div className="group cursor-pointer bg-white p-12 rounded-[2.5rem] shadow-xl shadow-blue-900/5 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-500 border border-[#e2e8f0] hover:border-[#007cc3]/30">
+               <div className="mb-8 p-6 bg-blue-50 inline-block rounded-2xl group-hover:bg-[#007cc3] transition-colors duration-500">
+                  <Target size={40} className="text-[#007cc3] group-hover:text-white transition-colors"/>
                </div>
-               <h3 className="text-3xl font-infosys-heading mb-6 tracking-tight">Our Mission</h3>
-               <p className="text-gray-300 font-light text-lg leading-relaxed border-l-[3px] border-[#333] pl-6 group-hover:border-[#007cc3] transition-colors">
+               <h3 className="text-3xl font-infosys-heading mb-6 tracking-tight text-[#0f172a]">Our Mission</h3>
+               <p className="text-[#64748b] font-light text-lg leading-relaxed border-l-[3px] border-[#e2e8f0] pl-6 group-hover:border-[#007cc3] transition-colors">
                  To deliver high-quality software solutions and enable business growth through innovative strategies. We streamline IT architectures globally to ensure resilience.
                </p>
             </div>
             
-            <div className="group cursor-pointer">
-               <div className="mb-8 p-6 bg-white/5 inline-block rounded-sm group-hover:bg-[#007cc3] transition-colors duration-500">
-                  <Flag size={40} className="text-[#5bb8e4] group-hover:text-white transition-colors"/>
+            <div className="group cursor-pointer bg-white p-12 rounded-[2.5rem] shadow-xl shadow-blue-900/5 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-500 border border-[#e2e8f0] hover:border-[#007cc3]/30">
+               <div className="mb-8 p-6 bg-blue-50 inline-block rounded-2xl group-hover:bg-[#007cc3] transition-colors duration-500">
+                  <Flag size={40} className="text-[#007cc3] group-hover:text-white transition-colors"/>
                </div>
-               <h3 className="text-3xl font-infosys-heading mb-6 tracking-tight">Our Vision</h3>
-               <p className="text-gray-300 font-light text-lg leading-relaxed border-l-[3px] border-[#333] pl-6 group-hover:border-[#007cc3] transition-colors">
+               <h3 className="text-3xl font-infosys-heading mb-6 tracking-tight text-[#0f172a]">Our Vision</h3>
+               <p className="text-[#64748b] font-light text-lg leading-relaxed border-l-[3px] border-[#e2e8f0] pl-6 group-hover:border-[#007cc3] transition-colors">
                  To become the definitive global leader in digital transformation and cloud consulting services, shaping the technological frontier for enterprises worldwide.
                </p>
             </div>
