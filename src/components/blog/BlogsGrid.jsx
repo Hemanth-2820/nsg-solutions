@@ -191,58 +191,65 @@ const ArticleModal = ({ post, onClose }) => {
 
 // ─── Blog Card ────────────────────────────────────────────────────────────────
 
-const BlogCard = ({ post, index, onOpen }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.7, delay: index * 0.08 }}
-    className="group relative h-[420px] rounded-[2rem] overflow-hidden cursor-pointer select-none"
-  >
-    {/* Background image */}
-    <img
-      src={post.image}
-      alt={post.title}
-      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-    />
+const BlogCard = ({ post, index, onOpen }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7, delay: index * 0.08 }}
+      onClick={() => onOpen(post)}
+      className="group relative h-[500px] overflow-hidden cursor-pointer select-none transition-all duration-700 border border-white/5 bg-[#0f172a]"
+    >
+      {/* Background Image — Fades out on hover */}
+      <img
+        src={post.image}
+        alt={post.title}
+        className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 opacity-70 group-hover:opacity-0"
+      />
+      
+      {/* Permanent bottom gradient for initial state title readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90 group-hover:opacity-0 transition-opacity duration-700" />
 
-    {/* Permanent subtle bottom gradient */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
+      {/* Hover Blue Overlay — Fades in on hover */}
+      <div className="absolute inset-0 bg-[#007cc3] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-    {/* Hover overlay — slides up */}
-    <div className="absolute inset-0 flex flex-col justify-end p-8 translate-y-6 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out bg-gradient-to-t from-black/90 via-black/55 to-transparent">
-      {/* Tag + time */}
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[#38bdf8] text-[10px] font-extrabold uppercase tracking-[0.25em]">
-          {post.tag}
+      {/* Category Badge - Top Left */}
+      <div className="absolute top-8 left-8 z-20">
+        <span className="px-4 py-2 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.25em] bg-black text-white">
+          {post.tag === 'Cyber Security' ? 'RESEARCH REPORT' : post.tag === 'Cloud Native' ? 'CASE STUDY' : 'BLOG'}
         </span>
-        <div className="flex items-center gap-1.5 text-white/50 text-[10px] font-semibold uppercase tracking-widest">
-          <Clock size={11} />
-          {post.time}
+      </div>
+
+      {/* Content Container */}
+      <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-10 z-10">
+        
+        {/* Title — Always Visible, stays crisp */}
+        <h4 className="font-infosys-heading text-[1.5rem] sm:text-[1.8rem] lg:text-[2.2rem] font-black uppercase leading-[1.05] italic mb-6 text-white transition-all duration-500">
+          {post.title}
+        </h4>
+
+        {/* Description — Appears only on hover with the blue background */}
+        <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
+          <div className="overflow-hidden">
+            <p className="text-white text-sm sm:text-[15px] leading-relaxed mb-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
+              {post.desc}
+            </p>
+          </div>
+        </div>
+
+        {/* Action Link — Always Visible at Bottom */}
+        <div className="flex items-center gap-3 text-[11px] sm:text-[12px] font-black uppercase tracking-[0.3em] text-white transition-all duration-300">
+          <span>READ FULL ARTICLE</span>
+          <ArrowUpRight size={18} className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
         </div>
       </div>
 
-      {/* Title */}
-      <h4 className="text-white font-bold text-[1.2rem] leading-snug mb-3 font-infosys-heading italic">
-        {post.title}
-      </h4>
-
-      {/* Description */}
-      <p className="text-white/60 text-[13px] leading-relaxed mb-6 line-clamp-2">
-        {post.desc}
-      </p>
-
-      {/* CTA */}
-      <button
-        onClick={() => onOpen(post)}
-        className="flex items-center gap-2 self-start bg-[#007cc3] hover:bg-[#38bdf8] text-white text-[11px] font-bold uppercase tracking-widest px-5 py-2.5 rounded-full transition-all duration-300 group/btn"
-      >
-        Read Article
-        <ArrowUpRight size={14} className="transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-      </button>
-    </div>
-  </motion.div>
-);
+      {/* Hover Light Overlay */}
+      <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-500 pointer-events-none" />
+    </motion.div>
+  );
+};
 
 // ─── Grid ─────────────────────────────────────────────────────────────────────
 
