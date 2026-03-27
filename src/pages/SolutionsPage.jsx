@@ -181,7 +181,7 @@ const PersistentStyleGrid = () => {
           <span className="text-[#1e3a8a] font-bold tracking-[0.3em] text-[12px] uppercase">Industries</span>
         </div>
         <h2 className="text-[2.8rem] md:text-[3.8rem] font-infosys-heading text-[#111] tracking-tight">
-           Solutions Across <span className="text-[#007cc3]">Industries</span>
+          Solutions Across <span className="text-[#007cc3]">Industries</span>
         </h2>
       </div>
 
@@ -207,7 +207,7 @@ const PersistentStyleGrid = () => {
             {/* Typography & CTA Container */}
             <div className="absolute bottom-8 left-8 right-8 z-20 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
               <h3 className="text-white font-infosys-heading font-bold text-[1.8rem] leading-[1.1] tracking-tight">
-                 {industry.name}
+                {industry.name}
               </h3>
               <div className="mt-5 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
                 <span className="text-white font-bold tracking-[0.2em] font-sans uppercase text-[11px] flex items-center gap-2 group-hover:gap-4 transition-all">

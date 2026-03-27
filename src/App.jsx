@@ -46,28 +46,28 @@ function App() {
       <ScrollToTop />
       <div className="flex flex-col min-h-screen font-sans">
         <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/services/*" element={<ServicesPage />} />
-              <Route path="/solutions" element={<SolutionsPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/case-studies" element={<InsightsPage />} />
-              <Route path="/careers" element={<CareersPage />} />
-              <Route path="/portfolio" element={<PortfolioPage />} />
-              <Route path="/client-login" element={<ClientLoginPage />} />
-              <Route path="/submit-review" element={<SubmitReviewPage />} />
-              <Route path="/blog" element={<BlogPage />} />
-              
-              {/* Solution sub-pages */}
-              <Route path="/solutions/itservices" element={<ITServices />} />
-              <Route path="/solutions/videoproduction" element={<VideoProduction />} />
-              <Route path="/solutions/digitalmarketing" element={<DigitalMarketing />} />
-              <Route path="/solutions/publishing" element={<Publishing />} />
-            </Routes>
-          </main>
-          <Footer />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/services/*" element={<ServicesPage />} />
+            <Route path="/solutions" element={<SolutionsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/case-studies" element={<InsightsPage />} />
+            <Route path="/careers/*" element={<CareersPage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/client-login" element={<ClientLoginPage />} />
+            <Route path="/submit-review" element={<SubmitReviewPage />} />
+            <Route path="/blog/*" element={<BlogPage />} />
+
+            {/* Solution sub-pages */}
+            <Route path="/solutions/itservices" element={<ITServices />} />
+            <Route path="/solutions/videoproduction" element={<VideoProduction />} />
+            <Route path="/solutions/digitalmarketing" element={<DigitalMarketing />} />
+            <Route path="/solutions/publishing" element={<Publishing />} />
+          </Routes>
+        </main>
+        <Footer />
       </div>
     </>
   );

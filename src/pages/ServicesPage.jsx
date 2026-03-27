@@ -1,42 +1,53 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import ServicesHero from "../components/services/ServicesHero";
 import ServicesGrid from "../components/services/ServicesGrid";
 import ServicePartners from "../components/services/ServicePartners";
 import ServicesCTA from "../components/services/ServicesCTA";
 import PageWrapper from "../components/services/PageWrapper";
-import SectionWrapper from "../components/services/SectionWrapper"; // ✅ NEW
+import SectionWrapper from "../components/services/SectionWrapper";
+
+// Service Sub-Pages
+import ITServicesPage from "./services/ITServicesPage";
+import VideoProductionPage from "./services/VideoProductionPage";
+import DigitalMarketingPage from "./services/DigitalMarketingPage";
+import EnterpriseStrategyPage from "./services/EnterpriseStrategyPage";
+
+const ServicesIndex = () => {
+  return (
+    <div className="min-h-screen font-sans bg-[#f5f7fa]">
+      <SectionWrapper>
+        <ServicesHero
+          title="Our Core Services"
+          subtitle="Comprehensive end-to-end digital solutions designed to propel your business forward globally. Engineered for scale, secured for the future."
+        />
+      </SectionWrapper>
+
+      <SectionWrapper>
+        <ServicesGrid />
+      </SectionWrapper>
+
+      <SectionWrapper>
+        <ServicePartners />
+      </SectionWrapper>
+
+      <SectionWrapper>
+        <ServicesCTA />
+      </SectionWrapper>
+    </div>
+  );
+};
 
 const ServicesPage = () => {
   return (
     <PageWrapper>
-
-      <div className="min-h-screen font-sans bg-[#f5f7fa]">
-
-        {/* HERO */}
-        <SectionWrapper>
-          <ServicesHero 
-            title="Our Core Services" 
-            subtitle="Comprehensive end-to-end digital solutions designed to propel your business forward globally. Engineered for scale, secured for the future." 
-          />
-        </SectionWrapper>
-
-        {/* GRID */}
-        <SectionWrapper>
-          <ServicesGrid />
-        </SectionWrapper>
-
-        {/* PARTNERS */}
-        <SectionWrapper>
-          <ServicePartners />
-        </SectionWrapper>
-
-        {/* CTA */}
-        <SectionWrapper>
-          <ServicesCTA />
-        </SectionWrapper>
-
-      </div>
-
+      <Routes>
+        <Route index element={<ServicesIndex />} />
+        <Route path="it" element={<ITServicesPage />} />
+        <Route path="creative" element={<VideoProductionPage />} />
+        <Route path="marketing" element={<DigitalMarketingPage />} />
+        <Route path="enterprise" element={<EnterpriseStrategyPage />} />
+      </Routes>
     </PageWrapper>
   );
 };
