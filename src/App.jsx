@@ -22,7 +22,6 @@ import VideoProduction from './components/solutions/VideoProduction';
 import DigitalMarketing from './components/solutions/DigitalMarketing';
 import Publishing from './components/solutions/Publishing';
 
-import { ReactLenis } from '@studio-freight/react-lenis';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
