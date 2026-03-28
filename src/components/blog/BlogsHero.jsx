@@ -54,7 +54,7 @@ const BlogsHero = () => {
       <div className="relative z-20 max-w-7xl mx-auto px-6 text-center">
 
 
-        <h1 className="text-5xl md:text-9xl font-bold text-white tracking-tight leading-tight mb-8 font-infosys-heading italic">
+        <h1 className="text-5xl md:text-8xl font-extrabold text-white tracking-tighter leading-tight mb-8">
           {words.map((word, i) => (
             <motion.span
               key={i}

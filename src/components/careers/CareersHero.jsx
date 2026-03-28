@@ -41,7 +41,7 @@ const CareersHero = () => {
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 1, delay: i * 0.1, ease: [0.33, 1, 0.68, 1] }}
-                className="text-5xl md:text-8xl font-bold text-white font-infosys-heading block"
+                className="text-5xl md:text-8xl font-extrabold text-white tracking-tight block"
               >
                 {word}
               </motion.span>

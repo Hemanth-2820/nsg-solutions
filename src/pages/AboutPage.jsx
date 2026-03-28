@@ -11,7 +11,7 @@ const InnerPageHero = ({ title, subtitle, bgImage }) => (
        <img src={bgImage} alt="Hero" className="w-full h-full object-cover grayscale mix-blend-overlay" />
     </div>
     <div className="max-w-[1400px] mx-auto px-6 w-full pt-32 relative z-10 font-sans">
-      <h1 className="text-[4rem] md:text-[5.5rem] font-infosys-heading text-white leading-[1.05] tracking-tight mb-6 mt-10">
+      <h1 className="text-[3.5rem] md:text-[5rem] font-extrabold text-white leading-[1.05] tracking-tight mb-6 mt-10">
         {title}
       </h1>
       <p className="border-l-[3px] border-[#007cc3] pl-6 text-white text-[1.4rem] font-light max-w-2xl leading-relaxed opacity-90">
@@ -67,7 +67,7 @@ const AboutPage = () => {
           
           <div className="flex flex-col lg:flex-row gap-20">
             <div className="lg:w-1/2">
-              <h2 className="text-[3rem] font-infosys-heading mb-10 text-[#111] leading-tight gsap-title">
+      <h2 className="text-[2.5rem] md:text-[3rem] font-extrabold mb-10 text-[#111] leading-tight gsap-title tracking-tight">
                  Engineering Digital Excellence <br /> <span className="text-[#007cc3]">for Tomorrow.</span>
               </h2>
               <div className="h-[2px] bg-gray-200 w-full mb-10 overflow-hidden">

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 
 const testimonials = [
   {
@@ -9,9 +9,7 @@ const testimonials = [
     author: "ELENA RODRIGUEZ",
     company: "Future Systems Inc.",
     color: "bg-[#0164ff]",
-    id: 1,
-    marginTop: "20vh",
-    marginLeft: "10%"
+    id: 1
   },
   {
     miniTitle: "Precision Brand Identity",
@@ -19,9 +17,7 @@ const testimonials = [
     author: "MARCUS CHEN",
     company: "Creative Connect Group",
     color: "bg-[#e50000]",
-    id: 2,
-    marginTop: "60vh",
-    marginLeft: "50%"
+    id: 2
   },
   {
     miniTitle: "A Trusted Global Partner",
@@ -29,9 +25,7 @@ const testimonials = [
     author: "SARAH JENKINS",
     company: "Streamline Global",
     color: "bg-[#003cff]",
-    id: 3,
-    marginTop: "60vh",
-    marginLeft: "15%"
+    id: 3
   },
   {
     miniTitle: "Seamless Cloud Migration",
@@ -39,9 +33,7 @@ const testimonials = [
     author: "DAVID WAGNER",
     company: "Wagner Logistics",
     color: "bg-[#007cc3]",
-    id: 4,
-    marginTop: "50vh",
-    marginLeft: "60%"
+    id: 4
   }
 ];
 
@@ -52,54 +44,50 @@ const TestimonialCard = ({ item }) => {
     <motion.div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      style={{
-        marginTop: item.marginTop,
-        marginLeft: item.marginLeft,
-        width: "320px",
-        height: "280px"
-      }}
-      className={`relative ${item.color} p-8 cursor-pointer shadow-2xl z-20 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden rounded-sm`}
+      className={`flex-shrink-0 w-[240px] sm:w-[280px] aspect-square ${item.color} p-7 flex flex-col justify-between shadow-2xl snap-center relative overflow-hidden group rounded-sm cursor-pointer`}
     >
-      {/* Accenture Line Pattern Overlay */}
+      {/* Pattern Overlay */}
       <div className="absolute inset-0 opacity-15 pointer-events-none">
         <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
           <path d="M0,50 Q25,0 50,50 T100,50" fill="none" stroke="white" strokeWidth="0.5" />
           <path d="M0,80 Q50,30 100,80" fill="none" stroke="white" strokeWidth="0.5" />
-          <path d="M10,10 Q60,60 10,110" fill="none" stroke="white" strokeWidth="0.3" />
         </svg>
       </div>
 
-      <div className="relative z-10 h-full flex flex-col bg-transparent overflow-hidden">
-        {/* Title layer - hidden on hover */}
-        <div className={`transition-all duration-500 ease-in-out ${isHovered ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
-          <h3 className="text-white font-bold text-3xl leading-tight tracking-[0.01em] bg-transparent">
+      <div className="relative z-10 h-full flex flex-col overflow-hidden">
+        {/* Resting View - Title */}
+        <div className={`transition-all duration-500 ease-in-out ${isHovered ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
+          <h3 className="text-white font-bold text-3xl leading-tight tracking-tight bg-transparent pr-4">
             {item.miniTitle}
           </h3>
         </div>
 
-        {/* Hover content layer - absolute centered/filled */}
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="absolute inset-0 flex flex-col justify-between bg-transparent"
-          >
-            <div>
-              <p className="text-white text-sm leading-relaxed mb-6 italic">
-                "{item.content}"
-              </p>
-              <div className="pt-6 border-t border-white/20">
-                <p className="font-bold text-lg text-white">{item.author}</p>
-                <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold tracking-[0.2em]">
-                  {item.company}
+        {/* Hover View - Content */}
+        <AnimatePresence>
+          {isHovered && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 15 }}
+              className="absolute inset-x-0 top-0 flex flex-col justify-between bg-transparent h-auto"
+            >
+              <div>
+                <p className="text-white text-xs sm:text-[13px] leading-relaxed italic mb-6">
+                  "{item.content}"
                 </p>
+                <div className="pt-4 border-t border-white/20">
+                  <p className="font-bold text-lg text-white uppercase italic tracking-tight">{item.author}</p>
+                  <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold tracking-[0.2em] mt-0.5">
+                    {item.company}
+                  </p>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="flex justify-end mt-auto relative z-20">
-          <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white">
+          <div className={`w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-white transition-all duration-500 ${isHovered ? 'bg-white text-black rotate-45 border-white' : ''}`}>
             <ArrowUpRight size={14} />
           </div>
         </div>
@@ -109,9 +97,21 @@ const TestimonialCard = ({ item }) => {
 };
 
 const Testimonials = () => {
-  return (
-    <section className="relative bg-black h-auto">
+  const containerRef = useRef(null);
 
+  const scroll = (direction) => {
+    const { current } = containerRef;
+    const scrollAmount = 350; // Width + Gap
+    if (direction === 'left') {
+      current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    } else {
+      current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <section className="relative bg-black h-[150vh]">
+      
       {/* STICKY TEXT LAYER (STAYS PINNED) */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center -z-0 overflow-hidden px-10">
         <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 via-white to-blue-400 tracking-tighter leading-[0.9] text-center select-none uppercase pointer-events-none opacity-30">
@@ -119,15 +119,53 @@ const Testimonials = () => {
         </h2>
       </div>
 
-      {/* SCROLLING CARDS LAYER (FLOWS OVER THE STICKY TEXT) */}
-      <div className="relative z-10 w-full pb-[40vh] -mt-[100vh]">
-        <div className="max-w-[1500px] mx-auto relative h-full">
-          {testimonials.map((t) => (
-            <TestimonialCard key={t.id} item={t} />
-          ))}
+      {/* HORIZONTAL CAROUSEL LAYER (FLOWS OVER THE STICKY TEXT) */}
+      <div className="relative z-10 w-full -mt-[60vh] pb-32 overflow-hidden">
+        <div className="max-w-[1400px] mx-auto px-6 relative flex flex-col items-center">
+          
+          <div className="flex items-center w-full justify-center gap-6 sm:gap-10">
+             {/* LEFT ARROW NAVIGATION */}
+             <button 
+                onClick={() => scroll('left')}
+                className="hidden sm:flex text-white/30 hover:text-white transition-colors"
+                aria-label="Previous Testimonial"
+              >
+                <ArrowLeft size={64} strokeWidth={1} />
+              </button>
+
+              {/* SCROLLING CARDS CONTAINER */}
+              <div 
+                ref={containerRef}
+                className="flex gap-10 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 sm:px-10 py-10 w-full max-w-[1100px]"
+              >
+                {testimonials.map((item) => (
+                  <TestimonialCard key={item.id} item={item} />
+                ))}
+              </div>
+
+              {/* RIGHT ARROW NAVIGATION */}
+              <button 
+                onClick={() => scroll('right')}
+                className="hidden sm:flex text-white/30 hover:text-white transition-colors"
+                aria-label="Next Testimonial"
+              >
+                <ArrowRight size={64} strokeWidth={1} />
+              </button>
+          </div>
+
         </div>
       </div>
-
+      
+      {/* ADD SMOOTH SCROLL HIDE STYLE */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
     </section>
   );
 };

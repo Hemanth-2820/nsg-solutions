@@ -19,7 +19,7 @@ const ServicesHero = ({ title, subtitle }) => (
         </span>
       </motion.div>
 
-      <h1 className="text-[3.5rem] md:text-[5.5rem] font-infosys-heading text-[#0f172a] leading-tight mb-8">
+      <h1 className="text-[3.5rem] md:text-[5rem] font-extrabold text-[#0f172a] leading-tight mb-8 tracking-tight">
         {title}
       </h1>
 
