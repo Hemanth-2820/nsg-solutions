@@ -12,7 +12,7 @@ const Footer = () => {
           
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-8 group">
-              <img src={logo} alt="NSG Solutions Logo" className="h-[110px] w-auto group-hover:scale-105 transition-transform duration-300 brightness-[0.95]" />
+              <img src={logo} alt="NSG Solutions Logo" className="h-[140px] md:h-[180px] w-auto group-hover:scale-105 transition-transform duration-300 brightness-[0.95]" />
             </Link>
             <p className="text-gray-600 font-light text-[1.1rem] leading-relaxed max-w-sm mb-8">
               Driving digital transformation and high-end creative solutions for enterprises globally. Engineered for scale, secured for the future.

@@ -12,33 +12,55 @@ export default function ClientAuth() {
 
   const navigate = useNavigate();
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setMessage({ type: '', text: '' });
 
-    // Check against localStorage or a demo credential
-    const savedUser = JSON.parse(localStorage.getItem('nsg_client_user'));
+    try {
+      const response = await fetch('/api/login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role: 'client' })
+      });
 
-    if ((savedUser && email === savedUser.email && password === savedUser.password) ||
-      (email === 'demo@nsg.com' && password === 'demo123')) {
-      navigate('/submit-review');
-    } else {
-      setMessage({ type: 'error', text: 'Invalid email or password. Please try again.' });
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        localStorage.setItem('nsg_client_user', JSON.stringify(data.user));
+        navigate('/submit-review');
+      } else {
+        setMessage({ type: 'error', text: data.message || 'Invalid credentials' });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setMessage({ type: 'error', text: 'Server connection failed. If you moved the backend to cPanel, please check your database connection strings.' });
     }
   };
 
-  const handleSignupSubmit = (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
     setMessage({ type: '', text: '' });
 
-    // Save to localStorage
-    const newUser = { fullName, email, password };
-    localStorage.setItem('nsg_client_user', JSON.stringify(newUser));
+    try {
+      const response = await fetch('/api/signup.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fullName, email, password })
+      });
 
-    // Switch to login 
-    setIsLogin(true);
-    setPassword('');
-    setMessage({ type: 'success', text: 'Account created successfully! Please sign in.' });
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        setMessage({ type: 'success', text: 'Account created successfully! Please sign in with your new credentials.' });
+        setIsLogin(true);
+        setPassword('');
+      } else {
+        setMessage({ type: 'error', text: data.message || 'Signup failed' });
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      setMessage({ type: 'error', text: 'Server connection failed. If you moved the backend to cPanel, please check your database connection strings.' });
+    }
   };
 
   const toggleMode = (mode) => {

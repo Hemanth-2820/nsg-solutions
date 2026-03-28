@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 
-const testimonials = [
+const staticTestimonials = [
   {
     miniTitle: "Unmatched Technical Scale",
     content: "NSG Solutions provided us with a technical framework that scaled perfectly as our global user base tripled. Their approach is truly world-class.",
@@ -98,6 +98,34 @@ const TestimonialCard = ({ item }) => {
 
 const Testimonials = () => {
   const containerRef = useRef(null);
+  const [dynamicTestimonials, setDynamicTestimonials] = useState([]);
+
+  useEffect(() => {
+    const fetchApproved = async () => {
+      try {
+        const response = await fetch('/api/get_testimonials.php');
+        const data = await response.json();
+        if (data.status === 'success') {
+          // Normalize DB data to match the UI structure
+          const normalized = data.data.map((item, idx) => ({
+            id: `db-${idx}`,
+            miniTitle: item.client_role || "Project Excellence",
+            content: item.content,
+            author: item.client_name,
+            company: item.company,
+            color: ["bg-[#0164ff]", "bg-[#e50000]", "bg-[#003cff]", "bg-[#007cc3]"][idx % 4]
+          }));
+          setDynamicTestimonials(normalized);
+        }
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+      }
+    };
+    fetchApproved();
+  }, []);
+
+  // Merge Static and Dynamic
+  const allTestimonials = [...staticTestimonials, ...dynamicTestimonials];
 
   const scroll = (direction) => {
     const { current } = containerRef;
@@ -138,7 +166,7 @@ const Testimonials = () => {
                 ref={containerRef}
                 className="flex gap-10 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 sm:px-10 py-10 w-full max-w-[1100px]"
               >
-                {testimonials.map((item) => (
+                {allTestimonials.map((item) => (
                   <TestimonialCard key={item.id} item={item} />
                 ))}
               </div>

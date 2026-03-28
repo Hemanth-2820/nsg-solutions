@@ -51,11 +51,11 @@ const Navbar = () => {
         animation: 'gradient-shift 15s ease infinite alternate'
       } : {}}
     >
-      <div className="max-w-[1550px] mx-auto px-6 h-28 flex items-center justify-between relative">
+      <div className="max-w-[1550px] mx-auto px-6 h-32 flex items-center justify-between relative">
 
         {/* Logo */}
         <Link to="/" className="flex-shrink-0 z-[110] relative group block">
-          <img src={logonavbar} alt="NSG Solutions Logo" className="h-[75px] md:h-[85px] w-auto transition-transform duration-300 group-hover:scale-105" />
+          <img src={logonavbar} alt="NSG Solutions Logo" className="h-[95px] md:h-[110px] w-auto transition-transform duration-300 group-hover:scale-105" />
         </Link>
 
         {/* Desktop Navigation */}

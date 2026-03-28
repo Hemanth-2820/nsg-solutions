@@ -14,6 +14,8 @@ import CareersPage from './pages/CareersPage';
 import PortfolioPage from './pages/PortfolioPage';
 import ClientLoginPage from './pages/ClientLoginPage';
 import SubmitReviewPage from './pages/SubmitReviewPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminLoginPage from './pages/admin/AdminLoginPage';
 import BlogPage from './pages/BlogPage';
 
 
@@ -33,6 +35,9 @@ const ScrollToTop = () => {
 };
 
 function App() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -44,8 +49,8 @@ function App() {
   return (
     <>
       <ScrollToTop />
-      <div className="flex flex-col min-h-screen font-sans">
-        <Navbar />
+      <div className={`flex flex-col min-h-screen font-sans ${isAdminRoute ? 'bg-[#0f172a]' : ''}`}>
+        {!isAdminRoute && <Navbar />}
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -58,6 +63,8 @@ function App() {
             <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/client-login" element={<ClientLoginPage />} />
             <Route path="/submit-review" element={<SubmitReviewPage />} />
+            <Route path="/admin-portal" element={<AdminDashboard />} />
+            <Route path="/admin-login" element={<AdminLoginPage />} />
             <Route path="/blog/*" element={<BlogPage />} />
 
             {/* Solution sub-pages */}
@@ -67,7 +74,7 @@ function App() {
             <Route path="/solutions/publishing" element={<Publishing />} />
           </Routes>
         </main>
-        <Footer />
+        {!isAdminRoute && <Footer />}
       </div>
     </>
   );

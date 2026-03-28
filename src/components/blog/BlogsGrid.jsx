@@ -1,23 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Loader } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-import thumb1 from '../../assets/generated/blog_thumb_1_1774529539839.png';
-import thumb2 from '../../assets/generated/blog_thumb_2_1774529561593.png';
-import thumb3 from '../../assets/generated/blog_thumb_3_1774529578137.png';
-import thumb4 from '../../assets/generated/careers_backend_tech_1774529182685.png';
-import thumb5 from '../../assets/generated/careers_cloud_tech_1774529148242.png';
-import thumb6 from '../../assets/generated/careers_ui_tech_1774529165327.png';
-
-const posts = [
-  { id: 1, title: 'Zero-Trust Perimeters in Multi-Cloud Environments', desc: 'A rigorous exploration into deterministic security for distributed enterprise systems operating at scale.', tag: 'Cyber Security', image: thumb1 },
-  { id: 2, title: 'Deterministic API Architecture: The Sub-100ms Goal', desc: 'How we leverage gRPC and modern caching strategies to achieve global performance parity.', tag: 'Cloud Native', image: thumb2 },
-  { id: 3, title: 'Generative AI: Moving Beyond Prompt Engineering', desc: 'Building custom neural layers for specialized enterprise knowledge bases and reasoning systems.', tag: 'AI Architecture', image: thumb3 },
-  { id: 4, title: 'Scalable Microservices with Rust and Go', desc: 'Choosing the right language for high-concurrency enterprise pipelines that never compromise on safety.', tag: 'Cloud Native', image: thumb4 },
-  { id: 5, title: 'Quantum-Resistant Encryption Standards', desc: 'Preparing the enterprise for the next era of computational threats with post-quantum cryptography.', tag: 'Cyber Security', image: thumb5 },
-  { id: 6, title: 'The Engineering Mindset: Excellence as a Baseline', desc: 'Defining the cultural pillars of a world-class technical organisation obsessed with craft.', tag: 'Engineering Culture', image: thumb6 },
-];
 
 const BlogCard = ({ post, index }) => {
   const navigate = useNavigate();
@@ -54,7 +38,7 @@ const BlogCard = ({ post, index }) => {
         <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
           <div className="overflow-hidden">
             <p className="text-white text-sm sm:text-[15px] leading-relaxed mb-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
-              {post.desc}
+              {post.description}
             </p>
           </div>
         </div>
@@ -69,10 +53,45 @@ const BlogCard = ({ post, index }) => {
 };
 
 const BlogsGrid = ({ activeCategory }) => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch('/api/get_blogs.php');
+        const result = await response.json();
+        if (result.status === 'success') {
+          // Prepend live domain to image paths if running locally (if they start with /)
+          const processedBlogs = result.data.map(blog => ({
+            ...blog,
+            image: blog.image.startsWith('/') 
+              ? `https://new.nsgsolutions.in${blog.image}` 
+              : blog.image
+          }));
+          setBlogs(processedBlogs);
+        }
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
+
   const filteredPosts =
     activeCategory === 'All'
-      ? posts
-      : posts.filter((post) => post.tag === activeCategory);
+      ? blogs
+      : blogs.filter((post) => post.tag === activeCategory);
+
+  if (loading) {
+    return (
+      <div className="py-24 flex items-center justify-center">
+        <Loader className="text-[#007cc3] animate-spin" size={40} />
+      </div>
+    );
+  }
 
   return (
     <section className="py-24 px-6 bg-[#0a0f16]">

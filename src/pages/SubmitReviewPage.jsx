@@ -5,11 +5,40 @@ import StarRating from '../components/reviews/StarRating';
 
 const SubmitReviewPage = () => {
   const [rating, setRating] = useState(0);
+  const [content, setContent] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setError('');
+
+    const clientData = JSON.parse(localStorage.getItem('nsg_client_user'));
+    if (!clientData || !clientData.id) {
+      setError('Session expired. Please login again.');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/submit_feedback.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          client_id: clientData.id, 
+          content: content 
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        setIsSubmitted(true);
+      } else {
+        setError(data.message || 'Submission failed');
+      }
+    } catch (err) {
+      setError('Connection error. Please try again.');
+    }
   };
 
   if (isSubmitted) {
@@ -85,19 +114,28 @@ const SubmitReviewPage = () => {
             <div className="relative">
               <textarea 
                 rows="5"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
                 placeholder="DETAILED FEEDBACK: Tell us about the quality of delivery, communication, and overall impact..." 
                 className="w-full bg-[#334155] rounded-sm px-6 py-5 text-white placeholder-white/50 focus:ring-1 focus:ring-white/20 outline-none resize-none"
                 required
               ></textarea>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <p className="text-red-500 font-bold uppercase tracking-widest text-[10px] mt-2">
+                {error}
+              </p>
+            )}
+
             {/* Submit Button */}
             <div className="pt-4 flex justify-start">
               <button 
                 type="submit"
-                disabled={rating === 0}
+                disabled={rating === 0 || !content}
                 className={`px-8 py-3 rounded-sm font-semibold transition-all ${
-                  rating === 0 
+                  (rating === 0 || !content)
                     ? 'bg-[#334155]/50 text-white/50 cursor-not-allowed' 
                     : 'bg-[#334155] text-white hover:bg-[#1e293b]'
                 }`}

@@ -11,28 +11,36 @@ const reasons = [
   { 
     image: innovationIcon, 
     title: 'Architectural Freedom', 
-    desc: 'We don’t just write code; we architect systems. Experience the freedom to solve complex engineering puzzles without the red tape.' 
+    desc: 'We don’t just write code; we architect systems. Experience the freedom to solve complex engineering puzzles without the red tape.',
+    bgColor: 'bg-[#f0f9ff]', // Subtle Sky
+    accentColor: '#007cc3'
   },
   { 
     image: growthIcon, 
     title: 'Exponential Growth', 
-    desc: 'Our meritocratic culture ensures that high performers ascend rapidly. We provide the mentorship and the stage; you provide the ambition.' 
+    desc: 'Our meritocratic culture ensures that high performers ascend rapidly. We provide the mentorship and the stage; you provide the ambition.',
+    bgColor: 'bg-[#f5f3ff]', // Subtle Lavender
+    accentColor: '#7c3aed'
   },
   { 
     image: collabIcon, 
     title: 'Collaborative Elite', 
-    desc: 'Work alongside a hand-picked team of specialists. At NSG, the "average" engineer is a world-class problem solver.' 
+    desc: 'Work alongside a hand-picked team of specialists. At NSG, the "average" engineer is a world-class problem solver.',
+    bgColor: 'bg-[#ecfdf5]', // Subtle Mint
+    accentColor: '#059669'
   },
   { 
     image: impactIcon, 
     title: 'Global Scale Impact', 
-    desc: 'Our solutions power enterprise operations at a massive scale. See your contributions move the needle for Fortune 500 giants.' 
+    desc: 'Our solutions power enterprise operations at a massive scale. See your contributions move the needle for Fortune 500 giants.',
+    bgColor: 'bg-[#fff7ed]', // Subtle Peach
+    accentColor: '#ea580c'
   }
 ];
 
 const CareersWhyJoin = () => {
   return (
-    <section className="py-24 px-6 bg-[#f5f7fa]">
+    <section className="py-24 px-6 bg-[#f8fafc]">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <motion.span 
@@ -56,10 +64,13 @@ const CareersWhyJoin = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.15 }}
               whileHover={{ y: -15 }}
-              className="bg-white border border-black/5 rounded-[2rem] p-10 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden relative group"
+              className={`${reason.bgColor} border border-black/5 rounded-[2.5rem] p-10 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden relative group`}
             >
               {/* Subtle hover background decoration */}
-              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-[#007cc3]/5 rounded-full group-hover:scale-[3] transition-transform duration-700 pointer-events-none" />
+              <div 
+                className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full group-hover:scale-[4] transition-transform duration-1000 pointer-events-none opacity-20"
+                style={{ backgroundColor: reason.accentColor }}
+              />
               
               <div className="w-24 h-24 mb-10 relative z-10 transition-transform duration-500 group-hover:scale-110">
                 <img src={reason.image} alt={reason.title} className="w-full h-full object-contain" />
@@ -67,7 +78,7 @@ const CareersWhyJoin = () => {
               
               <div className="relative z-10">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6 font-infosys-heading">{reason.title}</h3>
-                <p className="text-black/50 leading-relaxed text-[15px] font-medium">{reason.desc}</p>
+                <p className="text-slate-600 leading-relaxed text-[15px] font-medium">{reason.desc}</p>
               </div>
             </motion.div>
           ))}
