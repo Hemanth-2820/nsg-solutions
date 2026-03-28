@@ -3,8 +3,9 @@ import ProjectCard from '../components/portfolio/ProjectCard';
 
 const PortfolioPage = () => {
   return (
-    <div className="min-h-screen bg-[#f1f5f9] w-full">
-      <div className="pt-10 md:pt-12 px-6 md:px-0">
+    <div className="min-h-screen w-full relative" 
+         style={{ background: 'linear-gradient(120grad, rgb(100, 57, 134), rgb(152, 174, 213))' }}>
+      <div className="relative pt-10 md:pt-12 px-6 md:px-0">
         <ProjectCard />
       </div>
     </div>

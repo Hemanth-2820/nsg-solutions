@@ -243,7 +243,7 @@ const ProjectCard = () => {
   // PORTFOLIO VIEW: Cinematic Grid implementation for approved users
   if (viewMode === 'portfolio') {
     return (
-      <section className="bg-white py-12 md:py-32 min-h-screen w-full overflow-x-hidden">
+      <section className="bg-transparent py-12 md:py-32 min-h-screen w-full overflow-x-hidden">
         <div className="w-full mx-auto px-4 sm:px-10 md:px-16 lg:max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -300,7 +300,7 @@ const ProjectCard = () => {
   }
 
   return (
-    <section className="bg-white min-h-screen w-full flex items-start justify-center pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 py-10 md:py-24">
+    <section className="bg-transparent min-h-screen w-full flex items-start justify-center pt-8 sm:pt-10 md:pt-12 lg:pt-14 xl:pt-16 py-10 md:py-24">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
