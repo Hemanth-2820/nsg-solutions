@@ -1,7 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, X, ClipboardCheck, MessageSquare } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import ProjectInquiryForm from '../common/ProjectInquiryForm';
+import { AnimatePresence } from 'framer-motion';
 
 const solutionsData = [
   { 
@@ -72,6 +74,7 @@ const TCSStyleSolutions = () => {
   const scrollRef = useRef(null);
   const sectionRef = useRef(null);
   const navigate = useNavigate();
+  const [selectedInquiry, setSelectedInquiry] = useState(null);
 
   // Root Page level swipe navigation implementation logic
   useEffect(() => {
@@ -256,7 +259,8 @@ const TCSStyleSolutions = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ delay: index * 0.1, duration: 0.6 }}
-                    className="w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(25%-18px)] h-[380px] md:h-[400px] lg:h-[420px] xl:h-[440px] rounded-[1.2rem] relative overflow-hidden flex-shrink-0 snap-start group cursor-pointer"
+                    onClick={() => setSelectedInquiry(item.title)}
+                    className="w-[85vw] sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(25%-18px)] h-[380px] md:h-[400px] lg:h-[420px] xl:h-[440px] rounded-[1.2rem] relative overflow-hidden flex-shrink-0 snap-start group cursor-pointer border border-gray-100"
                 >
                     {/* Background Image Image */}
                     <img 
@@ -343,6 +347,32 @@ const TCSStyleSolutions = () => {
             </div>
         </div>
       </section>
+
+      {/* Solutions Inquiry Modal */}
+      <AnimatePresence>
+        {selectedInquiry && (
+          <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4">
+             <motion.div 
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               exit={{ opacity: 0 }}
+               onClick={() => setSelectedInquiry(null)}
+               className="absolute inset-0 bg-[#0a0e27]/90 backdrop-blur-xl cursor-pointer"
+             />
+             <motion.div 
+               initial={{ opacity: 0, scale: 0.9, y: 40 }}
+               animate={{ opacity: 1, scale: 1, y: 0 }}
+               exit={{ opacity: 0, scale: 0.9, y: 40 }}
+               className="relative w-full max-w-4xl bg-white rounded-[3rem] overflow-hidden shadow-2xl z-10 max-h-[90vh] overflow-y-auto custom-scrollbar border border-white/20"
+             >
+                <ProjectInquiryForm 
+                  projectName={selectedInquiry}
+                  onClose={() => setSelectedInquiry(null)} 
+                />
+             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
