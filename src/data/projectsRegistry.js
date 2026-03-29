@@ -17,5 +17,10 @@ export const allProjectsData = {
     { title: 'SEO Dominance Campaign', desc: 'A comprehensive search engine optimization strategy focused on high-intent keywords, technical audits, and authority building for competitive industries.', img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80' },
     { title: 'Social Growth Engine', desc: 'Innovative social media management that combines data-driven content with psychological triggers to build a loyal community across all platforms.', img: 'https://images.unsplash.com/photo-1557838923-2985c318be48?w=800&q=80' },
     { title: 'Performance Ads Suite', desc: 'Precision-targeted PPC campaigns on Google and Meta designed to maximize conversion rates while minimizing customer acquisition costs.', img: 'https://images.unsplash.com/photo-1533750516457-a7f992034fce?w=800&q=80' }
+  ],
+  branding: [
+    { title: 'Corporate Identity Suite', desc: 'We build comprehensive visual identities that resonate with your target audience, including logo design, typography systems, and core color palettes that define your global presence.', img: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80' },
+    { title: 'UI/UX Design Frameworks', desc: 'Crafting intuitive and aesthetically superior digital interfaces that prioritize user experience while maintaining a consistent and professional brand aesthetic across all platforms.', img: 'https://images.unsplash.com/photo-1586717791821-3f44a563dc4c?w=800&q=80' },
+    { title: 'Modern Brand Refresh', desc: 'Transforming established brands into modern market leaders through tactical design updates that maintain heritage while embracing contemporary visual trends.', img: 'https://images.unsplash.com/photo-1542744094-24638eff58bb?w=800&q=80' }
   ]
 };

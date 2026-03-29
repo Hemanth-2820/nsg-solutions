@@ -23,6 +23,7 @@ import ITServices from './components/solutions/ITServices';
 import VideoProduction from './components/solutions/VideoProduction';
 import DigitalMarketing from './components/solutions/DigitalMarketing';
 import Publishing from './components/solutions/Publishing';
+import BrandingDesign from './components/solutions/BrandingDesign';
 import SolutionInquiryPage from './pages/SolutionInquiryPage';
 
 import { ReactLenis } from '@studio-freight/react-lenis';
@@ -77,6 +78,7 @@ function App() {
             <Route path="/solutions/videoproduction" element={<VideoProduction />} />
             <Route path="/solutions/digitalmarketing" element={<DigitalMarketing />} />
             <Route path="/solutions/publishing" element={<Publishing />} />
+            <Route path="/solutions/branding" element={<BrandingDesign />} />
             
             <Route path="/solutions/:service/register/:project" element={<SolutionInquiryPage />} />
             
