@@ -31,7 +31,7 @@ const ContactForm = () => {
             <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#5bb8e4] blur-[120px] opacity-20 rounded-full pointer-events-none"></div>
 
             <div className="relative z-10">
-              <h3 className="text-[2rem] font-infosys-heading mb-2 text-white">Global Headquarters</h3>
+              <h3 className="text-[2rem] font-infosys-heading mb-2 text-white">Strategic Node</h3>
               <div className="w-12 h-[3px] bg-[#5bb8e4] mb-10 mt-3"></div>
 
               <div className="space-y-10">
@@ -40,24 +40,30 @@ const ContactForm = () => {
                     <MapPin size={18} className="text-[#5bb8e4]" />
                   </div>
                   <p className="font-light text-[#cbd5e1] leading-relaxed">
-                    123 Digital Innovation Park,<br />
-                    Cyber City, Tech District,<br />
-                    Global Hub — 10001
+                    HSR Layout, Sector 2,<br />
+                    Bengaluru, Karnataka,<br />
+                    India — 560102
                   </p>
                 </div>
 
-                <div className="flex items-center gap-5">
-                  <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
-                    <Phone size={18} className="text-[#5bb8e4]" />
-                  </div>
-                  <p className="font-light text-[#cbd5e1]">+1 (800) 555-0199</p>
+                {/* Embedded Map Section */}
+                <div className="mt-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl h-[250px]">
+                  <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15555.22818958226!2d77.63666065541991!3d12.913702200000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae148d390a183f%3A0x67340cf3534d4077!2sHSR%20Layout%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1711728100000!5m2!1sen!2sin" 
+                    width="100%" 
+                    height="100%" 
+                    style={{ border: 0 }} 
+                    allowFullScreen="" 
+                    loading="lazy" 
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
                 </div>
 
-                <div className="flex items-center gap-5">
+                <div className="flex items-center gap-5 pt-4">
                   <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
                     <Mail size={18} className="text-[#5bb8e4]" />
                   </div>
-                  <p className="font-light text-[#cbd5e1]">connect@nsgsolutions.com</p>
+                  <p className="font-light text-[#cbd5e1]">connect@nsgsolutions.in</p>
                 </div>
               </div>
             </div>

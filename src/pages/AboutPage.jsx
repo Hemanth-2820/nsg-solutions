@@ -2,20 +2,20 @@ import React, { useEffect, useRef } from 'react';
 import { Target, Flag, Users, Activity, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { gsap } from 'gsap';
 import { motion } from 'framer-motion';
-import FounderSection from '../components/about/FounderSection';
+import LeadershipSection from '../components/about/LeadershipSection';
 import TeamSection from '../components/about/TeamSection';
 import OfficeGallery from '../components/about/OfficeGallery';
 
 const InnerPageHero = ({ title, subtitle, bgImage }) => (
-  <section className="relative w-full h-[600px] flex items-center bg-[#111]">
+  <section className="relative w-full min-h-[400px] md:h-[600px] flex items-center bg-[#111] py-20">
     <div className="absolute inset-0 z-0 opacity-50">
       <img src={bgImage} alt="Hero" className="w-full h-full object-cover grayscale mix-blend-overlay" />
     </div>
-    <div className="max-w-[1400px] mx-auto px-6 w-full pt-32 relative z-10 font-sans">
-      <h1 className="text-[3.5rem] md:text-[5rem] font-extrabold text-white leading-[1.05] tracking-tight mb-6 mt-10">
+    <div className="max-w-[1400px] mx-auto px-6 w-full pt-20 md:pt-32 relative z-10 font-sans">
+      <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] font-extrabold text-white leading-[1.05] tracking-tight mb-6 mt-10">
         {title}
       </h1>
-      <p className="border-l-[3px] border-[#007cc3] pl-6 text-white text-[1.4rem] font-light max-w-2xl leading-relaxed opacity-90">
+      <p className="border-l-[3px] border-[#007cc3] pl-6 text-white text-[1.1rem] md:text-[1.4rem] font-light max-w-2xl leading-relaxed opacity-90">
         {subtitle}
       </p>
     </div>
@@ -182,7 +182,9 @@ const AboutPage = () => {
       </section>
 
       {/* Placeholders handled by the Developer (Rahul) */}
-      <FounderSection />
+      {/* Leadership Collective Section */}
+      <LeadershipSection />
+      
       <TeamSection />
       <OfficeGallery />
     </div>

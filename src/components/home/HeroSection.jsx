@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import heroBg from '../../assets/hero_bg.png';
 
 const VerticalCarousel = () => {
@@ -36,23 +37,29 @@ const VerticalCarousel = () => {
   }
 
   return (
-    <div className="relative w-full h-[650px] overflow-hidden flex gap-6 p-2 lg:p-6 bg-white/5 backdrop-blur-[20px] rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
+    <div 
+      className="relative w-full h-[450px] lg:h-[650px] overflow-hidden flex lg:gap-6 p-2 lg:p-6 bg-white/5 backdrop-blur-[20px] rounded-[2rem] lg:rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)]"
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)'
+      }}
+    >
       {/* Decorative Orbs */}
       <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/20 blur-[80px] rounded-full"></div>
       <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-500/20 blur-[80px] rounded-full"></div>
 
       <motion.div
-        className="flex flex-col w-1/2"
+        className="flex flex-col w-full lg:w-1/2"
         animate={{ y: ["0%", "-50%"] }}
-        transition={{ repeat: Infinity, ease: "linear", duration: 20 }}
+        transition={{ repeat: Infinity, ease: "linear", duration: 25 }}
       >
         {[...col1, ...col1].map((item, i) => (
-          <div key={`c1-${i}`} className="w-full pb-6">
-            <div className="relative w-full h-52 rounded-3xl overflow-hidden shadow-2xl group border border-white/5">
+          <div key={`c1-${i}`} className="w-full pb-3 md:pb-6">
+            <div className="relative w-full h-56 md:h-64 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group border border-white/5">
               <img src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-              <div className="absolute bottom-5 left-6">
-                <span className="text-white font-bold text-xl tracking-tight opacity-90 group-hover:opacity-100 transition-opacity">{item.title}</span>
+              <div className="absolute bottom-6 left-6">
+                <span className="text-white font-black text-2xl md:text-3xl tracking-tight opacity-90">{item.title}</span>
               </div>
             </div>
           </div>
@@ -60,17 +67,17 @@ const VerticalCarousel = () => {
       </motion.div>
 
       <motion.div
-        className="flex flex-col w-1/2 pt-12"
+        className="hidden lg:flex flex-col lg:w-1/2 pt-12"
         animate={{ y: ["-50%", "0%"] }}
-        transition={{ repeat: Infinity, ease: "linear", duration: 30 }}
+        transition={{ repeat: Infinity, ease: "linear", duration: 35 }}
       >
         {[...col2, ...col2].map((item, i) => (
           <div key={`c2-${i}`} className="w-full pb-6">
-            <div className="relative w-full h-52 rounded-3xl overflow-hidden shadow-2xl group border border-white/5">
+            <div className="relative w-full h-64 rounded-3xl overflow-hidden shadow-2xl group border border-white/5">
               <img src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
               <div className="absolute bottom-5 left-6">
-                <span className="text-white font-bold text-xl tracking-tight opacity-90 group-hover:opacity-100 transition-opacity">{item.title}</span>
+                <span className="text-white font-bold text-3xl tracking-tight opacity-90">{item.title}</span>
               </div>
             </div>
           </div>
@@ -145,57 +152,62 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay"></div>
       </div>
 
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full relative z-10 flex flex-col lg:flex-row justify-between items-center h-full gap-20">
+      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full relative z-10 flex flex-col lg:flex-row justify-between items-center h-full gap-10 lg:gap-20">
 
         {/* TEXT CONTENT COLUMN */}
-        <div className="lg:w-1/2 flex flex-col justify-center items-start min-h-[500px] lg:min-h-screen">
+        <div className="lg:w-1/2 flex flex-col justify-center items-center lg:items-start min-h-[350px] lg:min-h-screen text-center lg:text-left">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full flex flex-col items-start py-20"
+              className="w-full flex flex-col items-center lg:items-start py-10 lg:py-20"
             >
               {/* Animated Label */}
-              <div className="flex items-center gap-4 mb-8 overflow-hidden">
+              <div className="flex items-center gap-4 mb-6 md:mb-8 overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: 60 }}
-                  className="h-[3px] bg-blue-500 rounded-full"
+                  className="h-[2px] md:h-[3px] bg-blue-500 rounded-full"
                 ></motion.div>
-                <span className="text-white text-[14px] font-bold tracking-[0.4em] uppercase opacity-70">
+                <span className="text-white text-[10px] md:text-[14px] font-bold tracking-[0.4em] uppercase opacity-70">
                   {slides[currentSlide].preTitle}
                 </span>
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: 60 }}
+                  className="h-[2px] md:h-[3px] bg-blue-500 rounded-full lg:hidden"
+                ></motion.div>
               </div>
 
-              {/* Bold Typography Title */}
               {/* Bold Typography Title - Sleek & Compact */}
-              <h1 className="text-[2.2rem] md:text-[3rem] lg:text-[3.8rem] xl:text-[4.5rem] font-extrabold text-white leading-[1.05] tracking-tight mb-12">
+              <h1 className="text-[2.2rem] sm:text-[2.8rem] md:text-[3.8rem] lg:text-[3.5rem] xl:text-[4.5rem] font-extrabold text-white leading-[1.1] md:leading-[0.95] tracking-tighter mb-10 md:mb-12">
                 {slides[currentSlide].title.split(' ').map((word, index) => (
-                  <span key={index} className={slides[currentSlide].highlight.includes(word) ? "block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-blue-600" : "inline-block mr-4"}>
+                  <span key={index} className={slides[currentSlide].highlight.includes(word) ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-blue-600 block sm:inline" : "inline-block mr-2 md:mr-4"}>
                     {word}{' '}
                   </span>
                 ))}
               </h1>
-
             </motion.div>
           </AnimatePresence>
         </div>
 
         {/* VISUAL CAROUSEL COLUMN */}
-        <div className="lg:w-[45%] xl:w-[42%] w-full flex justify-center items-center py-10 lg:py-0">
+        <div className="lg:w-[45%] xl:w-[42%] w-full flex justify-center items-center py-6 lg:py-0">
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="w-full relative group"
           >
             {/* Background Glow behind Carousel */}
-            <div className="absolute inset-0 bg-blue-600/30 blur-[120px] rounded-full scale-75 group-hover:scale-100 transition-transform duration-1000"></div>
+            <div className="absolute inset-0 bg-blue-600/20 blur-[100px] rounded-full scale-90 group-hover:scale-100 transition-transform duration-1000"></div>
 
-            <VerticalCarousel />
+            <div className="h-[450px] lg:h-[650px] w-full relative">
+               <VerticalCarousel />
+            </div>
           </motion.div>
         </div>
       </div>

@@ -122,7 +122,10 @@ const Navbar = () => {
 
         {/* Mobile Toggle */}
         <div className="xl:hidden">
-          <button onClick={() => setIsOpen(!isOpen)} className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center text-white z-[110] relative border border-white/20">
+          <button 
+            onClick={() => setIsOpen(!isOpen)} 
+            className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white z-[130] relative border border-white/20 active:scale-95 transition-transform"
+          >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -131,14 +134,48 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div initial={{ opacity: 0, x: '100%' }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: '100%' }} className="fixed inset-0 bg-[#0A0E27] z-[105] flex flex-col p-10 pt-32">
-            <div className="flex flex-col gap-6 overflow-y-auto">
-              {mainLinks.map((link) => (
-                <div key={link.name} className="border-b border-white/10 pb-4">
-                  <Link to={link.path} className="text-[2.2rem] font-black text-white">{link.name}</Link>
-                </div>
+          <motion.div 
+            initial={{ x: '100%', opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: '100%', opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed inset-0 bg-[#0A0E27] z-[110] flex flex-col p-8 pt-24"
+          >
+            {/* Background Aesthetic Blur */}
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full"></div>
+            
+            <div className="flex flex-col gap-4 overflow-y-auto hide-scrollbar flex-grow relative z-20">
+              {mainLinks.map((link, idx) => (
+                <motion.div 
+                  key={link.name}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="border-b border-white/5 pb-3"
+                >
+                  {!link.hasDropdown ? (
+                    <Link to={link.path} className="text-[2rem] font-black text-white active:text-[#38bdf8] transition-colors">{link.name}</Link>
+                  ) : (
+                    <div className="space-y-4 py-2">
+                       <span className="text-[2rem] font-black text-white/40 uppercase tracking-widest text-xs block mb-2">Capabilities</span>
+                        {serviceSubLinks.map((sub, i) => (
+                          <Link 
+                            key={i} 
+                            to={sub.path} 
+                            className="text-white font-bold text-xl hover:text-[#38bdf8] flex items-center justify-between"
+                          >
+                            {sub.name}
+                            <ArrowRight size={18} className="text-[#38bdf8]" />
+                          </Link>
+                        ))}
+                    </div>
+                  )}
+                </motion.div>
               ))}
-              <Link to="/client-login" className="mt-8 p-6 bg-[#007cc3] rounded-2xl text-white text-center font-bold tracking-widest uppercase">Login</Link>
+              
+              <Link to="/client-login" className="mt-8 p-6 bg-[#007cc3] rounded-[2rem] text-white text-center font-black tracking-[0.2em] uppercase shadow-2xl active:scale-95 transition-transform border border-white/10">
+                Client Dashboard
+              </Link>
             </div>
           </motion.div>
         )}

@@ -49,11 +49,12 @@ function App() {
   }, []);
 
   return (
-    <>
+    <ReactLenis root>
       <ScrollToTop />
       <div className={`flex flex-col min-h-screen font-sans ${isAdminRoute ? 'bg-[#0f172a]' : ''}`}>
         {!isAdminRoute && <Navbar />}
         <main className="flex-grow">
+          {/* ... Routes remain same ... */}
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
@@ -92,7 +93,7 @@ function App() {
         </main>
         {!isAdminRoute && <Footer />}
       </div>
-    </>
+    </ReactLenis>
   );
 }
 

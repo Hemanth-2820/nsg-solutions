@@ -11,6 +11,19 @@
     -moz-osx-font-smoothing: grayscale;
     background-color: #ffffff;
     color: #111111;
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+  }
+
+  h1 { 
+    @apply text-[2.8rem] sm:text-[4rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8rem] font-infosys-heading leading-[0.95] tracking-tighter transition-all; 
+  }
+  
+  h2 {
+    @apply text-[2rem] sm:text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem] font-infosys-heading leading-[1.05] tracking-tight transition-all;
+  }
+
+  p {
+    @apply text-base md:text-lg lg:text-xl font-light leading-relaxed transition-all;
   }
 }
 

@@ -91,7 +91,7 @@ const AboutMNCLevel = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: i * 0.15 }}
-            className={`relative ${stat.color} aspect-[4/3] p-10 flex flex-col justify-between overflow-hidden group cursor-default shadow-2xl hover:-translate-y-4 transition-all duration-700 rounded-sm`}
+            className={`relative ${stat.color} aspect-video md:aspect-[4/3] p-6 md:p-10 flex flex-col justify-between overflow-hidden group cursor-default shadow-2xl hover:-translate-y-4 transition-all duration-700 rounded-sm`}
           >
             {/* Background Texture Pattern */}
             <div className="absolute inset-0 opacity-10 pointer-events-none">

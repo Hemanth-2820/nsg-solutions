@@ -11,15 +11,7 @@ const ContactHero = () => (
     </div>
 
     <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-20 relative z-10 h-full flex flex-col justify-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="flex items-center gap-3 mb-6"
-      >
-        <Sparkles size={16} className="text-[#5bb8e4]" />
-        <span className="text-[#5bb8e4] font-bold tracking-[0.3em] text-[12px] uppercase">Get In Touch</span>
-      </motion.div>
+
 
       <div className="overflow-hidden pb-3">
         <motion.h1
