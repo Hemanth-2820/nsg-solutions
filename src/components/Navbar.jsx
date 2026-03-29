@@ -26,7 +26,6 @@ const Navbar = () => {
     { name: 'About', path: '/about' },
     { name: 'Services', path: '/services', hasDropdown: true },
     { name: 'Solutions', path: '/solutions' },
-    { name: 'Portfolio', path: '/portfolio' },
     { name: 'Blog', path: '/blog' },
     { name: 'Careers', path: '/careers' },
     { name: 'Contact', path: '/contact' }
@@ -41,7 +40,7 @@ const Navbar = () => {
     { name: 'Enterprise Strategy', path: '/services/enterprise' }
   ];
 
-  const forceDarkNav = ['/portfolio', '/client-login'].includes(location.pathname);
+  const forceDarkNav = ['/client-login'].includes(location.pathname);
 
   return (
     <nav

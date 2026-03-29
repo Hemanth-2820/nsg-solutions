@@ -11,7 +11,6 @@ import SolutionsPage from './pages/SolutionsPage';
 import ContactPage from './pages/ContactPage';
 import InsightsPage from './pages/InsightsPage';
 import CareersPage from './pages/CareersPage';
-import PortfolioPage from './pages/PortfolioPage';
 import ClientLoginPage from './pages/ClientLoginPage';
 import SubmitReviewPage from './pages/SubmitReviewPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -64,7 +63,6 @@ function App() {
             <Route path="/case-studies" element={<InsightsPage />} />
             <Route path="/careers/*" element={<CareersPage />} />
             <Route path="/careers/apply/:role" element={<CareersApplyPage />} />
-            <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/client-login" element={<ClientLoginPage />} />
             <Route path="/submit-review" element={<SubmitReviewPage />} />
             
