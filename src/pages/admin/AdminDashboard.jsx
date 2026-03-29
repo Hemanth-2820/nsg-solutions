@@ -11,6 +11,7 @@ const AdminDashboard = () => {
     const [applications, setApplications] = useState([]);
     const [solutions, setSolutions] = useState({});
     const [inquiries, setInquiries] = useState([]);
+    const [highlights, setHighlights] = useState({ left: [], right: [] });
     const [loading, setLoading] = useState(true);
     const [statusMessage, setStatusMessage] = useState(null);
     
@@ -25,6 +26,10 @@ const AdminDashboard = () => {
     // Solution States
     const [isEditingSolution, setIsEditingSolution] = useState(false);
     const [currentSolution, setCurrentSolution] = useState({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
+
+    // Highlight States
+    const [isEditingHighlight, setIsEditingHighlight] = useState(false);
+    const [currentHighlight, setCurrentHighlight] = useState({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
 
     const navigate = useNavigate();
 
@@ -47,6 +52,7 @@ const AdminDashboard = () => {
             else if (activeTab === 'applications') await fetchApplications();
             else if (activeTab === 'solutions') await fetchSolutions();
             else if (activeTab === 'inquiries') await fetchInquiries();
+            else if (activeTab === 'highlights') await fetchHighlights();
         } catch (err) {
             console.error("Fetch error:", err);
         }
@@ -98,6 +104,43 @@ const AdminDashboard = () => {
         const res = await fetch('/api/get_inquiries.php');
         const data = await res.json();
         if (data.status === 'success') setInquiries(data.data);
+    };
+
+    const fetchHighlights = async () => {
+        const res = await fetch('/api/get_highlights.php');
+        const data = await res.json();
+        if (data.status === 'success') setHighlights(data.data);
+    };
+
+    const handleSaveHighlight = async (e) => {
+        e.preventDefault();
+        const method = isEditingHighlight ? 'PUT' : 'POST';
+        try {
+            const res = await fetch('/api/manage_highlights.php', {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentHighlight)
+            });
+            const result = await res.json();
+            if (result.status === 'success') {
+                showToast(isEditingHighlight ? 'Highlight updated!' : 'Highlight added!', 'success');
+                setIsEditingHighlight(false);
+                setCurrentHighlight({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
+                fetchHighlights();
+            }
+        } catch (err) { showToast('Action failed.', 'error'); }
+    };
+
+    const handleDeleteHighlight = async (id) => {
+        if (!window.confirm('Remove this highlight card?')) return;
+        try {
+            const res = await fetch(`/api/manage_highlights.php?id=${id}`, { method: 'DELETE' });
+            const result = await res.json();
+            if (result.status === 'success') {
+                showToast('Highlight removed!', 'success');
+                fetchHighlights();
+            }
+        } catch (err) { showToast('Deletion failed.', 'error'); }
     };
 
     const handleSaveSolution = async (e) => {
@@ -248,6 +291,7 @@ const AdminDashboard = () => {
                             {[
                                 { id: 'testimonials', label: 'Testimonials', icon: <CheckCircle size={14} /> },
                                 { id: 'solutions', label: 'Solutions', icon: <Briefcase size={14} /> },
+                                { id: 'highlights', label: 'Home Highlights', icon: <Zap size={14} /> },
                                 { id: 'inquiries', label: 'Inquiries', icon: <Send size={14} /> },
                                 { id: 'blogs', label: 'Blogs', icon: <BookOpen size={14} /> },
                                 { id: 'jobs', label: 'Careers', icon: <Zap size={14} /> },
@@ -544,6 +588,76 @@ const AdminDashboard = () => {
                                         <button type="submit" className="w-full bg-[#007cc3] text-white py-4 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all hover:bg-[#0088d8] flex items-center justify-center gap-2 mt-4"><Send size={16} /> {isEditingSolution ? 'Update Project' : 'Add to Portfolio'}</button>
                                     </div>
                                 </form>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'highlights' && (
+                        <motion.div key="highlights" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }}>
+                            <div className="flex items-center justify-between mb-12">
+                                <div>
+                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">High-Impact Highlights</h2>
+                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Vertical Showcase Configuration</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                                <div className="lg:col-span-2 space-y-8">
+                                    {['left', 'right'].map(side => (
+                                        <div key={side} className="bg-white/5 border border-white/10 rounded-3xl p-8">
+                                            <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-6 flex items-center gap-2">
+                                                <div className="w-2 h-2 rounded-full bg-[#007cc3]"></div> {side === 'left' ? 'Primary Flow (Left)' : 'Secondary Flow (Right)'}
+                                            </h3>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                {(highlights[side] || []).map((card) => (
+                                                    <div key={card.id} className="group bg-white/5 border border-white/5 rounded-2xl overflow-hidden hover:border-[#007cc3]/30 transition-all">
+                                                        <div className="aspect-video relative overflow-hidden">
+                                                            <img src={card.image_url} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000" />
+                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                                                            <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all">
+                                                                <button onClick={() => { setIsEditingHighlight(true); setCurrentHighlight(card); }} className="p-3 bg-white/10 hover:bg-[#007cc3] rounded-xl text-white transition-all"><Edit2 size={16} /></button>
+                                                                <button onClick={() => handleDeleteHighlight(card.id)} className="p-3 bg-red-500/10 hover:bg-red-500 rounded-xl text-white transition-all"><Trash2 size={16} /></button>
+                                                            </div>
+                                                        </div>
+                                                        <div className="p-4">
+                                                            <div className="font-bold text-sm tracking-tight">{card.title}</div>
+                                                            <div className="text-[9px] text-white/30 uppercase tracking-[0.2em] font-black mt-1">Order: {card.sort_order}</div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="space-y-6">
+                                    <form onSubmit={handleSaveHighlight} className="bg-white/5 border border-white/10 rounded-3xl p-8 sticky top-32">
+                                        <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-8 flex items-center gap-2">
+                                            {isEditingHighlight ? <Edit2 size={14} /> : <Plus size={14} />} {isEditingHighlight ? 'Modify Highlight' : 'Compose Highlight'}
+                                        </h3>
+                                        <div className="space-y-4">
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-2">Column Side</label>
+                                                <select key="side-select" value={currentHighlight.column_side} onChange={e => setCurrentHighlight({...currentHighlight, column_side: e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none appearance-none">
+                                                    <option className="bg-[#0f172a]" value="left">Left Column</option>
+                                                    <option className="bg-[#0f172a]" value="right">Right Column</option>
+                                                </select>
+                                            </div>
+                                            <input required value={currentHighlight.title} onChange={e => setCurrentHighlight({...currentHighlight, title: e.target.value})} placeholder="Service Title" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
+                                            <input required value={currentHighlight.image_url} onChange={e => setCurrentHighlight({...currentHighlight, image_url: e.target.value})} placeholder="Image URL (Unsplash/Direct)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
+                                            <input type="number" value={currentHighlight.sort_order} onChange={e => setCurrentHighlight({...currentHighlight, sort_order: parseInt(e.target.value)})} placeholder="Sort Order" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
+                                            
+                                            <div className="flex gap-3 mt-4">
+                                                {isEditingHighlight && (
+                                                    <button type="button" onClick={() => { setIsEditingHighlight(false); setCurrentHighlight({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 }); }} className="flex-1 bg-white/5 text-white/50 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-white/10">Cancel</button>
+                                                )}
+                                                <button type="submit" className="flex-[2] bg-[#007cc3] text-white py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-[#0088d8] flex items-center justify-center gap-2">
+                                                    <Send size={14} /> {isEditingHighlight ? 'Commit Changes' : 'Initialize Highlight'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </motion.div>
                     )}

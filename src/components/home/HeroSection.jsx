@@ -4,19 +4,36 @@ import { motion, AnimatePresence } from 'framer-motion';
 import heroBg from '../../assets/hero_bg.png';
 
 const VerticalCarousel = () => {
-  const col1 = [
-    { img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500&q=80", title: "IT Services" },
-    { img: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&q=80", title: "Video Production" },
-    { img: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=500&q=80", title: "Digital Marketing" },
-    { img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500&q=80", title: "Smart Classroom" }
-  ];
+  const [col1, setCol1] = useState([]);
+  const [col2, setCol2] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const col2 = [
-    { img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80", title: "E-Commerce" },
-    { img: "https://images.unsplash.com/photo-1557992260-ec58e38d363c?w=500&q=80", title: "Surveillance" },
-    { img: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&q=80", title: "Healthcare" },
-    { img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=500&q=80", title: "EduQuiz" }
-  ];
+  useEffect(() => {
+    const fetchHighlights = async () => {
+      try {
+        const res = await fetch('/api/get_highlights.php');
+        const data = await res.json();
+        if (data.status === 'success') {
+          // Add default fallback if DB is empty but we should have data from setup
+          setCol1(data.data.left || []);
+          setCol2(data.data.right || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch highlights:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchHighlights();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-[650px] flex items-center justify-center bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10">
+        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-[650px] overflow-hidden flex gap-6 p-2 lg:p-6 bg-white/5 backdrop-blur-[20px] rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)]">
@@ -32,7 +49,7 @@ const VerticalCarousel = () => {
         {[...col1, ...col1].map((item, i) => (
           <div key={`c1-${i}`} className="w-full pb-6">
             <div className="relative w-full h-52 rounded-3xl overflow-hidden shadow-2xl group border border-white/5">
-              <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+              <img src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
               <div className="absolute bottom-5 left-6">
                 <span className="text-white font-bold text-xl tracking-tight opacity-90 group-hover:opacity-100 transition-opacity">{item.title}</span>
@@ -50,7 +67,7 @@ const VerticalCarousel = () => {
         {[...col2, ...col2].map((item, i) => (
           <div key={`c2-${i}`} className="w-full pb-6">
             <div className="relative w-full h-52 rounded-3xl overflow-hidden shadow-2xl group border border-white/5">
-              <img src={item.img} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
+              <img src={item.image_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
               <div className="absolute bottom-5 left-6">
                 <span className="text-white font-bold text-xl tracking-tight opacity-90 group-hover:opacity-100 transition-opacity">{item.title}</span>
