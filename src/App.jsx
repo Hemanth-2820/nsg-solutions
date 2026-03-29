@@ -25,8 +25,6 @@ import Publishing from './components/solutions/Publishing';
 import BrandingDesign from './components/solutions/BrandingDesign';
 import SolutionInquiryPage from './pages/SolutionInquiryPage';
 
-import { ReactLenis } from '@studio-freight/react-lenis';
-
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -49,12 +47,12 @@ function App() {
   }, []);
 
   return (
-    <ReactLenis root>
+    <>
       <ScrollToTop />
       <div className={`flex flex-col min-h-screen font-sans ${isAdminRoute ? 'bg-[#0f172a]' : ''}`}>
         {!isAdminRoute && <Navbar />}
         <main className="flex-grow">
-          {/* ... Routes remain same ... */}
+          {/* Main application routing configuration */}
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
@@ -93,7 +91,7 @@ function App() {
         </main>
         {!isAdminRoute && <Footer />}
       </div>
-    </ReactLenis>
+    </>
   );
 }
 
