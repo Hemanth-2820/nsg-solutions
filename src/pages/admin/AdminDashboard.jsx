@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import logonavbar from "../../assets/logonavbar.png";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Clock, CheckCircle, XCircle, LogOut, Layout, BookOpen, Plus, Trash2, Edit2, FileText, Tag, Image as ImageIcon, Send, Briefcase, Users, MapPin, Download, ExternalLink, Zap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Shield, Clock, CheckCircle, XCircle, LogOut, Layout, BookOpen, Plus, Trash2, Edit2, FileText, Tag, Image as ImageIcon, Send, Briefcase, Users, MapPin, Download, ExternalLink, Zap, ArrowRight } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
-    const [activeTab, setActiveTab] = useState('testimonials'); // 'testimonials', 'blogs', 'jobs', 'applications', 'solutions', 'inquiries'
+    const [activeTab, setActiveTab] = useState('testimonials'); 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [testimonials, setTestimonials] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [jobs, setJobs] = useState([]);
@@ -15,35 +17,34 @@ const AdminDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [statusMessage, setStatusMessage] = useState(null);
     
-    // Blog States
+    // Sub-states
     const [isEditingBlog, setIsEditingBlog] = useState(false);
     const [currentBlog, setCurrentBlog] = useState({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' });
-    
-    // Job States
     const [isEditingJob, setIsEditingJob] = useState(false);
     const [currentJob, setCurrentJob] = useState({ title: '', location: '', type: 'Full-time', stack: '', salary: '', description: '' });
-
-    // Solution States
     const [isEditingSolution, setIsEditingSolution] = useState(false);
     const [currentSolution, setCurrentSolution] = useState({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
-
-    // Highlight States
     const [isEditingHighlight, setIsEditingHighlight] = useState(false);
     const [currentHighlight, setCurrentHighlight] = useState({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
 
     const navigate = useNavigate();
 
-    // SECURITY CHECK
     useEffect(() => {
         const adminUser = JSON.parse(localStorage.getItem('nsg_admin_user'));
-        if (!adminUser) {
-            navigate('/admin-login'); 
-        } else {
-            fetchData();
-        }
+        if (!adminUser) navigate('/admin-login'); 
+        else fetchData();
     }, [navigate, activeTab]);
 
+    const normalizeImg = (img) => {
+        if (!img) return '';
+        if (img.startsWith('http')) return img;
+        let clean = img;
+        if (!clean.startsWith('/')) clean = '/' + clean;
+        return `https://new.nsgsolutions.in${clean}`;
+    }
+
     const fetchData = async () => {
+        if (!navigator.onLine) return;
         setLoading(true);
         try {
             if (activeTab === 'testimonials') await fetchPending();
@@ -53,9 +54,7 @@ const AdminDashboard = () => {
             else if (activeTab === 'solutions') await fetchSolutions();
             else if (activeTab === 'inquiries') await fetchInquiries();
             else if (activeTab === 'highlights') await fetchHighlights();
-        } catch (err) {
-            console.error("Fetch error:", err);
-        }
+        } catch (err) { console.error(err); }
         setLoading(false);
     };
 
@@ -67,25 +66,17 @@ const AdminDashboard = () => {
 
     const fetchBlogs = async () => {
         const res = await fetch('/api/get_blogs.php');
-        const data = await res.json();
-        if (data.status === 'success') {
-            const processedBlogs = data.data.map(blog => {
-                let img = blog.image;
-                if (!img.startsWith('http')) {
-                  if (!img.startsWith('/')) img = '/' + img;
-                  img = `https://new.nsgsolutions.in${img}`;
-                }
-                return { ...blog, image: img };
-            });
-            setBlogs(processedBlogs);
+        const result = await res.json();
+        if (result.status === 'success') {
+            const processed = result.data.map(b => ({ ...b, displayImg: normalizeImg(b.image) }));
+            setBlogs(processed);
         }
     };
 
     const fetchJobs = async () => {
         const res = await fetch('/api/get_jobs.php');
         const data = await res.json();
-        const processed = data.map(j => ({ ...j, stack: Array.isArray(j.stack) ? j.stack.join(', ') : j.stack }));
-        setJobs(processed || []);
+        setJobs(data || []);
     };
 
     const fetchApplications = async () => {
@@ -96,8 +87,14 @@ const AdminDashboard = () => {
 
     const fetchSolutions = async () => {
         const res = await fetch('/api/get_solutions.php');
-        const data = await res.json();
-        if (data.status === 'success') setSolutions(data.data);
+        const result = await res.json();
+        if (result.status === 'success') {
+            const normalized = {};
+            Object.keys(result.data).forEach(cat => {
+                normalized[cat] = result.data[cat].map(s => ({ ...s, displayImg: normalizeImg(s.img) }));
+            });
+            setSolutions(normalized);
+        }
     };
 
     const fetchInquiries = async () => {
@@ -108,72 +105,45 @@ const AdminDashboard = () => {
 
     const fetchHighlights = async () => {
         const res = await fetch('/api/get_highlights.php');
-        const data = await res.json();
-        if (data.status === 'success') setHighlights(data.data);
+        const result = await res.json();
+        if (result.status === 'success') {
+            const norm = { left: [], right: [] };
+            if (result.data.left) norm.left = result.data.left.map(h => ({ ...h, displayImg: normalizeImg(h.image_url) }));
+            if (result.data.right) norm.right = result.data.right.map(h => ({ ...h, displayImg: normalizeImg(h.image_url) }));
+            setHighlights(norm);
+        }
     };
 
-    const handleSaveHighlight = async (e) => {
+    // BLOG ACTIONS
+    const handleSaveBlog = async (e) => {
         e.preventDefault();
-        const method = isEditingHighlight ? 'PUT' : 'POST';
+        const endpoint = isEditingBlog ? '/api/admin/update_blog.php' : '/api/admin/create_blog.php';
         try {
-            const res = await fetch('/api/manage_highlights.php', {
-                method: method,
+            const res = await fetch(endpoint, {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(currentHighlight)
+                body: JSON.stringify(currentBlog)
             });
-            const result = await res.json();
-            if (result.status === 'success') {
-                showToast(isEditingHighlight ? 'Highlight updated!' : 'Highlight added!', 'success');
-                setIsEditingHighlight(false);
-                setCurrentHighlight({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
-                fetchHighlights();
+            if ((await res.json()).status === 'success') {
+                showToast(isEditingBlog ? 'Insight Updated!' : 'Insight Published!', 'success');
+                setIsEditingBlog(false);
+                setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' });
+                fetchBlogs();
             }
-        } catch (err) { showToast('Action failed.', 'error'); }
-    };
+        } catch (err) { showToast('Action failed', 'error'); }
+    }
 
-    const handleDeleteHighlight = async (id) => {
-        if (!window.confirm('Remove this highlight card?')) return;
+    const handleDeleteBlog = async (id) => {
+        if (!window.confirm('Delete article?')) return;
         try {
-            const res = await fetch(`/api/manage_highlights.php?id=${id}`, { method: 'DELETE' });
-            const result = await res.json();
-            if (result.status === 'success') {
-                showToast('Highlight removed!', 'success');
-                fetchHighlights();
-            }
-        } catch (err) { showToast('Deletion failed.', 'error'); }
-    };
-
-    const handleSaveSolution = async (e) => {
-        e.preventDefault();
-        const method = isEditingSolution ? 'PUT' : 'POST';
-        const solData = { ...currentSolution, features: currentSolution.features.split(',').map(f => f.trim()) };
-        try {
-            const res = await fetch('/api/manage_solutions.php', {
-                method: method,
+            const res = await fetch('/api/admin/delete_blog.php', {
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(solData)
+                body: JSON.stringify({ id })
             });
-            const result = await res.json();
-            if (result.status === 'success') {
-                showToast(isEditingSolution ? 'Project updated!' : 'Project added!', 'success');
-                setIsEditingSolution(false);
-                setCurrentSolution({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
-                fetchSolutions();
-            }
-        } catch (err) { showToast('Project save failed.', 'error'); }
-    };
-
-    const handleDeleteSolution = async (id) => {
-        if (!window.confirm('Confirm project deletion?')) return;
-        try {
-            const res = await fetch(`/api/manage_solutions.php?id=${id}`, { method: 'DELETE' });
-            const result = await res.json();
-            if (result.status === 'success') {
-                showToast('Project removed!', 'success');
-                fetchSolutions();
-            }
-        } catch (err) { showToast('Deletion failed.', 'error'); }
-    };
+            if ((await res.json()).status === 'success') { showToast('Deleted!', 'success'); fetchBlogs(); }
+        } catch (err) { showToast('Fails', 'error'); }
+    }
 
     // JOB ACTIONS
     const handleSaveJob = async (e) => {
@@ -185,31 +155,81 @@ const AdminDashboard = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(currentJob)
             });
-            const data = await res.json();
-            if (data.status === 'success') {
-                showToast(isEditingJob ? 'Job updated!' : 'Job posted!', 'success');
+            if ((await res.json()).status === 'success') {
+                showToast(isEditingJob ? 'Job Revised!' : 'Vacancy Posted!', 'success');
                 setIsEditingJob(false);
                 setCurrentJob({ title: '', location: '', type: 'Full-time', stack: '', salary: '', description: '' });
                 fetchJobs();
             }
-        } catch (err) { showToast('Job save failed.', 'error'); }
-    };
+        } catch (err) { showToast('Fails', 'error'); }
+    }
 
     const handleDeleteJob = async (id) => {
-        if (!window.confirm('Confirm job deletion?')) return;
+        if (!window.confirm('Delete job listing?')) return;
         try {
             const res = await fetch('/api/manage_jobs.php?action=delete', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id })
             });
-            const data = await res.json();
-            if (data.status === 'success') {
-                showToast('Job removed!', 'success');
-                fetchJobs();
+            if ((await res.json()).status === 'success') { showToast('Deleted!', 'success'); fetchJobs(); }
+        } catch (err) { showToast('Fails', 'error'); }
+    }
+
+    // SOLUTION ACTIONS
+    const handleSaveSolution = async (e) => {
+        e.preventDefault();
+        const method = isEditingSolution ? 'PUT' : 'POST';
+        const solData = { ...currentSolution, features: typeof currentSolution.features === 'string' ? currentSolution.features.split(',').map(f => f.trim()) : currentSolution.features };
+        try {
+            const res = await fetch('/api/manage_solutions.php', {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(solData)
+            });
+            if ((await res.json()).status === 'success') {
+                showToast(isEditingSolution ? 'Project Revised!' : 'Project Added!', 'success');
+                setIsEditingSolution(false);
+                setCurrentSolution({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
+                fetchSolutions();
             }
-        } catch (err) { showToast('Deletion failed.', 'error'); }
-    };
+        } catch (err) { showToast('Fails', 'error'); }
+    }
+
+    const handleDeleteSolution = async (id) => {
+        if (!window.confirm('Delete project entries?')) return;
+        try {
+            const res = await fetch(`/api/manage_solutions.php?id=${id}`, { method: 'DELETE' });
+            if ((await res.json()).status === 'success') { showToast('Deleted!', 'success'); fetchSolutions(); }
+        } catch (err) { showToast('Fails', 'error'); }
+    }
+
+    // HIGHLIGHT ACTIONS
+    const handleSaveHighlight = async (e) => {
+        e.preventDefault();
+        const method = isEditingHighlight ? 'PUT' : 'POST';
+        try {
+            const res = await fetch('/api/manage_highlights.php', {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentHighlight)
+            });
+            if ((await res.json()).status === 'success') {
+                showToast(isEditingHighlight ? 'Revised!' : 'Added!', 'success');
+                setIsEditingHighlight(false);
+                setCurrentHighlight({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
+                fetchHighlights();
+            }
+        } catch (err) { showToast('Fails', 'error'); }
+    }
+
+    const handleDeleteHighlight = async (id) => {
+        if (!window.confirm('Delete highlight?')) return;
+        try {
+            const res = await fetch(`/api/manage_highlights.php?id=${id}`, { method: 'DELETE' });
+            if ((await res.json()).status === 'success') { showToast('Deleted!', 'success'); fetchHighlights(); }
+        } catch (err) { showToast('Fails', 'error'); }
+    }
 
     const handleUpdateTestimonial = async (id, status) => {
         try {
@@ -219,52 +239,8 @@ const AdminDashboard = () => {
                 body: JSON.stringify({ testimonial_id: id, status: status })
             });
             const data = await response.json();
-            if (data.status === 'success') {
-                showToast(`Testimonial ${status} successfully!`, 'success');
-                fetchPending();
-            }
+            if (data.status === 'success') { showToast(`Moderated!`, 'success'); fetchPending(); }
         } catch (error) { showToast('Update failed.', 'error'); }
-    };
-
-    const handleSaveBlog = async (e) => {
-        e.preventDefault();
-        const endpoint = isEditingBlog ? '/api/admin/update_blog.php' : '/api/admin/create_blog.php';
-        const blogData = { ...currentBlog, image: currentBlog.image.replace('https://new.nsgsolutions.in', '') };
-        try {
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(blogData)
-            });
-            const data = await response.json();
-            if (data.status === 'success') {
-                showToast(isEditingBlog ? 'Blog updated!' : 'Blog created!', 'success');
-                setIsEditingBlog(false);
-                setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' });
-                fetchBlogs();
-            }
-        } catch (error) { showToast('Action failed.', 'error'); }
-    };
-
-    const handleDeleteBlog = async (id) => {
-        if (!window.confirm('Are you sure you want to delete this blog?')) return;
-        try {
-            const response = await fetch('/api/admin/delete_blog.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id })
-            });
-            const data = await response.json();
-            if (data.status === 'success') {
-                showToast('Blog deleted!', 'success');
-                fetchBlogs();
-            }
-        } catch (error) { showToast('Deletion failed.', 'error'); }
-    };
-
-    const showToast = (text, type) => {
-        setStatusMessage({ text, type });
-        setTimeout(() => setStatusMessage(null), 3000);
     };
 
     const handleLogout = () => {
@@ -272,81 +248,78 @@ const AdminDashboard = () => {
         navigate('/admin-login');
     };
 
+    const showToast = (text, type) => {
+        setStatusMessage({ text, type });
+        setTimeout(() => setStatusMessage(null), 3000);
+    };
+
+    const adminTabs = [
+        { id: 'testimonials', label: 'Testimonials', icon: <CheckCircle size={18} /> },
+        { id: 'solutions', label: 'Solutions', icon: <Briefcase size={18} /> },
+        { id: 'highlights', label: 'Highlights', icon: <Zap size={18} /> },
+        { id: 'inquiries', label: 'Inquiries', icon: <Send size={18} /> },
+        { id: 'blogs', label: 'Blogs', icon: <BookOpen size={18} /> },
+        { id: 'jobs', label: 'Careers', icon: <Zap size={18} /> },
+        { id: 'applications', label: 'Apps', icon: <Users size={18} /> }
+    ];
+
     return (
-        <div className="min-h-screen bg-[#0f172a] text-white font-sans selection:bg-[#007cc3] selection:text-white">
-            <header className="border-b border-white/10 bg-[#0f172a]/80 backdrop-blur-xl sticky top-0 z-50 w-full">
-                <div className="max-w-[1400px] mx-auto px-6 h-24 flex items-center justify-between">
-                    <div className="flex items-center gap-8">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 bg-[#007cc3] rounded-xl text-white shadow-lg shadow-blue-500/20">
-                                <Layout size={28} />
+        <div className="min-h-screen bg-[#0f172a] text-white pt-28">
+            <header className="fixed top-0 left-0 w-full border-b border-white/10 bg-[#0f172a] z-[300] shadow-2xl h-28">
+                <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between relative">
+                    <div className="flex items-center gap-4">
+                        <Link to="/" className="flex items-center gap-4">
+                            <img src={logonavbar} alt="Logo" className="h-10 w-auto" />
+                            <div className="flex flex-col">
+                                <span className="text-sm font-black uppercase text-[#007cc3]">NSG Command</span>
+                                <span className="text-[10px] text-white/30 font-bold uppercase tracking-widest leading-none">Control Panel</span>
                             </div>
-                            <div>
-                                <h1 className="text-xl font-bold uppercase tracking-[0.2em] hidden sm:block">Admin Node</h1>
-                                <span className="text-[10px] text-[#007cc3] font-bold uppercase tracking-[0.3em] hidden sm:block">Secure Session</span>
-                            </div>
-                        </div>
-                        
-                        <nav className="hidden lg:flex items-center gap-2 ml-4">
-                            {[
-                                { id: 'testimonials', label: 'Testimonials', icon: <CheckCircle size={14} /> },
-                                { id: 'solutions', label: 'Solutions', icon: <Briefcase size={14} /> },
-                                { id: 'highlights', label: 'Home Highlights', icon: <Zap size={14} /> },
-                                { id: 'inquiries', label: 'Inquiries', icon: <Send size={14} /> },
-                                { id: 'blogs', label: 'Blogs', icon: <BookOpen size={14} /> },
-                                { id: 'jobs', label: 'Careers', icon: <Zap size={14} /> },
-                                { id: 'applications', label: 'Applications', icon: <Users size={14} /> }
-                            ].map(tab => (
-                                <button 
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id)}
-                                    className={`px-5 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === tab.id ? 'bg-white/10 text-[#007cc3]' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
-                                >
-                                    {tab.icon} {tab.label}
-                                </button>
-                            ))}
-                        </nav>
+                        </Link>
                     </div>
 
-                    <div className="flex items-center gap-6">
-                        <button onClick={handleLogout} className="text-white/40 hover:text-red-400 transition-colors capitalize text-sm font-bold flex items-center gap-2">
-                           <LogOut size={16} /> Logout
-                        </button>
+                    <nav className="hidden lg:flex items-center gap-2">
+                        {adminTabs.map(tab => (
+                            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-white/10 text-[#007cc3]' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>{tab.label}</button>
+                        ))}
+                    </nav>
+
+                    <div className="flex items-center gap-4 relative z-[320]">
+                        <button onClick={handleLogout} className="text-white/40 hover:text-red-400 font-bold hidden lg:flex items-center gap-2 text-[10px] uppercase tracking-widest transition-all"><LogOut size={16} /> Logout</button>
+                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white border border-white/10 shadow-xl">{isMenuOpen ? <XCircle size={24} /> : <Layout size={24} />}</button>
                     </div>
                 </div>
+
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.div initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }} className="fixed inset-0 bg-[#0A0E27] z-[250] flex flex-col p-8 pt-32 backdrop-blur-3xl bg-opacity-95">
+                            <div className="flex flex-col gap-3 overflow-y-auto mt-4">
+                                {adminTabs.map(tab => (
+                                    <button key={tab.id} onClick={() => { setActiveTab(tab.id); setIsMenuOpen(false); }} className={`w-full p-6 rounded-2xl text-left flex items-center gap-4 font-black uppercase tracking-widest text-lg transition-all ${activeTab === tab.id ? 'bg-[#007cc3] text-white border-none shadow-2xl' : 'bg-white/5 text-white/30 border border-white/5 hover:bg-white/10 hover:text-white'}`}>{tab.icon} {tab.label}</button>
+                                ))}
+                                <button onClick={handleLogout} className="mt-6 p-6 bg-red-500/10 text-red-500 rounded-2xl font-black uppercase border border-red-500/10 tracking-widest flex items-center justify-center gap-2 pb-10 mb-10"><LogOut size={20} /> Terminate</button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </header>
 
             <main className="max-w-[1400px] mx-auto px-6 py-12">
                 <AnimatePresence mode="wait">
                     {activeTab === 'testimonials' && (
                         <motion.div key="testimonials" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                             <div className="flex items-center justify-between mb-12">
-                                <div>
-                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">Testimonial Queue</h2>
-                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Client feedback moderation</p>
-                                </div>
-                            </div>
-
+                            <h2 className="text-3xl font-black uppercase italic mb-8">Testimonial Queue</h2>
                             <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
-                                {loading ? <div className="py-20 text-center uppercase tracking-widest text-xs opacity-20 animate-pulse">Accessing DB...</div> : testimonials.length === 0 ? (
-                                    <div className="py-20 text-center flex flex-col items-center">
-                                        <CheckCircle size={48} className="text-green-500/20 mb-4" />
-                                        <p className="text-white/40 font-bold uppercase tracking-widest text-xs">Queue Clear</p>
-                                    </div>
-                                ) : (
+                                {loading ? <p className="text-center opacity-20 py-10 uppercase font-black">Syncing...</p> : testimonials.length === 0 ? <p className="text-center opacity-40 uppercase tracking-[0.3em] text-[10px] font-black py-20 italic">No items pending.</p> : (
                                     <div className="space-y-4">
-                                        {testimonials.map((item) => (
-                                            <div key={item.id} className="bg-white/[0.02] border border-white/5 rounded-2xl p-6 flex flex-col lg:flex-row gap-6 items-center justify-between">
+                                        {testimonials.map(item => (
+                                            <div key={item.id} className="bg-white/5 p-6 rounded-2xl flex flex-col lg:flex-row justify-between items-center gap-6 border border-white/5 shadow-lg relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-[#007cc3]"></div>
                                                 <div className="flex-1">
-                                                    <div className="flex items-center gap-3 mb-3">
-                                                        <div className="w-8 h-8 rounded-full bg-[#007cc3] flex items-center justify-center font-black text-xs">{item.client_name.charAt(0)}</div>
-                                                        <span className="font-bold text-sm uppercase tracking-wider">{item.client_name} <span className="text-white/30 ml-2 font-normal">@{item.company}</span></span>
-                                                    </div>
-                                                    <p className="text-white/70 italic text-sm leading-relaxed">"{item.content}"</p>
+                                                    <div className="font-bold uppercase text-xs mb-2 flex items-center gap-2">{item.client_name} <span className="opacity-30">@{item.company}</span></div>
+                                                    <p className="italic opacity-70 text-sm leading-relaxed">"{item.content}"</p>
                                                 </div>
                                                 <div className="flex gap-2">
-                                                    <button onClick={() => handleUpdateTestimonial(item.id, 'approved')} className="bg-green-500/10 hover:bg-green-500 text-green-500 hover:text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">Approve</button>
-                                                    <button onClick={() => handleUpdateTestimonial(item.id, 'rejected')} className="bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">Reject</button>
+                                                    <button onClick={() => handleUpdateTestimonial(item.id, 'approved')} className="px-6 py-2 bg-green-500/10 hover:bg-green-500 text-green-500 hover:text-white rounded-lg font-black uppercase text-[10px] tracking-widest transition-all">Accept</button>
+                                                    <button onClick={() => handleUpdateTestimonial(item.id, 'rejected')} className="px-6 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-lg font-black uppercase text-[10px] tracking-widest transition-all">Decline</button>
                                                 </div>
                                             </div>
                                         ))}
@@ -358,387 +331,216 @@ const AdminDashboard = () => {
 
                     {activeTab === 'blogs' && (
                         <motion.div key="blogs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <div className="flex items-center justify-between mb-12">
-                                <div>
-                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">Insight Flow</h2>
-                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Knowledge Base Control</p>
-                                </div>
-                                <button onClick={() => { setIsEditingBlog(false); setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' }); }} className="bg-[#007cc3] hover:bg-[#0088d8] text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-[11px] flex items-center gap-3 shadow-xl active:scale-95 transition-all"><Plus size={18} /> New Post</button>
+                            <div className="flex justify-between items-center mb-10">
+                                <h2 className="text-3xl font-black uppercase italic">Insight Flow</h2>
+                                <button onClick={() => { setIsEditingBlog(false); setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' }); }} className="bg-[#007cc3] text-white px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all shadow-xl active:scale-95"><Plus size={18} /> Compose</button>
                             </div>
-
                             <div className="grid lg:grid-cols-[1fr_450px] gap-12">
                                 <div className="space-y-4">
-                                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                                        <h3 className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-8 border-b border-white/5 pb-4">Published Articles ({blogs.length})</h3>
-                                        <div className="space-y-2">
-                                            {blogs.map((blog) => (
-                                                <div key={blog.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-xl p-4 flex items-center justify-between transition-all">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 bg-[#0f172a] rounded overflow-hidden border border-white/10"><img src={blog.image} className="w-full h-full object-cover opacity-50" onError={(e) => e.target.src='https://via.placeholder.com/100'} /></div>
-                                                        <div>
-                                                            <h4 className="text-sm font-bold mb-1 truncate max-w-[250px]">{blog.title}</h4>
-                                                            <span className="text-[9px] font-black uppercase tracking-widest text-[#007cc3]">{blog.tag}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <button onClick={() => { setIsEditingBlog(true); setCurrentBlog(blog); }} className="p-2 hover:bg-white/10 rounded-lg text-white/50 hover:text-white transition-all"><Edit2 size={16} /></button>
-                                                        <button onClick={() => handleDeleteBlog(blog.id)} className="p-2 hover:bg-red-500/10 rounded-lg text-white/50 hover:text-red-400 transition-all"><Trash2 size={16} /></button>
-                                                    </div>
+                                    {blogs.map(blog => (
+                                        <div key={blog.id} className="bg-white/5 border border-white/5 p-5 rounded-3xl flex items-center justify-between group hover:border-[#007cc3]/30 transition-all shadow-xl backdrop-blur-sm">
+                                            <div className="flex items-center gap-5">
+                                                <div className="w-16 h-16 bg-black rounded-2xl overflow-hidden border border-white/10 flex-shrink-0 shadow-2xl">
+                                                    <img src={blog.displayImg} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <form onSubmit={handleSaveBlog} className="bg-white/5 border border-white/10 rounded-3xl p-8 sticky top-32">
-                                    <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-8 flex items-center gap-2">{isEditingBlog ? <Edit2 size={14} /> : <Plus size={14} />} {isEditingJob ? 'Edit Article' : 'Compose insight'}</h3>
-                                    <div className="space-y-6">
-                                        <input required value={currentBlog.title} onChange={e => setCurrentBlog({...currentBlog, title: e.target.value})} placeholder="Title" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#007cc3] outline-none" />
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <input value={currentBlog.tag} onChange={e => setCurrentBlog({...currentBlog, tag: e.target.value})} placeholder="Tag" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#007cc3] outline-none" />
-                                            <input value={currentBlog.time_to_read} onChange={e => setCurrentBlog({...currentBlog, time_to_read: e.target.value})} placeholder="Read Time" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#007cc3] outline-none" />
-                                        </div>
-                                        <input value={currentBlog.image} onChange={e => setCurrentBlog({...currentBlog, image: e.target.value})} placeholder="Image Path" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#007cc3] outline-none" />
-                                        <textarea rows="6" required value={currentBlog.content} onChange={e => setCurrentBlog({...currentBlog, content: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-[#007cc3] outline-none resize-none" />
-                                        <button type="submit" className="w-full bg-[#007cc3] text-white py-4 rounded-xl font-black uppercase tracking-widest text-[11px] hover:bg-[#0088d8] transition-all flex items-center justify-center gap-2"><Send size={16} /> {isEditingBlog ? 'Update' : 'Publish'}</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {activeTab === 'jobs' && (
-                        <motion.div key="jobs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <div className="flex items-center justify-between mb-12">
-                                <div>
-                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">Talent Acquisition</h2>
-                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Corporate Role Management</p>
-                                </div>
-                                <button onClick={() => { setIsEditingJob(false); setCurrentJob({ title: '', location: '', type: 'Full-time', stack: '', salary: '', description: '' }); }} className="bg-[#007cc3] hover:bg-[#0088d8] text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-[11px] flex items-center gap-3 active:scale-95 transition-all"><Plus size={18} /> Post Job</button>
-                            </div>
-
-                            <div className="grid lg:grid-cols-[1fr_450px] gap-12">
-                                <div className="space-y-4">
-                                    <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                                        <h3 className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-8 border-b border-white/5 pb-4">Active Positions ({jobs.length})</h3>
-                                        <div className="space-y-2">
-                                            {jobs.map((job) => (
-                                                <div key={job.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-xl p-6 flex items-center justify-between transition-all">
-                                                    <div className="flex-1">
-                                                        <h4 className="text-lg font-bold mb-1">{job.title}</h4>
-                                                        <div className="flex items-center gap-4 text-[10px] font-black text-white/40 uppercase tracking-widest">
-                                                            <span className="flex items-center gap-1"><MapPin size={12} /> {job.location}</span>
-                                                            <span className="flex items-center gap-1"><Clock size={12} /> {job.type}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <button onClick={() => { setIsEditingJob(true); setCurrentJob(job); }} className="p-3 hover:bg-white/10 rounded-lg text-white/50 hover:text-[#007cc3] transition-all"><Edit2 size={18} /></button>
-                                                        <button onClick={() => handleDeleteJob(job.id)} className="p-3 hover:bg-red-500/10 rounded-lg text-white/50 hover:text-red-400 transition-all"><Trash2 size={18} /></button>
-                                                    </div>
+                                                <div>
+                                                    <h4 className="font-bold text-base mb-1 truncate max-w-[250px]">{blog.title}</h4>
+                                                    <span className="text-[10px] uppercase font-black text-[#007cc3] opacity-60 tracking-widest">{blog.tag}</span>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <form onSubmit={handleSaveJob} className="bg-white/5 border border-white/10 rounded-3xl p-8 sticky top-32">
-                                    <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-8 flex items-center gap-2">{isEditingJob ? <Edit2 size={14} /> : <Plus size={14} />} {isEditingJob ? 'Edit Position' : 'Broadcast Vacancy'}</h3>
-                                    <div className="space-y-5">
-                                        <input required value={currentJob.title} onChange={e => setCurrentJob({...currentJob, title: e.target.value})} placeholder="Job Title" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        <input required value={currentJob.location} onChange={e => setCurrentJob({...currentJob, location: e.target.value})} placeholder="Location (e.g. Remote)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        <select value={currentJob.type} onChange={e => setCurrentJob({...currentJob, type: e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none appearance-none cursor-pointer">
-                                            <option className="bg-[#0f172a] text-white" value="Full-time">Full-time</option>
-                                            <option className="bg-[#0f172a] text-white" value="Part-time">Part-time</option>
-                                            <option className="bg-[#0f172a] text-white" value="Contract">Contract</option>
-                                            <option className="bg-[#0f172a] text-white" value="Remote">Remote</option>
-                                        </select>
-                                        <input required value={currentJob.stack} onChange={e => setCurrentJob({...currentJob, stack: e.target.value})} placeholder="Stack (comma separated)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        <input required value={currentJob.salary} onChange={e => setCurrentJob({...currentJob, salary: e.target.value})} placeholder="Salary Bracket" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        <textarea rows="4" value={currentJob.description} onChange={e => setCurrentJob({...currentJob, description: e.target.value})} placeholder="Description (Optional)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none resize-none" />
-                                        <button type="submit" className="w-full bg-[#007cc3] text-white py-4 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all hover:bg-[#0088d8] flex items-center justify-center gap-2"><Send size={16} /> {isEditingJob ? 'Update Job' : 'Post Opening'}</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {activeTab === 'applications' && (
-                        <motion.div key="applications" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <div className="flex items-center justify-between mb-12">
-                                <div>
-                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">Deterministic Candidates</h2>
-                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Job application review hub</p>
-                                </div>
-                                <div className="bg-white/5 px-6 py-4 border border-white/10 rounded-2xl text-center">
-                                    <span className="block text-[10px] font-black uppercase text-white/30 mb-1 tracking-widest">Submissions</span>
-                                    <span className="text-2xl font-black text-[#007cc3]">{applications.length}</span>
-                                </div>
-                            </div>
-
-                            <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
-                                {loading ? <div className="py-20 text-center uppercase tracking-widest text-xs opacity-20 animate-pulse">Scanning Archive...</div> : (
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left border-collapse">
-                                            <thead>
-                                                <tr className="bg-white/5 text-[10px] font-black uppercase tracking-widest text-white/30 border-b border-white/5">
-                                                    <th className="px-8 py-6">Candidate</th>
-                                                    <th className="px-8 py-6">Target Role</th>
-                                                    <th className="px-8 py-6">Contact</th>
-                                                    <th className="px-8 py-6">Applied Date</th>
-                                                    <th className="px-8 py-6 text-right">Resume</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-white/5">
-                                                {applications.map((app) => (
-                                                    <tr key={app.id} className="hover:bg-white/[0.02] transition-colors">
-                                                        <td className="px-8 py-6">
-                                                            <div className="font-bold text-sm">{app.name}</div>
-                                                            {app.portfolio_url && <a href={app.portfolio_url} target="_blank" rel="noreferrer" className="text-[10px] text-[#007cc3] hover:underline flex items-center gap-1 mt-1 font-bold italic"><ExternalLink size={10} /> Portfolio</a>}
-                                                        </td>
-                                                        <td className="px-8 py-6">
-                                                            <span className="px-3 py-1 bg-[#007cc3]/10 text-[#007cc3] text-[10px] font-black uppercase tracking-widest rounded-md">{app.job_title || 'Unknown Role'}</span>
-                                                        </td>
-                                                        <td className="px-8 py-6">
-                                                            <div className="text-sm font-medium">{app.email}</div>
-                                                            <div className="text-[10px] text-white/30 font-bold">{app.phone}</div>
-                                                        </td>
-                                                        <td className="px-8 py-6 text-[11px] font-black text-white/30">
-                                                            {new Date(app.created_at).toLocaleDateString()}
-                                                        </td>
-                                                        <td className="px-8 py-6 text-right">
-                                                            <a 
-                                                                href={`https://new.nsgsolutions.in/api/${app.resume_path}`} 
-                                                                target="_blank" 
-                                                                rel="noreferrer" 
-                                                                className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-[#007cc3] text-white rounded-lg text-[10px] font-black uppercase tracking-widest transition-all"
-                                                            >
-                                                                <Download size={14} /> View CV
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                        {applications.length === 0 && (
-                                            <div className="py-20 text-center">
-                                                <Users size={48} className="mx-auto text-white/5 mb-4" />
-                                                <p className="text-white/20 font-bold uppercase tracking-widest text-xs">No deterministic candidates yet.</p>
                                             </div>
-                                        )}
+                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button onClick={() => { setIsEditingBlog(true); setCurrentBlog(blog); }} className="p-3 text-white/40 hover:text-white bg-white/5 rounded-xl"><Edit2 size={18} /></button>
+                                                <button onClick={() => handleDeleteBlog(blog.id)} className="p-3 text-white/40 hover:text-red-400 bg-red-500/5 rounded-xl"><Trash2 size={18} /></button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <form onSubmit={handleSaveBlog} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-[0_0_100px_rgba(0,0,0,0.5)]">
+                                    <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-5 flex items-center gap-3">{isEditingBlog ? <Edit2 size={16} /> : <Plus size={16} />} {isEditingBlog ? 'Revise Article' : 'New Publication'}</h3>
+                                    <div className="space-y-6">
+                                        <input required value={currentBlog.title} onChange={e=>setCurrentBlog({...currentBlog, title:e.target.value})} placeholder="Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:border-[#007cc3] outline-none transition-all" />
+                                        <div className="flex gap-4">
+                                            <input required value={currentBlog.tag} onChange={e=>setCurrentBlog({...currentBlog, tag:e.target.value})} placeholder="Category" className="flex-1 bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                            <input required value={currentBlog.time_to_read} onChange={e=>setCurrentBlog({...currentBlog, time_to_read:e.target.value})} placeholder="Min" className="w-32 bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        </div>
+                                        <input required value={currentBlog.image} onChange={e=>setCurrentBlog({...currentBlog, image:e.target.value})} placeholder="Image Path (/blog.png)" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <textarea required rows="8" value={currentBlog.content} onChange={e=>setCurrentBlog({...currentBlog, content:e.target.value})} placeholder="Markdown Content" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
+                                        <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[12px] tracking-widest shadow-blue-500/20 shadow-xl hover:bg-[#0088d8] transition-all flex items-center justify-center gap-3"><Send size={20} /> Finalize Post</button>
                                     </div>
-                                )}
+                                </form>
                             </div>
                         </motion.div>
                     )}
-                    {activeTab === 'solutions' && (
-                        <motion.div key="solutions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <div className="flex items-center justify-between mb-12">
-                                <div>
-                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">Portfolio Nexus</h2>
-                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Sectoral Service Management</p>
-                                </div>
-                                <button onClick={() => { setIsEditingSolution(false); setCurrentSolution({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' }); }} className="bg-[#007cc3] hover:bg-[#0088d8] text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-[11px] flex items-center gap-3 active:scale-95 transition-all"><Plus size={18} /> Add Project</button>
-                            </div>
 
-                            <div className="grid lg:grid-cols-[1fr_450px] gap-12">
-                                <div className="space-y-8">
-                                    {Object.keys(solutions).map(category => (
-                                        <div key={category} className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                                            <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-6 border-b border-white/5 pb-4">{category} projects</h3>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                {solutions[category].map(project => (
-                                                    <div key={project.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-xl overflow-hidden transition-all">
-                                                        <div className="h-32 bg-black/50 relative overflow-hidden">
-                                                            <img src={project.img} className="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-700" />
-                                                            <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60">
-                                                                <button onClick={() => { setIsEditingSolution(true); setCurrentSolution({ ...project, category, features: (project.features || []).join(', ') }); }} className="p-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-all"><Edit2 size={16} /></button>
-                                                                <button onClick={() => handleDeleteSolution(project.id)} className="p-2 bg-red-500/20 hover:bg-red-500 rounded-lg text-white transition-all"><Trash2 size={16} /></button>
-                                                            </div>
-                                                        </div>
-                                                        <div className="p-4">
-                                                            <h4 className="text-sm font-bold truncate">{project.title}</h4>
-                                                            <p className="text-[10px] text-white/30 truncate mt-1">{project.shortDesc}</p>
-                                                        </div>
+                    {activeTab === 'solutions' && (
+                        <motion.div key="solutions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                             <div className="flex justify-between items-center mb-10">
+                                <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Portfolio Nexus</h2>
+                                <button onClick={() => { setIsEditingSolution(false); setCurrentSolution({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' }); }} className="bg-[#007cc3] text-white px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all"><Plus size={18} /> New Discovery</button>
+                             </div>
+                             <div className="grid lg:grid-cols-[1fr_450px] gap-12">
+                                <div className="space-y-10">
+                                    {Object.keys(solutions).map(cat => (
+                                        <div key={cat} className="bg-white/5 p-8 rounded-[40px] border border-white/10 shadow-xl">
+                                            <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 tracking-widest flex items-center gap-3"><Briefcase size={16} /> {cat} Projects</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {solutions[cat].map(proj => (
+                                                    <div key={proj.id} className="bg-[#0f172a] rounded-3xl overflow-hidden border border-white/5 group relative shadow-2xl">
+                                                        <div className="h-40 relative overflow-hidden"><img src={proj.displayImg} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-70" /><div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div></div>
+                                                        <div className="p-5 flex items-center justify-between"><span className="font-bold text-sm truncate">{proj.title}</span><div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity"><button onClick={() => { setIsEditingSolution(true); setCurrentSolution({ ...proj, category: cat, features: Array.isArray(proj.features) ? proj.features.join(', ') : proj.features }); }} className="p-2 hover:text-[#007cc3] text-white/40"><Edit2 size={16} /></button><button onClick={() => handleDeleteSolution(proj.id)} className="p-2 hover:text-red-400 text-white/40"><Trash2 size={16} /></button></div></div>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
                                     ))}
-                                    {Object.keys(solutions).length === 0 && <div className="py-20 text-center text-white/20 uppercase tracking-widest text-xs font-black">No projects discovered.</div>}
                                 </div>
-
-                                <form onSubmit={handleSaveSolution} className="bg-white/5 border border-white/10 rounded-3xl p-8 sticky top-32">
-                                    <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-8 flex items-center gap-2">{isEditingSolution ? <Edit2 size={14} /> : <Plus size={14} />} {isEditingSolution ? 'Modify Deliverable' : 'New Project Entry'}</h3>
+                                <form onSubmit={handleSaveSolution} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl overflow-hidden">
+                                    <h3 className="uppercase text-[10px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 flex items-center gap-3"><ImageIcon size={16} /> Registry Entry</h3>
                                     <div className="space-y-4">
-                                        <div className="space-y-1">
-                                            <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-2">Sector Category</label>
-                                            <select value={currentSolution.category} onChange={e => setCurrentSolution({...currentSolution, category: e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none appearance-none cursor-pointer">
-                                                <option className="bg-[#0f172a] text-white" value="itservices">IT Services</option>
-                                                <option className="bg-[#0f172a] text-white" value="digitalmarketing">Digital Marketing</option>
-                                                <option className="bg-[#0f172a] text-white" value="videoproduction">Video Production</option>
-                                                <option className="bg-[#0f172a] text-white" value="branding">Branding & Design</option>
-                                            </select>
-                                        </div>
-                                        <input required value={currentSolution.title} onChange={e => setCurrentSolution({...currentSolution, title: e.target.value})} placeholder="Project Title" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        <input required value={currentSolution.shortDesc} onChange={e => setCurrentSolution({...currentSolution, shortDesc: e.target.value})} placeholder="Short Hook Text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        <textarea required rows="4" value={currentSolution.desc} onChange={e => setCurrentSolution({...currentSolution, desc: e.target.value})} placeholder="Full Description" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none resize-none" />
-                                        <input required value={currentSolution.img} onChange={e => setCurrentSolution({...currentSolution, img: e.target.value})} placeholder="Image URL (Unsplash/Direct)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        <input value={currentSolution.features} onChange={e => setCurrentSolution({...currentSolution, features: e.target.value})} placeholder="Key Features (comma separated)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        
-                                        <button type="submit" className="w-full bg-[#007cc3] text-white py-4 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all hover:bg-[#0088d8] flex items-center justify-center gap-2 mt-4"><Send size={16} /> {isEditingSolution ? 'Update Project' : 'Add to Portfolio'}</button>
+                                        <select value={currentSolution.category} onChange={e=>setCurrentSolution({...currentSolution, category:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none">
+                                            <option value="itservices">IT Services</option>
+                                            <option value="digitalmarketing">Digital Marketing</option>
+                                            <option value="videoproduction">Video Production</option>
+                                            <option value="branding">Branding & Design</option>
+                                        </select>
+                                        <input required value={currentSolution.title} onChange={e=>setCurrentSolution({...currentSolution, title:e.target.value})} placeholder="Project Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <input required value={currentSolution.img} onChange={e=>setCurrentSolution({...currentSolution, img:e.target.value})} placeholder="Asset Path (/img.jpg)" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <textarea required rows="5" value={currentSolution.desc} onChange={e=>setCurrentSolution({...currentSolution, desc:e.target.value})} placeholder="Briefing" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
+                                        <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 transition-all"><Send size={18} /> Update Nexus</button>
                                     </div>
                                 </form>
-                            </div>
+                             </div>
+                        </motion.div>
+                    )}
+
+                     {activeTab === 'jobs' && (
+                        <motion.div key="jobs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                             <div className="flex justify-between items-center mb-10">
+                                <h2 className="text-3xl font-black uppercase italic italic font-infosys-heading tracking-tight mb-2">Talent Acquisition</h2>
+                                <button onClick={() => { setIsEditingJob(false); setCurrentJob({ title: '', location: '', type: 'Full-time', stack: '', salary: '', description: '' }); }} className="bg-[#007cc3] text-white px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all shadow-xl"><Plus size={18} /> Add Vacancy</button>
+                             </div>
+                             <div className="grid lg:grid-cols-[1fr_450px] gap-12">
+                                <div className="space-y-4">
+                                     {jobs.map(job => (
+                                        <div key={job.id} className="bg-white/5 border border-white/5 p-6 rounded-3xl flex items-center justify-between group hover:border-[#007cc3]/30 transition-all shadow-xl">
+                                            <div>
+                                                <h4 className="font-bold text-xl mb-1">{job.title}</h4>
+                                                <div className="flex items-center gap-4 text-[10px] font-black text-white/30 uppercase tracking-[0.2em]"><span className="flex items-center gap-1"><MapPin size={12} /> {job.location}</span><span className="flex items-center gap-1"><Clock size={12} /> {job.type}</span></div>
+                                            </div>
+                                            <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button onClick={() => { setIsEditingJob(true); setCurrentJob(job); }} className="p-3 bg-white/5 rounded-xl hover:text-white"><Edit2 size={20} /></button>
+                                                <button onClick={() => handleDeleteJob(job.id)} className="p-3 bg-red-500/5 rounded-xl hover:text-red-400"><Trash2 size={20} /></button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <form onSubmit={handleSaveJob} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl">
+                                    <h3 className="uppercase text-[10px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 flex items-center gap-3"><Briefcase size={16} /> Job Registry</h3>
+                                    <div className="space-y-5">
+                                        <input required value={currentJob.title} onChange={e=>setCurrentJob({...currentJob, title:e.target.value})} placeholder="Position Name" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none" />
+                                        <input required value={currentJob.location} onChange={e=>setCurrentJob({...currentJob, location:e.target.value})} placeholder="Location" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none" />
+                                        <select value={currentJob.type} onChange={e=>setCurrentJob({...currentJob, type:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-5 py-4 text-sm outline-none">
+                                            <option value="Full-time">Full-time</option>
+                                            <option value="Contract">Contract</option>
+                                        </select>
+                                        <textarea rows="4" value={currentJob.description} onChange={e=>setCurrentJob({...currentJob, description:e.target.value})} placeholder="Description" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none resize-none" />
+                                        <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 hover:bg-[#0088d8] transition-all"><Send size={18} /> Update Careers</button>
+                                    </div>
+                                </form>
+                             </div>
                         </motion.div>
                     )}
 
                     {activeTab === 'highlights' && (
-                        <motion.div key="highlights" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }}>
-                            <div className="flex items-center justify-between mb-12">
-                                <div>
-                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">High-Impact Highlights</h2>
-                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Vertical Showcase Configuration</p>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                                <div className="lg:col-span-2 space-y-8">
+                        <motion.div key="highlights" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                             <h2 className="text-3xl font-black uppercase italic mb-8">High-Impact Highlights</h2>
+                             <div className="grid lg:grid-cols-[1fr_400px] gap-10">
+                                <div className="space-y-8">
                                     {['left', 'right'].map(side => (
-                                        <div key={side} className="bg-white/5 border border-white/10 rounded-3xl p-8">
-                                            <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-6 flex items-center gap-2">
-                                                <div className="w-2 h-2 rounded-full bg-[#007cc3]"></div> {side === 'left' ? 'Primary Flow (Left)' : 'Secondary Flow (Right)'}
-                                            </h3>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                {(highlights[side] || []).map((card) => (
-                                                    <div key={card.id} className="group bg-white/5 border border-white/5 rounded-2xl overflow-hidden hover:border-[#007cc3]/30 transition-all">
-                                                        <div className="aspect-video relative overflow-hidden">
-                                                            <img src={card.image_url} className="w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-1000" />
-                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                                                            <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all">
-                                                                <button onClick={() => { setIsEditingHighlight(true); setCurrentHighlight(card); }} className="p-3 bg-white/10 hover:bg-[#007cc3] rounded-xl text-white transition-all"><Edit2 size={16} /></button>
-                                                                <button onClick={() => handleDeleteHighlight(card.id)} className="p-3 bg-red-500/10 hover:bg-red-500 rounded-xl text-white transition-all"><Trash2 size={16} /></button>
-                                                            </div>
-                                                        </div>
-                                                        <div className="p-4">
-                                                            <div className="font-bold text-sm tracking-tight">{card.title}</div>
-                                                            <div className="text-[9px] text-white/30 uppercase tracking-[0.2em] font-black mt-1">Order: {card.sort_order}</div>
-                                                        </div>
+                                        <div key={side} className="bg-white/5 p-8 rounded-[40px] border border-white/10 shadow-xl">
+                                            <h3 className="uppercase text-[10px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 tracking-widest">{side} Track</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {(highlights[side] || []).map(card => (
+                                                    <div key={card.id} className="bg-[#0f172a] rounded-3xl overflow-hidden border border-white/5 group relative shadow-2xl">
+                                                        <div className="h-32 bg-black/60 relative"><img src={card.displayImg} className="w-full h-full object-cover opacity-60 transition-transform duration-1000 group-hover:scale-110" /><div className="absolute inset-0 bg-black/40"></div></div>
+                                                        <div className="p-4 flex items-center justify-between"><h4 className="font-bold text-sm truncate">{card.title}</h4><div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all"><button onClick={() => { setIsEditingHighlight(true); setCurrentHighlight(card); }} className="p-2 bg-white/5 rounded-lg hover:text-[#007cc3]"><Edit2 size={14} /></button><button onClick={() => handleDeleteHighlight(card.id)} className="p-2 bg-red-500/5 rounded-lg hover:text-red-400"><Trash2 size={14} /></button></div></div>
                                                     </div>
                                                 ))}
                                             </div>
                                         </div>
                                     ))}
                                 </div>
+                                <form onSubmit={handleSaveHighlight} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl">
+                                    <h3 className="uppercase text-[10px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4">Highlight Registry</h3>
+                                    <div className="space-y-4">
+                                        <select value={currentHighlight.column_side} onChange={e=>setCurrentHighlight({...currentHighlight, column_side:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none">
+                                            <option value="left">Left Column</option>
+                                            <option value="right">Right Column</option>
+                                        </select>
+                                        <input required value={currentHighlight.title} onChange={e=>setCurrentHighlight({...currentHighlight, title:e.target.value})} placeholder="Card Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <input required value={currentHighlight.image_url} onChange={e=>setCurrentHighlight({...currentHighlight, image_url:e.target.value})} placeholder="Asset Path" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <input type="number" required value={currentHighlight.sort_order} onChange={e=>setCurrentHighlight({...currentHighlight, sort_order:parseInt(e.target.value)})} placeholder="Priority" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 transition-all hover:bg-[#0088d8]"><Send size={18} /> Sync Highlight</button>
+                                    </div>
+                                </form>
+                             </div>
+                        </motion.div>
+                    )}
 
-                                <div className="space-y-6">
-                                    <form onSubmit={handleSaveHighlight} className="bg-white/5 border border-white/10 rounded-3xl p-8 sticky top-32">
-                                        <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-8 flex items-center gap-2">
-                                            {isEditingHighlight ? <Edit2 size={14} /> : <Plus size={14} />} {isEditingHighlight ? 'Modify Highlight' : 'Compose Highlight'}
-                                        </h3>
-                                        <div className="space-y-4">
-                                            <div className="space-y-1">
-                                                <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-2">Column Side</label>
-                                                <select key="side-select" value={currentHighlight.column_side} onChange={e => setCurrentHighlight({...currentHighlight, column_side: e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none appearance-none">
-                                                    <option className="bg-[#0f172a]" value="left">Left Column</option>
-                                                    <option className="bg-[#0f172a]" value="right">Right Column</option>
-                                                </select>
-                                            </div>
-                                            <input required value={currentHighlight.title} onChange={e => setCurrentHighlight({...currentHighlight, title: e.target.value})} placeholder="Service Title" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                            <input required value={currentHighlight.image_url} onChange={e => setCurrentHighlight({...currentHighlight, image_url: e.target.value})} placeholder="Image URL (Unsplash/Direct)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                            <input type="number" value={currentHighlight.sort_order} onChange={e => setCurrentHighlight({...currentHighlight, sort_order: parseInt(e.target.value)})} placeholder="Sort Order" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                            
-                                            <div className="flex gap-3 mt-4">
-                                                {isEditingHighlight && (
-                                                    <button type="button" onClick={() => { setIsEditingHighlight(false); setCurrentHighlight({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 }); }} className="flex-1 bg-white/5 text-white/50 py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-white/10">Cancel</button>
-                                                )}
-                                                <button type="submit" className="flex-[2] bg-[#007cc3] text-white py-4 rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-[#0088d8] flex items-center justify-center gap-2">
-                                                    <Send size={14} /> {isEditingHighlight ? 'Commit Changes' : 'Initialize Highlight'}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                    {activeTab === 'applications' && (
+                        <motion.div key="apps" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}>
+                             <div className="flex justify-between items-end mb-12">
+                                <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Deterministic Candidates</h2>
+                                <div className="bg-white/5 px-8 py-5 rounded-2xl border border-white/10 text-center shadow-lg"><span className="block text-[10px] uppercase font-black text-[#007cc3] mb-1">Total Intelligence</span><span className="text-3xl font-black tracking-tighter">{applications.length}</span></div>
+                             </div>
+                             <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
+                                <table className="w-full text-left">
+                                    <thead className="bg-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 border-b border-white/5">
+                                        <tr><th className="px-10 py-8">Identity</th><th className="px-10 py-8">Target Project</th><th className="px-10 py-8 text-right">Archived CV</th></tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        {applications.map(app => (
+                                            <tr key={app.id} className="hover:bg-white/[0.02] transition-all group">
+                                                <td className="px-10 py-8"><div className="font-bold text-lg mb-1">{app.name}</div><div className="text-[10px] font-black uppercase tracking-widest text-white/30">{app.email}</div></td>
+                                                <td className="px-10 py-8"><span className="px-4 py-2 bg-[#007cc3]/10 text-[#007cc3] text-[9px] font-black uppercase tracking-widest rounded-full border border-[#007cc3]/20">{app.job_title || 'General Entry'}</span></td>
+                                                <td className="px-10 py-8 text-right"><a href={`https://new.nsgsolutions.in/api/${app.resume_path}`} target="_blank" className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-[#007cc3] text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl"><Download size={14} /> Analyze CV</a></td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                             </div>
                         </motion.div>
                     )}
 
                     {activeTab === 'inquiries' && (
-                        <motion.div key="inquiries" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <div className="flex items-center justify-between mb-12">
-                                <div>
-                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">Inquiry Insights</h2>
-                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Prospective Business Stream</p>
-                                </div>
-                                <div className="bg-white/5 px-6 py-4 border border-white/10 rounded-2xl text-center">
-                                    <span className="block text-[10px] font-black uppercase text-white/30 mb-1 tracking-widest">Global Leads</span>
-                                    <span className="text-2xl font-black text-[#007cc3]">{inquiries.length}</span>
-                                </div>
-                            </div>
-
-                            <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-left border-collapse">
-                                        <thead>
-                                            <tr className="bg-white/5 text-[10px] font-black uppercase tracking-widest text-white/30 border-b border-white/5">
-                                                <th className="px-8 py-6">Inquirer</th>
-                                                <th className="px-8 py-6">Target Project</th>
-                                                <th className="px-8 py-6">Corporate Entity</th>
-                                                <th className="px-8 py-6">Timestamp</th>
-                                                <th className="px-8 py-6 text-right">Request ID</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-white/5">
-                                            {inquiries.map((lead) => (
-                                                <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors">
-                                                    <td className="px-8 py-6">
-                                                        <div className="font-bold text-sm text-white">{lead.first_name} {lead.last_name}</div>
-                                                        <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest mt-1">{lead.email} | {lead.phone}</div>
-                                                    </td>
-                                                    <td className="px-8 py-6">
-                                                        <div className="flex flex-col">
-                                                            <span className="text-sm font-bold text-[#007cc3]">{lead.project_name}</span>
-                                                            <span className="text-[9px] font-black uppercase tracking-widest text-white/20 mt-1">{lead.service_category}</span>
-                                                        </div>
-                                                    </td>
-                                                    <td className="px-8 py-6">
-                                                        <div className="text-sm font-medium text-white/80">{lead.company}</div>
-                                                        <div className="text-[10px] text-white/30 italic font-bold">{lead.role}</div>
-                                                    </td>
-                                                    <td className="px-8 py-6 text-[11px] font-black text-white/30">
-                                                        {new Date(lead.created_at).toLocaleDateString()} at {new Date(lead.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                    </td>
-                                                    <td className="px-8 py-6 text-right">
-                                                        <span className="px-3 py-1 bg-white/5 text-white/50 text-[10px] font-black uppercase tracking-widest rounded border border-white/5">{lead.request_id}</span>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    {inquiries.length === 0 && (
-                                        <div className="py-20 text-center">
-                                            <Send size={48} className="mx-auto text-white/5 mb-4" />
-                                            <p className="text-white/20 font-bold uppercase tracking-widest text-xs">No active inquiries registered.</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
+                        <motion.div key="leads" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
+                             <div className="flex justify-between items-center mb-12">
+                                <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Intelligence Inbound</h2>
+                                <div className="bg-[#007cc3] px-8 py-5 rounded-2xl shadow-xl shadow-blue-500/20 text-center border border-white/10"><span className="block text-[10px] uppercase font-black text-white/50 mb-1">Global Intelligence</span><span className="text-3xl font-black tracking-tighter">{inquiries.length}</span></div>
+                             </div>
+                             <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
+                                <table className="w-full text-left">
+                                    <thead className="bg-[#0f172a] text-[10px] font-black uppercase tracking-[0.2em] text-white/20 border-b border-white/5">
+                                        <tr><th className="px-10 py-8">Identity</th><th className="px-10 py-8">Target Project</th><th className="px-10 py-8 text-right">Observation</th></tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-white/5">
+                                        {inquiries.map(lead => (
+                                            <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors"><td className="px-10 py-8"><div className="font-bold text-lg text-white mb-1">{lead.first_name} {lead.last_name}</div><div className="text-[10px] font-black text-white/30 uppercase tracking-widest mt-1">{lead.email} | {lead.phone}</div></td><td className="px-10 py-8"><div className="text-sm font-black text-[#007cc3] mb-1">{lead.project_name}</div><div className="text-[9px] font-black uppercase tracking-widest text-white/20">{lead.company} | {lead.role}</div></td><td className="px-10 py-8 text-right text-[11px] font-black text-white/20 uppercase tracking-[0.1em]">{new Date(lead.created_at).toLocaleDateString()}</td></tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
             </main>
 
-            <AnimatePresence>
-                {statusMessage && (
-                    <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }}
-                        className={`fixed bottom-10 right-10 z-[100] px-8 py-4 rounded-2xl shadow-2xl font-bold uppercase tracking-widest text-[10px] flex items-center gap-3 ${statusMessage.type === 'success' ? 'bg-[#007cc3] text-white' : 'bg-red-500 text-white'}`}
-                    >
-                        {statusMessage.type === 'success' ? <CheckCircle size={18} /> : <XCircle size={18} />}
-                        {statusMessage.text}
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {statusMessage && (
+                <motion.div initial={{ opacity:0, y:50 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:50 }} className={`fixed bottom-10 right-10 p-6 rounded-3xl shadow-2xl font-black uppercase text-[10px] tracking-widest z-[500] flex items-center gap-3 backdrop-blur-3xl border border-white/10 ${statusMessage.type === 'success' ? 'bg-[#007cc3] text-white shadow-blue-500/20' : 'bg-red-500 text-white shadow-red-500/20'}`}>{statusMessage.text}</motion.div>
+            )}
         </div>
     );
 };
 
 export default AdminDashboard;
+const Menu = ({ size }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>;
