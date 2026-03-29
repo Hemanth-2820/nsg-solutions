@@ -17,7 +17,7 @@ import SubmitReviewPage from './pages/SubmitReviewPage';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import BlogPage from './pages/BlogPage';
-
+import CareersApplyPage from './pages/CareersApplyPage';
 
 import ITServices from './components/solutions/ITServices';
 import VideoProduction from './components/solutions/VideoProduction';
@@ -36,7 +36,8 @@ const ScrollToTop = () => {
 
 function App() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  // Robust Admin check (case-insensitive and handles various slashes)
+  const isAdminRoute = location.pathname.toLowerCase().includes('admin');
 
   useEffect(() => {
     AOS.init({
@@ -60,11 +61,14 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/case-studies" element={<InsightsPage />} />
             <Route path="/careers/*" element={<CareersPage />} />
+            <Route path="/careers/apply/:role" element={<CareersApplyPage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/client-login" element={<ClientLoginPage />} />
             <Route path="/submit-review" element={<SubmitReviewPage />} />
+            
             <Route path="/admin-portal" element={<AdminDashboard />} />
             <Route path="/admin-login" element={<AdminLoginPage />} />
+            
             <Route path="/blog/*" element={<BlogPage />} />
 
             {/* Solution sub-pages */}
@@ -72,6 +76,15 @@ function App() {
             <Route path="/solutions/videoproduction" element={<VideoProduction />} />
             <Route path="/solutions/digitalmarketing" element={<DigitalMarketing />} />
             <Route path="/solutions/publishing" element={<Publishing />} />
+            
+            {/* Catch-all route to handle 404s cleanly */}
+            <Route path="*" element={
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-10">
+                    <h1 className="text-8xl font-black text-slate-100 mb-4 opacity-10 italic">404</h1>
+                    <p className="text-xl font-bold uppercase tracking-widest text-slate-400">Node Not Found</p>
+                    <a href="/" className="mt-8 px-8 py-3 bg-[#007cc3] text-white rounded-full font-bold uppercase tracking-widest text-xs">Return to Main Terminal</a>
+                </div>
+            } />
           </Routes>
         </main>
         {!isAdminRoute && <Footer />}

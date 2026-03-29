@@ -62,13 +62,15 @@ const BlogsGrid = ({ activeCategory }) => {
         const response = await fetch('/api/get_blogs.php');
         const result = await response.json();
         if (result.status === 'success') {
-          // Prepend live domain to image paths if running locally (if they start with /)
-          const processedBlogs = result.data.map(blog => ({
-            ...blog,
-            image: blog.image.startsWith('/') 
-              ? `https://new.nsgsolutions.in${blog.image}` 
-              : blog.image
-          }));
+          // Robust Image Normalization
+          const processedBlogs = result.data.map(blog => {
+            let img = blog.image;
+            if (!img.startsWith('http')) {
+              if (!img.startsWith('/')) img = '/' + img;
+              img = `https://new.nsgsolutions.in${img}`;
+            }
+            return { ...blog, image: img };
+          });
           setBlogs(processedBlogs);
         }
       } catch (error) {

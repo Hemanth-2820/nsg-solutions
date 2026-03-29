@@ -15,12 +15,15 @@ const BlogPostPage = () => {
         const response = await fetch(`/api/get_blogs.php?id=${id}`);
         const result = await response.json();
         if (result.status === 'success') {
-          // Prepend live domain to image path if running locally
+          // Robust Image Normalization
+          let img = result.data.image;
+          if (!img.startsWith('http')) {
+            if (!img.startsWith('/')) img = '/' + img;
+            img = `https://new.nsgsolutions.in${img}`;
+          }
           const processedPost = {
             ...result.data,
-            image: result.data.image.startsWith('/') 
-              ? `https://new.nsgsolutions.in${result.data.image}` 
-              : result.data.image
+            image: img
           };
           setPost(processedPost);
         }

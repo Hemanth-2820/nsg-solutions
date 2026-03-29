@@ -1,16 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Clock, ArrowRight, Zap } from 'lucide-react';
+import { MapPin, Clock, ArrowRight, Zap, Loader2 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-
-const roles = [
-  { title: 'Principal Systems Architect', loc: 'Hyderabad / Hybrid', type: 'Full-time', stack: ['Go', 'Kubernetes', 'gRPC'], salary: '$120k - $180k' },
-  { title: 'Senior AI Research Engineer', loc: 'Bengaluru / Remote', type: 'Full-time', stack: ['PyTorch', 'CUDA', 'Python'], salary: '$140k - $200k' },
-  { title: 'Lead Frontend Engineer', loc: 'Remote', type: 'Full-time', stack: ['React', 'Three.js', 'Framer'], salary: '$110k - $160k' },
-  { title: 'Cloud Infrastructure Lead', loc: 'Hyderabad', type: 'Full-time', stack: ['AWS', 'Terraform', 'Ansible'], salary: '$130k - $190k' },
-  { title: 'Security Operations Head', loc: 'Remote', type: 'Full-time', stack: ['PenTesting', 'SIEM', 'CloudSec'], salary: '$150k - $220k' },
-  { title: 'Data Engineering Lead', loc: 'Mumbai', type: 'Full-time', stack: ['Spark', 'Kafka', 'Scala'], salary: '$125k - $175k' },
-];
 
 const RoleCard = ({ role, index }) => {
   const navigate = useNavigate();
@@ -21,7 +12,7 @@ const RoleCard = ({ role, index }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       whileHover={{ y: -10 }}
-      className="bg-white border border-black/5 rounded-[2rem] p-8 flex flex-col justify-between group transition-all duration-500 hover:shadow-2xl relative overflow-hidden"
+      className="bg-white border border-black/5 rounded-[2rem] p-8 flex flex-col justify-between group transition-all duration-500 hover:shadow-2xl relative overflow-hidden h-full"
     >
       <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
         <Zap size={20} className="text-[#007cc3]" />
@@ -29,31 +20,31 @@ const RoleCard = ({ role, index }) => {
 
       <div>
         <div className="flex items-center gap-3 mb-6 flex-wrap">
-          {role.stack.map((s, i) => (
+          {(role.stack || []).map((s, i) => (
             <span key={i} className="px-3 py-1 bg-[#f5f7fa] text-[#007cc3] text-[9px] font-bold uppercase tracking-widest rounded-full">
               {s}
             </span>
           ))}
         </div>
 
-        <h3 className="text-2xl font-bold text-gray-900 mb-4 font-infosys-heading group-hover:text-[#007cc3] transition-colors duration-500">
+        <h3 className="text-2xl font-bold text-gray-900 mb-4 font-infosys-heading group-hover:text-[#007cc3] transition-colors duration-500 line-clamp-2">
           {role.title}
         </h3>
 
         <div className="flex items-center gap-6 text-black/40 text-[11px] font-bold uppercase tracking-widest mb-8 flex-wrap">
-          <span className="flex items-center gap-2"><MapPin size={12} /> {role.loc}</span>
+          <span className="flex items-center gap-2"><MapPin size={12} /> {role.loc || role.location}</span>
           <span className="flex items-center gap-2"><Clock size={12} /> {role.type}</span>
         </div>
       </div>
 
-      <div className="pt-8 border-t border-black/5 flex items-center justify-between">
+      <div className="pt-8 border-t border-black/5 flex items-center justify-between mt-auto">
         <div className="flex flex-col">
           <span className="text-[9px] text-black/30 font-bold uppercase tracking-widest mb-1">Estimated Base</span>
           <span className="text-sm font-bold text-gray-900">{role.salary}</span>
         </div>
         <motion.button
           whileHover={{ x: 5 }}
-          onClick={() => navigate(`/careers/apply/${encodeURIComponent(role.title)}`)}
+          onClick={() => navigate(`/careers/apply/${role.id}`)}
           className="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center group-hover:bg-[#007cc3] transition-colors duration-500"
         >
           <ArrowRight size={20} />
@@ -64,6 +55,22 @@ const RoleCard = ({ role, index }) => {
 };
 
 const CareersRoles = () => {
+    const [roles, setRoles] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch('/api/get_jobs.php')
+            .then(res => res.json())
+            .then(data => {
+                setRoles(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error("Failed to fetch jobs:", err);
+                setLoading(false);
+            });
+    }, []);
+
   return (
     <section id="careers-roles" className="py-24 px-6 bg-[#f5f7fa]">
       <div className="max-w-7xl mx-auto">
@@ -85,11 +92,24 @@ const CareersRoles = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {roles.map((role, i) => (
-            <RoleCard key={i} role={role} index={i} />
-          ))}
-        </div>
+        {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 grayscale opacity-40">
+                <Loader2 size={48} className="animate-spin mb-4" />
+                <p className="font-bold tracking-widest text-xs uppercase">Loading Dynamic Careers...</p>
+            </div>
+        ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {roles.length > 0 ? (
+                    roles.map((role, i) => (
+                        <RoleCard key={role.id || i} role={role} index={i} />
+                    ))
+                ) : (
+                    <div className="col-span-full text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
+                        <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">No active positions currently.</p>
+                    </div>
+                )}
+            </div>
+        )}
 
         <div className="mt-20 text-center">
           <p className="text-black/40 text-[11px] font-bold uppercase tracking-widest">
