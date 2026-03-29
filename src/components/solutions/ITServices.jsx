@@ -153,7 +153,7 @@ const ITServices = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: (idx % 3) * 0.1, duration: 0.5 }}
-              onClick={() => navigate(`/solutions/itservices/register/${project.title.replace(/\s+/g, '-').toLowerCase()}`)}
+              onClick={() => navigate(`/solutions/itservices/register/${project.title.replace(/[\s/]+/g, '-').toLowerCase()}`)}
               className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-2xl cursor-pointer transition-all duration-300 group border border-gray-100 flex flex-col items-center"
             >
               <div className="relative w-full h-64 overflow-hidden">
@@ -164,7 +164,7 @@ const ITServices = () => {
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">{project.title}</h3>
                 <p className="text-gray-600 mb-6 flex-grow">{project.shortDesc}</p>
                 <div className="text-[#007cc3] font-bold tracking-widest text-[11px] uppercase flex items-center gap-2 group-hover:gap-4 transition-all">
-                  View Project Details <ArrowRight size={14} strokeWidth={2.5} />
+                  Register Inquiry <ArrowRight size={14} strokeWidth={2.5} />
                 </div>
               </div>
             </motion.div>
