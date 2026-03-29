@@ -360,16 +360,25 @@ const TCSStyleSolutions = () => {
                className="absolute inset-0 bg-[#0a0e27]/90 backdrop-blur-xl cursor-pointer"
              />
              <motion.div 
-               initial={{ opacity: 0, scale: 0.9, y: 40 }}
-               animate={{ opacity: 1, scale: 1, y: 0 }}
-               exit={{ opacity: 0, scale: 0.9, y: 40 }}
-               className="relative w-full max-w-4xl bg-white rounded-[3rem] overflow-hidden shadow-2xl z-10 max-h-[90vh] overflow-y-auto custom-scrollbar border border-white/20"
-             >
-                <ProjectInquiryForm 
-                  projectName={selectedInquiry}
-                  onClose={() => setSelectedInquiry(null)} 
-                />
-             </motion.div>
+            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 30 }}
+            className="relative w-full max-w-5xl bg-white rounded-[3rem] overflow-hidden shadow-2xl z-10 flex flex-col md:flex-row max-h-[85vh] md:max-h-[85vh] border border-white/20"
+          >
+            <button 
+              onClick={() => setSelectedInquiry(null)}
+              className="absolute top-8 right-8 w-12 h-12 bg-white shadow-2xl hover:bg-[#1baade] hover:text-white text-[#0a0e27] rounded-full flex items-center justify-center z-30 transition-all active:scale-95"
+            >
+              <X size={24} />
+            </button>
+
+            <div className="w-full h-full bg-white">
+              <ProjectInquiryForm 
+                projectName={selectedInquiry} 
+                onClose={() => setSelectedInquiry(null)} 
+              />
+            </div>
+          </motion.div>
           </div>
         )}
       </AnimatePresence>

@@ -142,11 +142,11 @@ const VideoProduction = () => {
               className="absolute inset-0 bg-[#0a0e27]/90 backdrop-blur-xl cursor-pointer"
             ></motion.div>
 
-            <motion.div
+            <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 30 }}
-              className="relative w-full max-w-5xl bg-white rounded-[3rem] overflow-hidden shadow-2xl z-10 flex flex-col md:flex-row max-h-[85vh] md:max-h-[85vh] border border-white/20"
+              className={`relative w-full max-w-5xl bg-white rounded-[3rem] overflow-hidden shadow-2xl z-10 flex flex-col ${!showInquiry ? 'md:flex-row' : ''} max-h-[85vh] border border-white/20`}
             >
               <button
                 onClick={() => { setSelectedProject(null); setShowInquiry(false); }}
@@ -156,12 +156,10 @@ const VideoProduction = () => {
               </button>
 
               {showInquiry ? (
-                <div className="w-full h-full overflow-y-auto custom-scrollbar">
-                  <ProjectInquiryForm
-                    projectName={selectedProject.title}
-                    onClose={() => { setSelectedProject(null); setShowInquiry(false); }}
-                  />
-                </div>
+                <ProjectInquiryForm
+                  projectName={selectedProject.title}
+                  onClose={() => { setSelectedProject(null); setShowInquiry(false); }}
+                />
               ) : (
                 <>
                   <div className="w-full md:w-2/5 min-h-[300px] md:min-h-full relative overflow-hidden bg-gray-100">
