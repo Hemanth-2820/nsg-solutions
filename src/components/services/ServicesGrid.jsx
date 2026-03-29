@@ -27,12 +27,21 @@ const servicesData = [
   },
   {
     id: "creative",
-    title: "Video Production",
+    title: "Video Production & Animation",
     tag: "CREATIVE",
     image:
       "https://images.unsplash.com/photo-1492724441997-5dc865305da7?w=1200&q=80",
-    shortDesc: "High-quality storytelling.",
+    shortDesc: "High-quality storytelling & visual effects.",
     path: "/services/creative"
+  },
+  {
+    id: "branding",
+    title: "Branding & Design",
+    tag: "AESTHETICS",
+    image:
+      "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=1200&q=80",
+    shortDesc: "Crafting iconic corporate identities.",
+    path: "/services/branding"
   },
   {
     id: "marketing",

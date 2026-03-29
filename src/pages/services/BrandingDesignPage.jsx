@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Video, Film, Megaphone } from 'lucide-react';
+import { ArrowLeft, Palette, Layout, Box, Award, Zap } from 'lucide-react';
 
-const subServices = [
-  { name: "Corporate Films", icon: Video, color: "from-[#007cc3] to-cyan-500" },
-  { name: "Ad Films", icon: Film, color: "from-purple-600 to-indigo-600" },
-  { name: "Short Films", icon: Film, color: "from-emerald-600 to-teal-500" },
-  { name: "Product Films", icon: Video, color: "from-orange-500 to-rose-600" },
-  { name: "Promotional Videos", icon: Megaphone, color: "from-blue-700 to-indigo-800" }
+const brandingServices = [
+  { name: "Brand Identity", icon: Award, color: "from-blue-600 to-indigo-600" },
+  { name: "Logo Design", icon: Palette, color: "from-purple-600 to-pink-500" },
+  { name: "Visual Systems", icon: Layout, color: "from-[#007cc3] to-cyan-500" },
+  { name: "Product Packaging", icon: Box, color: "from-orange-500 to-yellow-600" },
+  { name: "Brand Strategy", icon: Zap, color: "from-rose-600 to-red-500" }
 ];
 
-const VideoProductionPage = () => (
+const BrandingDesignPage = () => (
   <div className="min-h-screen bg-[#0a1122] font-sans overflow-x-hidden pt-32 pb-20">
     <div className="max-w-[1500px] mx-auto px-6 lg:px-12">
       <Link 
@@ -23,16 +23,16 @@ const VideoProductionPage = () => (
 
       <div className="mb-20">
         <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight italic">
-          Video Production
+          Branding & Design
         </h1>
         <div className="w-24 h-1.5 bg-[#007cc3] rounded-full mb-8"></div>
         <p className="text-white/60 text-xl font-light max-w-3xl leading-relaxed">
-          High-quality storytelling — from corporate narratives to digital advertisements. We bring your vision to life with cinematic precision.
+          Crafting iconic corporate identities and visual systems that resonate with global audiences. We define your brand’s aesthetic essence through world-class design engineering.
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {subServices.map((item, i) => {
+        {brandingServices.map((item, i) => {
           const Icon = item.icon;
           return (
             <motion.div
@@ -50,11 +50,11 @@ const VideoProductionPage = () => (
               <div className="absolute inset-0 opacity-20 mix-blend-soft-light pointer-events-none group-hover:scale-110 transition-transform duration-[2s]">
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                   <defs>
-                    <pattern id={`hex-video-${i}`} width="30" height="50" patternUnits="userSpaceOnUse">
+                    <pattern id={`hex-branding-${i}`} width="30" height="50" patternUnits="userSpaceOnUse">
                       <path d="M15 0L30 8.5V25.5L15 34L0 25.5V8.5L15 0Z" fill="none" stroke="white" strokeWidth="0.5" />
                     </pattern>
                   </defs>
-                  <rect width="100%" height="100%" fill={`url(#hex-video-${i})`} />
+                  <rect width="100%" height="100%" fill={`url(#hex-branding-${i})`} />
                 </svg>
               </div>
 
@@ -75,7 +75,7 @@ const VideoProductionPage = () => (
   </div>
 );
 
-export default VideoProductionPage;
+export default BrandingDesignPage;
 
 
 

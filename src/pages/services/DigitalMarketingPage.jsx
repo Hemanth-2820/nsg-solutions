@@ -10,7 +10,7 @@ const subServices = [
 ];
 
 const DigitalMarketingPage = () => (
-  <div className="min-h-screen bg-white font-sans overflow-x-hidden pt-32 pb-20">
+  <div className="min-h-screen bg-[#0a1122] font-sans overflow-x-hidden pt-32 pb-20">
     <div className="max-w-[1500px] mx-auto px-6 lg:px-12">
       <Link 
         to="/services" 
@@ -20,11 +20,11 @@ const DigitalMarketingPage = () => (
       </Link>
 
       <div className="mb-20">
-        <h1 className="text-5xl md:text-7xl font-black text-[#0f172a] mb-6 tracking-tight italic">
+        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight italic">
           Digital Marketing
         </h1>
         <div className="w-24 h-1.5 bg-[#007cc3] rounded-full mb-8"></div>
-        <p className="text-gray-500 text-xl font-light max-w-3xl leading-relaxed">
+        <p className="text-white/60 text-xl font-light max-w-3xl leading-relaxed">
           Grow your digital presence — data-driven marketing strategies engineered to scale brands in the modern digital landscape.
         </p>
       </div>
@@ -56,7 +56,7 @@ const DigitalMarketingPage = () => (
                 </svg>
               </div>
 
-              <div className="relative z-10 mb-6 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl group-hover:rotate-[360deg] transition-transform duration-700">
+              <div className="relative z-10 mb-6 p-6 bg-[#0a1122]/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl group-hover:rotate-[360deg] transition-transform duration-700">
                 <Icon size={42} className="text-white" />
               </div>
 
@@ -64,7 +64,7 @@ const DigitalMarketingPage = () => (
                 {item.name}
               </h4>
 
-              <div className="absolute -top-10 -right-10 w-24 h-24 bg-white/10 blur-2xl rounded-full group-hover:bg-white/30 transition-all duration-500"></div>
+              <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#0a1122]/10 blur-2xl rounded-full group-hover:bg-[#0a1122]/30 transition-all duration-500"></div>
             </motion.div>
           );
         })}
@@ -74,3 +74,6 @@ const DigitalMarketingPage = () => (
 );
 
 export default DigitalMarketingPage;
+
+
+

@@ -34,9 +34,10 @@ const Navbar = () => {
 
   const serviceSubLinks = [
     { name: 'IT Services', path: '/services/it' },
-    { name: 'Video Production', path: '/services/creative' },
+    { name: 'Video Production & Animation', path: '/services/creative' },
     { name: 'Digital Marketing', path: '/services/marketing' },
     { name: 'Publishing Solutions', path: 'https://nsgpublishers.com', external: true },
+    { name: 'Branding & Design', path: '/solutions/branding' },
     { name: 'Enterprise Strategy', path: '/services/enterprise' }
   ];
 

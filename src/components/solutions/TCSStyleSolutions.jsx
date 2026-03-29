@@ -62,9 +62,10 @@ const solutionsData = [
 
 const projectsData = [
   { id: 1, title: 'IT Services', img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80', path: '/solutions/itservices' },
-  { id: 2, title: 'Video Production', img: 'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=800&q=80', path: '/solutions/videoproduction' },
+  { id: 2, title: 'Video Production & Animation', img: 'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=800&q=80', path: '/solutions/videoproduction' },
   { id: 3, title: 'Digital Marketing', img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80', path: '/solutions/digitalmarketing' },
-  { id: 4, title: 'Publishing', img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&q=80', path: '/solutions/publishing' }
+  { id: 4, title: 'Publishing', img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=800&q=80', path: '/solutions/publishing' },
+  { id: 5, title: 'Branding & Design', img: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80', path: '/solutions/branding' }
 ];
 
 const TCSStyleSolutions = () => {

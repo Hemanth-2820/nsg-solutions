@@ -12,6 +12,7 @@ import ITServicesPage from "./services/ITServicesPage";
 import VideoProductionPage from "./services/VideoProductionPage";
 import DigitalMarketingPage from "./services/DigitalMarketingPage";
 import EnterpriseStrategyPage from "./services/EnterpriseStrategyPage";
+import BrandingDesignPage from "./services/BrandingDesignPage";
 
 const ServicesIndex = () => {
   return (
@@ -47,6 +48,7 @@ const ServicesPage = () => {
         <Route path="creative" element={<VideoProductionPage />} />
         <Route path="marketing" element={<DigitalMarketingPage />} />
         <Route path="enterprise" element={<EnterpriseStrategyPage />} />
+        <Route path="branding" element={<BrandingDesignPage />} />
       </Routes>
     </PageWrapper>
   );
