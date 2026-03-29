@@ -3,36 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import { X, ArrowRight, ClipboardCheck, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const brandingProjects = [
-  {
-    id: 1,
-    title: 'Corporate Identity Suite',
-    shortDesc: 'Complete brand DNA construction.',
-    desc: 'We build comprehensive visual identities that resonate with your target audience, including logo design, typography systems, and core color palettes that define your global presence.',
-    features: ['Custom Logo Typography', 'Brand Guidelines Handbook', 'Digital Iconography Systems'],
-    img: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=80'
-  },
-  {
-    id: 2,
-    title: 'UI/UX Design Frameworks',
-    shortDesc: 'Scalable product design systems.',
-    desc: 'Crafting intuitive and aesthetically superior digital interfaces that prioritize user experience while maintaining a consistent and professional brand aesthetic across all platforms.',
-    features: ['Component Design Libraries', 'Interactive Wireframing', 'Accessibility Compliance'],
-    img: 'https://images.unsplash.com/photo-1586717791821-3f44a563dc4c?w=800&q=80'
-  },
-  {
-    id: 3,
-    title: 'Modern Brand Refresh',
-    shortDesc: 'Revitalizing legacy institutions.',
-    desc: 'Transforming established brands into modern market leaders through tactical design updates that maintain heritage while embracing contemporary visual trends.',
-    features: ['Heritage Preservation Design', 'Social Media Visual kits', 'Motion Graphics Identity'],
-    img: 'https://images.unsplash.com/photo-1542744094-24638eff58bb?w=800&q=80'
-  }
-];
-
 const BrandingDesign = () => {
   const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState(null);
+  const [brandingProjects, setBrandingProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/get_solutions.php');
+        const data = await response.json();
+        if (data.status === 'success' && data.data['branding']) {
+          setBrandingProjects(data.data['branding']);
+        }
+      } catch (err) {
+        console.error("Failed to fetch Branding solutions:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
 
   useEffect(() => {
     let isNavigated = false;

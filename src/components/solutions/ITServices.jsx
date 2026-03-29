@@ -4,75 +4,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRight, ClipboardCheck, MessageSquare } from 'lucide-react';
 import ProjectInquiryForm from '../common/ProjectInquiryForm';
 
-const itProjects = [
-  {
-    id: 1,
-    title: 'AI Farming Assistant Chatbot',
-    shortDesc: 'Intelligent crop & yield guidance.',
-    desc: 'An AI-powered conversational agent designed specifically for the agricultural sector, delivering real-time actionable insights to farmers on modern crop management and pest control.',
-    features: ['Multi-lingual NLP engine', 'Weather & Soil sensor integration', 'Real-time pest diagnosis via image recognition'],
-    useCases: ['Rural crop advisory', 'Automated supply chain ordering', 'Government agricultural subsidies guidance'],
-    img: 'https://images.unsplash.com/photo-1592982537447-6f2da3c6fe60?w=800&q=80'
-  },
-  {
-    id: 2,
-    title: 'MBA Portal',
-    shortDesc: 'Comprehensive academic management system.',
-    desc: 'A robust, centralized portal unifying student records, course materials, alumni networking, and placement tracking for leading MBA institutions.',
-    features: ['Live assignment tracking', 'Alumni directory & networking hub', 'Integrated webinar capabilities'],
-    useCases: ['University campus administration', 'Corporate placement matching', 'Student lifecycle management'],
-    img: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&q=80'
-  },
-  {
-    id: 3,
-    title: 'EduQuiz',
-    shortDesc: 'Gamified learning assessment platform.',
-    desc: 'A highly scalable, real-time quiz application offering interactive assessments to students while generating deep performance analytics for educators.',
-    features: ['Real-time multiplayer leaderboards', 'Adaptive difficulty engine', 'Automated grading analytics'],
-    useCases: ['K-12 remote learning', 'Corporate training programs', 'Standardized test preparation'],
-    img: 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=800&q=80'
-  },
-  {
-    id: 4,
-    title: 'Smart Classroom',
-    shortDesc: 'IoT-enabled educational environments.',
-    desc: 'An integrated hardware and software solution that brings modern IoT tools into the classroom, making education highly interactive and immersive.',
-    features: ['Interactive smartboard syncing', 'Automated attendance via facial recognition', 'Lecture recording & indexing'],
-    useCases: ['Modern university lecture halls', 'Hybrid classrooms', 'Accessible learning environments'],
-    img: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80'
-  },
-  {
-    id: 5,
-    title: 'Preventive Healthcare',
-    shortDesc: 'Predictive health monitoring dashboard.',
-    desc: 'A data-driven analytics platform aggregating patient biometrics to predict potential health risks, facilitating proactive medical interventions before crises occur.',
-    features: ['Wearable device integrations', 'Machine Learning predictive risk models', 'Telehealth consultation scheduling'],
-    useCases: ['Hospital patient monitoring', 'Elderly care tracking', 'Corporate wellness initiatives'],
-    img: 'https://images.unsplash.com/photo-1576091160550-2173ff9e5eb3?w=800&q=80'
-  },
-  {
-    id: 6,
-    title: 'EAMCET Platform',
-    shortDesc: 'High-concurrency exam engine.',
-    desc: 'A highly optimized, zero-latency testing platform specifically built to handle massive concurrent loads during state-level engineering and medical entrance examinations.',
-    features: ['Anti-cheat browser lockdown', 'Zero-latency question delivery', 'Automated scaling infrastructure'],
-    useCases: ['State-level entrance exams', 'Massive open online assessments', 'Secure government evaluations'],
-    img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80'
-  },
-  {
-    id: 7,
-    title: 'Realtors Media',
-    shortDesc: 'Immersive property showcasing hub.',
-    desc: 'A dynamic multi-media platform for real estate agencies, featuring 3D virtual tours, high-definition real estate tracking, and direct agent communication.',
-    features: ['3D WebGL virtual property tours', 'Automated lead generation CRM', 'Dynamic neighborhood mapping'],
-    useCases: ['Luxury real estate listings', 'Commercial property leasing', 'Remote property investments'],
-    img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80'
-  }
-];
-
 const ITServices = () => {
   const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState(null);
+  const [itProjects, setItProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/get_solutions.php');
+        const data = await response.json();
+        if (data.status === 'success' && data.data['itservices']) {
+          setItProjects(data.data['itservices']);
+        }
+      } catch (err) {
+        console.error("Failed to fetch IT solutions:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
   const [showInquiry, setShowInquiry] = useState(false);
 
   useEffect(() => {
@@ -145,17 +99,27 @@ const ITServices = () => {
           <div className="w-16 h-1 bg-[#1e3a8a] mx-auto mt-4"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {itProjects.map((project, idx) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: (idx % 3) * 0.1, duration: 0.5 }}
-              onClick={() => navigate(`/solutions/itservices/register/${project.title.replace(/[\s/]+/g, '-').toLowerCase()}`)}
-              className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-2xl cursor-pointer transition-all duration-300 group border border-gray-100 flex flex-col items-center"
-            >
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 animate-pulse">
+            <div className="w-12 h-12 border-4 border-[#007cc3] border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-white/40 uppercase tracking-[0.3em] text-[10px] font-black">Syncing with Cloud Registry...</p>
+          </div>
+        ) : itProjects.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">No project discovered in this sector.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {itProjects.map((project, idx) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: (idx % 3) * 0.1, duration: 0.5 }}
+                onClick={() => navigate(`/solutions/itservices/register/${project.title.replace(/[\s/]+/g, '-').toLowerCase()}`)}
+                className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-2xl cursor-pointer transition-all duration-300 group border border-gray-100 flex flex-col items-center"
+              >
               <div className="relative w-full h-64 overflow-hidden">
                 <img src={project.img} alt={project.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
@@ -168,8 +132,9 @@ const ITServices = () => {
                 </div>
               </div>
             </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Project Details Modal Popup */}

@@ -139,7 +139,7 @@ const Testimonials = () => {
 
   return (
     <section className="relative bg-black h-[150vh]">
-      
+
       {/* STICKY TEXT LAYER (STAYS PINNED) */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center -z-0 overflow-hidden px-10">
         <h2 className="text-[4rem] md:text-[6rem] lg:text-[8rem] font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 via-white to-blue-400 tracking-tighter leading-[0.9] text-center select-none uppercase pointer-events-none opacity-30">
@@ -150,42 +150,43 @@ const Testimonials = () => {
       {/* HORIZONTAL CAROUSEL LAYER (FLOWS OVER THE STICKY TEXT) */}
       <div className="relative z-10 w-full -mt-[60vh] pb-32 overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 relative flex flex-col items-center">
-          
+
           <div className="flex items-center w-full justify-center gap-6 sm:gap-10">
-             {/* LEFT ARROW NAVIGATION */}
-             <button 
-                onClick={() => scroll('left')}
-                className="hidden sm:flex text-white/30 hover:text-white transition-colors"
-                aria-label="Previous Testimonial"
-              >
-                <ArrowLeft size={64} strokeWidth={1} />
-              </button>
+            {/* LEFT ARROW NAVIGATION */}
+            <button
+              onClick={() => scroll('left')}
+              className="hidden sm:flex text-white/30 hover:text-white transition-colors"
+              aria-label="Previous Testimonial"
+            >
+              <ArrowLeft size={64} strokeWidth={1} />
+            </button>
 
-              {/* SCROLLING CARDS CONTAINER */}
-              <div 
-                ref={containerRef}
-                className="flex gap-10 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 sm:px-10 py-10 w-full max-w-[1100px]"
-              >
-                {allTestimonials.map((item) => (
-                  <TestimonialCard key={item.id} item={item} />
-                ))}
-              </div>
+            {/* SCROLLING CARDS CONTAINER */}
+            <div
+              ref={containerRef}
+              className="flex gap-10 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 sm:px-10 py-10 w-full max-w-[1100px]"
+            >
+              {allTestimonials.map((item) => (
+                <TestimonialCard key={item.id} item={item} />
+              ))}
+            </div>
 
-              {/* RIGHT ARROW NAVIGATION */}
-              <button 
-                onClick={() => scroll('right')}
-                className="hidden sm:flex text-white/30 hover:text-white transition-colors"
-                aria-label="Next Testimonial"
-              >
-                <ArrowRight size={64} strokeWidth={1} />
-              </button>
+            {/* RIGHT ARROW NAVIGATION */}
+            <button
+              onClick={() => scroll('right')}
+              className="hidden sm:flex text-white/30 hover:text-white transition-colors"
+              aria-label="Next Testimonial"
+            >
+              <ArrowRight size={64} strokeWidth={1} />
+            </button>
           </div>
 
         </div>
       </div>
-      
+
       {/* ADD SMOOTH SCROLL HIDE STYLE */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }

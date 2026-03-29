@@ -111,21 +111,37 @@ const ProjectInquiryForm = ({ projectName, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-    setStatus('submitting');
-    
-    const prefix = formData.inquiryType.substring(0, 3).toUpperCase();
-    const newId = `NSG-REQ-${prefix}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    const submissionData = {
+        ...formData,
+        projectName: projectName,
+        serviceCategory: window.location.pathname.split('/')[2] || 'general',
+        requestId: `REQ-${Math.floor(Math.random() * 900000) + 100000}`
+    };
 
     try {
-      await fetch('/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, requestId: newId })
-      });
-      setGeneratedId(newId);
-      setStatus('success');
+        const response = await fetch('/api/submit_inquiry.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(submissionData)
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            setGeneratedId(submissionData.requestId);
+            setSubmitStatus('success');
+            setStatus('success');
+            setTimeout(() => {
+                if (onClose) onClose();
+            }, 3000);
+        } else {
+            setSubmitStatus('error');
+        }
     } catch (err) {
-      setGeneratedId(newId);
       setStatus('success');
     }
   };

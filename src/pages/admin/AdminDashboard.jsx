@@ -4,11 +4,13 @@ import { Shield, Clock, CheckCircle, XCircle, LogOut, Layout, BookOpen, Plus, Tr
 import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
-    const [activeTab, setActiveTab] = useState('testimonials'); // 'testimonials', 'blogs', 'jobs', 'applications'
+    const [activeTab, setActiveTab] = useState('testimonials'); // 'testimonials', 'blogs', 'jobs', 'applications', 'solutions', 'inquiries'
     const [testimonials, setTestimonials] = useState([]);
     const [blogs, setBlogs] = useState([]);
     const [jobs, setJobs] = useState([]);
     const [applications, setApplications] = useState([]);
+    const [solutions, setSolutions] = useState({});
+    const [inquiries, setInquiries] = useState([]);
     const [loading, setLoading] = useState(true);
     const [statusMessage, setStatusMessage] = useState(null);
     
@@ -19,6 +21,10 @@ const AdminDashboard = () => {
     // Job States
     const [isEditingJob, setIsEditingJob] = useState(false);
     const [currentJob, setCurrentJob] = useState({ title: '', location: '', type: 'Full-time', stack: '', salary: '', description: '' });
+
+    // Solution States
+    const [isEditingSolution, setIsEditingSolution] = useState(false);
+    const [currentSolution, setCurrentSolution] = useState({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
 
     const navigate = useNavigate();
 
@@ -39,6 +45,8 @@ const AdminDashboard = () => {
             else if (activeTab === 'blogs') await fetchBlogs();
             else if (activeTab === 'jobs') await fetchJobs();
             else if (activeTab === 'applications') await fetchApplications();
+            else if (activeTab === 'solutions') await fetchSolutions();
+            else if (activeTab === 'inquiries') await fetchInquiries();
         } catch (err) {
             console.error("Fetch error:", err);
         }
@@ -78,6 +86,50 @@ const AdminDashboard = () => {
         const res = await fetch('/api/get_applications.php');
         const data = await res.json();
         setApplications(data || []);
+    };
+
+    const fetchSolutions = async () => {
+        const res = await fetch('/api/get_solutions.php');
+        const data = await res.json();
+        if (data.status === 'success') setSolutions(data.data);
+    };
+
+    const fetchInquiries = async () => {
+        const res = await fetch('/api/get_inquiries.php');
+        const data = await res.json();
+        if (data.status === 'success') setInquiries(data.data);
+    };
+
+    const handleSaveSolution = async (e) => {
+        e.preventDefault();
+        const method = isEditingSolution ? 'PUT' : 'POST';
+        const solData = { ...currentSolution, features: currentSolution.features.split(',').map(f => f.trim()) };
+        try {
+            const res = await fetch('/api/manage_solutions.php', {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(solData)
+            });
+            const result = await res.json();
+            if (result.status === 'success') {
+                showToast(isEditingSolution ? 'Project updated!' : 'Project added!', 'success');
+                setIsEditingSolution(false);
+                setCurrentSolution({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
+                fetchSolutions();
+            }
+        } catch (err) { showToast('Project save failed.', 'error'); }
+    };
+
+    const handleDeleteSolution = async (id) => {
+        if (!window.confirm('Confirm project deletion?')) return;
+        try {
+            const res = await fetch(`/api/manage_solutions.php?id=${id}`, { method: 'DELETE' });
+            const result = await res.json();
+            if (result.status === 'success') {
+                showToast('Project removed!', 'success');
+                fetchSolutions();
+            }
+        } catch (err) { showToast('Deletion failed.', 'error'); }
     };
 
     // JOB ACTIONS
@@ -195,8 +247,10 @@ const AdminDashboard = () => {
                         <nav className="hidden lg:flex items-center gap-2 ml-4">
                             {[
                                 { id: 'testimonials', label: 'Testimonials', icon: <CheckCircle size={14} /> },
+                                { id: 'solutions', label: 'Solutions', icon: <Briefcase size={14} /> },
+                                { id: 'inquiries', label: 'Inquiries', icon: <Send size={14} /> },
                                 { id: 'blogs', label: 'Blogs', icon: <BookOpen size={14} /> },
-                                { id: 'jobs', label: 'Careers', icon: <Briefcase size={14} /> },
+                                { id: 'jobs', label: 'Careers', icon: <Zap size={14} /> },
                                 { id: 'applications', label: 'Applications', icon: <Users size={14} /> }
                             ].map(tab => (
                                 <button 
@@ -348,11 +402,11 @@ const AdminDashboard = () => {
                                     <div className="space-y-5">
                                         <input required value={currentJob.title} onChange={e => setCurrentJob({...currentJob, title: e.target.value})} placeholder="Job Title" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
                                         <input required value={currentJob.location} onChange={e => setCurrentJob({...currentJob, location: e.target.value})} placeholder="Location (e.g. Remote)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
-                                        <select value={currentJob.type} onChange={e => setCurrentJob({...currentJob, type: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none">
-                                            <option value="Full-time">Full-time</option>
-                                            <option value="Part-time">Part-time</option>
-                                            <option value="Contract">Contract</option>
-                                            <option value="Remote">Remote</option>
+                                        <select value={currentJob.type} onChange={e => setCurrentJob({...currentJob, type: e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none appearance-none cursor-pointer">
+                                            <option className="bg-[#0f172a] text-white" value="Full-time">Full-time</option>
+                                            <option className="bg-[#0f172a] text-white" value="Part-time">Part-time</option>
+                                            <option className="bg-[#0f172a] text-white" value="Contract">Contract</option>
+                                            <option className="bg-[#0f172a] text-white" value="Remote">Remote</option>
                                         </select>
                                         <input required value={currentJob.stack} onChange={e => setCurrentJob({...currentJob, stack: e.target.value})} placeholder="Stack (comma separated)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
                                         <input required value={currentJob.salary} onChange={e => setCurrentJob({...currentJob, salary: e.target.value})} placeholder="Salary Bracket" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
@@ -429,6 +483,130 @@ const AdminDashboard = () => {
                                         )}
                                     </div>
                                 )}
+                            </div>
+                        </motion.div>
+                    )}
+                    {activeTab === 'solutions' && (
+                        <motion.div key="solutions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                            <div className="flex items-center justify-between mb-12">
+                                <div>
+                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">Portfolio Nexus</h2>
+                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Sectoral Service Management</p>
+                                </div>
+                                <button onClick={() => { setIsEditingSolution(false); setCurrentSolution({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' }); }} className="bg-[#007cc3] hover:bg-[#0088d8] text-white px-8 py-4 rounded-xl font-black uppercase tracking-widest text-[11px] flex items-center gap-3 active:scale-95 transition-all"><Plus size={18} /> Add Project</button>
+                            </div>
+
+                            <div className="grid lg:grid-cols-[1fr_450px] gap-12">
+                                <div className="space-y-8">
+                                    {Object.keys(solutions).map(category => (
+                                        <div key={category} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                                            <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-6 border-b border-white/5 pb-4">{category} projects</h3>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                {solutions[category].map(project => (
+                                                    <div key={project.id} className="group bg-white/[0.02] border border-white/5 hover:border-white/10 rounded-xl overflow-hidden transition-all">
+                                                        <div className="h-32 bg-black/50 relative overflow-hidden">
+                                                            <img src={project.img} className="w-full h-full object-cover opacity-50 group-hover:scale-110 transition-transform duration-700" />
+                                                            <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/60">
+                                                                <button onClick={() => { setIsEditingSolution(true); setCurrentSolution({ ...project, category, features: (project.features || []).join(', ') }); }} className="p-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-all"><Edit2 size={16} /></button>
+                                                                <button onClick={() => handleDeleteSolution(project.id)} className="p-2 bg-red-500/20 hover:bg-red-500 rounded-lg text-white transition-all"><Trash2 size={16} /></button>
+                                                            </div>
+                                                        </div>
+                                                        <div className="p-4">
+                                                            <h4 className="text-sm font-bold truncate">{project.title}</h4>
+                                                            <p className="text-[10px] text-white/30 truncate mt-1">{project.shortDesc}</p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {Object.keys(solutions).length === 0 && <div className="py-20 text-center text-white/20 uppercase tracking-widest text-xs font-black">No projects discovered.</div>}
+                                </div>
+
+                                <form onSubmit={handleSaveSolution} className="bg-white/5 border border-white/10 rounded-3xl p-8 sticky top-32">
+                                    <h3 className="text-[10px] font-black uppercase tracking-widest text-[#007cc3] mb-8 flex items-center gap-2">{isEditingSolution ? <Edit2 size={14} /> : <Plus size={14} />} {isEditingSolution ? 'Modify Deliverable' : 'New Project Entry'}</h3>
+                                    <div className="space-y-4">
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black uppercase tracking-widest text-white/30 ml-2">Sector Category</label>
+                                            <select value={currentSolution.category} onChange={e => setCurrentSolution({...currentSolution, category: e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none appearance-none cursor-pointer">
+                                                <option className="bg-[#0f172a] text-white" value="itservices">IT Services</option>
+                                                <option className="bg-[#0f172a] text-white" value="digitalmarketing">Digital Marketing</option>
+                                                <option className="bg-[#0f172a] text-white" value="videoproduction">Video Production</option>
+                                                <option className="bg-[#0f172a] text-white" value="branding">Branding & Design</option>
+                                            </select>
+                                        </div>
+                                        <input required value={currentSolution.title} onChange={e => setCurrentSolution({...currentSolution, title: e.target.value})} placeholder="Project Title" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
+                                        <input required value={currentSolution.shortDesc} onChange={e => setCurrentSolution({...currentSolution, shortDesc: e.target.value})} placeholder="Short Hook Text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
+                                        <textarea required rows="4" value={currentSolution.desc} onChange={e => setCurrentSolution({...currentSolution, desc: e.target.value})} placeholder="Full Description" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none resize-none" />
+                                        <input required value={currentSolution.img} onChange={e => setCurrentSolution({...currentSolution, img: e.target.value})} placeholder="Image URL (Unsplash/Direct)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
+                                        <input value={currentSolution.features} onChange={e => setCurrentSolution({...currentSolution, features: e.target.value})} placeholder="Key Features (comma separated)" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm focus:border-[#007cc3] outline-none" />
+                                        
+                                        <button type="submit" className="w-full bg-[#007cc3] text-white py-4 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all hover:bg-[#0088d8] flex items-center justify-center gap-2 mt-4"><Send size={16} /> {isEditingSolution ? 'Update Project' : 'Add to Portfolio'}</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTab === 'inquiries' && (
+                        <motion.div key="inquiries" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                            <div className="flex items-center justify-between mb-12">
+                                <div>
+                                    <h2 className="text-3xl font-black uppercase italic font-infosys-heading tracking-tight mb-2">Inquiry Insights</h2>
+                                    <p className="text-white/40 text-[11px] font-bold uppercase tracking-[0.3em]">Prospective Business Stream</p>
+                                </div>
+                                <div className="bg-white/5 px-6 py-4 border border-white/10 rounded-2xl text-center">
+                                    <span className="block text-[10px] font-black uppercase text-white/30 mb-1 tracking-widest">Global Leads</span>
+                                    <span className="text-2xl font-black text-[#007cc3]">{inquiries.length}</span>
+                                </div>
+                            </div>
+
+                            <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="bg-white/5 text-[10px] font-black uppercase tracking-widest text-white/30 border-b border-white/5">
+                                                <th className="px-8 py-6">Inquirer</th>
+                                                <th className="px-8 py-6">Target Project</th>
+                                                <th className="px-8 py-6">Corporate Entity</th>
+                                                <th className="px-8 py-6">Timestamp</th>
+                                                <th className="px-8 py-6 text-right">Request ID</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/5">
+                                            {inquiries.map((lead) => (
+                                                <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors">
+                                                    <td className="px-8 py-6">
+                                                        <div className="font-bold text-sm text-white">{lead.first_name} {lead.last_name}</div>
+                                                        <div className="text-[10px] text-white/40 font-bold uppercase tracking-widest mt-1">{lead.email} | {lead.phone}</div>
+                                                    </td>
+                                                    <td className="px-8 py-6">
+                                                        <div className="flex flex-col">
+                                                            <span className="text-sm font-bold text-[#007cc3]">{lead.project_name}</span>
+                                                            <span className="text-[9px] font-black uppercase tracking-widest text-white/20 mt-1">{lead.service_category}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="px-8 py-6">
+                                                        <div className="text-sm font-medium text-white/80">{lead.company}</div>
+                                                        <div className="text-[10px] text-white/30 italic font-bold">{lead.role}</div>
+                                                    </td>
+                                                    <td className="px-8 py-6 text-[11px] font-black text-white/30">
+                                                        {new Date(lead.created_at).toLocaleDateString()} at {new Date(lead.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </td>
+                                                    <td className="px-8 py-6 text-right">
+                                                        <span className="px-3 py-1 bg-white/5 text-white/50 text-[10px] font-black uppercase tracking-widest rounded border border-white/5">{lead.request_id}</span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    {inquiries.length === 0 && (
+                                        <div className="py-20 text-center">
+                                            <Send size={48} className="mx-auto text-white/5 mb-4" />
+                                            <p className="text-white/20 font-bold uppercase tracking-widest text-xs">No active inquiries registered.</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </motion.div>
                     )}

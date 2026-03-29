@@ -4,36 +4,29 @@ import { X, ArrowRight, ClipboardCheck, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectInquiryForm from '../common/ProjectInquiryForm';
 
-const dmProjects = [
-  {
-    id: 1,
-    title: 'SEO Dominance Campaign',
-    shortDesc: 'Drive 300% more organic traffic.',
-    desc: 'A comprehensive search engine optimization strategy focused on high-intent keywords, technical audits, and authority building for competitive industries.',
-    features: ['Technical SEO Audit', 'Competitor Keyword Analysis', 'High-DA Backlink Building'],
-    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80'
-  },
-  {
-    id: 2,
-    title: 'Social Growth Engine',
-    shortDesc: 'Viral engagement & brand awareness.',
-    desc: 'Innovative social media management that combines data-driven content with psychological triggers to build a loyal community across all platforms.',
-    features: ['Content Calendar Strategy', 'AI-Powered Influencer Match', 'Real-time Analytics Dashboard'],
-    img: 'https://images.unsplash.com/photo-1557838923-2985c318be48?w=800&q=80'
-  },
-  {
-    id: 3,
-    title: 'Performance Ads Suite',
-    shortDesc: 'High-ROI paid acquisition.',
-    desc: 'Precision-targeted PPC campaigns on Google and Meta designed to maximize conversion rates while minimizing customer acquisition costs.',
-    features: ['Dynamic A/B Testing', 'Precision Retargeting', 'Conversion Rate Optimization'],
-    img: 'https://images.unsplash.com/photo-1533750516457-a7f992034fce?w=800&q=80'
-  }
-];
-
 const DigitalMarketing = () => {
   const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState(null);
+  const [dmProjects, setDmProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/get_solutions.php');
+        const data = await response.json();
+        if (data.status === 'success' && data.data['digitalmarketing']) {
+          setDmProjects(data.data['digitalmarketing']);
+        }
+      } catch (err) {
+        console.error("Failed to fetch Marketing solutions:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
   const [showInquiry, setShowInquiry] = useState(false);
 
   useEffect(() => {

@@ -4,36 +4,29 @@ import { X, ArrowRight, ClipboardCheck, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectInquiryForm from '../common/ProjectInquiryForm';
 
-const vpProjects = [
-  {
-    id: 1,
-    title: 'Corporate Commercials',
-    shortDesc: 'Cinematic brand storytelling.',
-    desc: 'High-end film production that translates your corporate vision into a compelling cinematic experience, perfect for high-stakes brand launches.',
-    features: ['4K Cinematic Production', 'Professional Scriptwriting', 'High-End Sound Design'],
-    img: 'https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?w=800&q=80'
-  },
-  {
-    id: 2,
-    title: 'Character Animation',
-    shortDesc: '2D & 3D character design.',
-    desc: 'Breathtaking character-driven animations that simplify complex ideas and create emotional connections with your target audience.',
-    features: ['Custom Rigging & Motion', 'Dynamic Voice Acting', 'Physics-Based VFX'],
-    img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80'
-  },
-  {
-    id: 3,
-    title: '3D Product Reveals',
-    shortDesc: 'Hyper-realistic product visuals.',
-    desc: 'Cutting-edge 3D rendering that showcases your product in impossible environments, highlighting every detail with precision and style.',
-    features: ['Photorealistic Rendering', 'Exploded View Animations', 'Interactive Web Components'],
-    img: 'https://images.unsplash.com/photo-1633167606207-d840b5070fc2?w=800&q=80'
-  }
-];
-
 const VideoProduction = () => {
   const navigate = useNavigate();
   const [selectedProject, setSelectedProject] = useState(null);
+  const [vpProjects, setVpProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/get_solutions.php');
+        const data = await response.json();
+        if (data.status === 'success' && data.data['videoproduction']) {
+          setVpProjects(data.data['videoproduction']);
+        }
+      } catch (err) {
+        console.error("Failed to fetch Video solutions:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
   const [showInquiry, setShowInquiry] = useState(false);
 
   useEffect(() => {
