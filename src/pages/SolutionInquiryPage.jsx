@@ -16,10 +16,11 @@ const SolutionInquiryPage = () => {
         const cleanName = decodeURIComponent(project.replace(/-/g, ' '));
         setDecodedProjectName(cleanName);
         
-        // Lookup project in registry
-        const category = service.toLowerCase().replace('services', '');
-        const projectData = allProjectsData[service.toLowerCase()]?.find(
-          p => p.title.toLowerCase() === cleanName.toLowerCase()
+        // Improved Lookup project in registry with normalized name matching
+        const serviceKey = service.toLowerCase();
+        const projectData = allProjectsData[serviceKey]?.find(
+          p => p.title.replace(/\s+/g, '-').toLowerCase() === project.toLowerCase() || 
+               p.title.toLowerCase() === cleanName.toLowerCase()
         );
         setProjectDetails(projectData);
     }
