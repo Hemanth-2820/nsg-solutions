@@ -112,7 +112,7 @@ const DigitalMarketing = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: (idx % 3) * 0.1, duration: 0.5 }}
-              onClick={() => { setSelectedProject(project); setShowInquiry(true); }}
+              onClick={() => navigate(`/solutions/digitalmarketing/register/${project.title.replace(/\s+/g, '-').toLowerCase()}`)}
               className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-2xl cursor-pointer transition-all duration-300 group border border-gray-100 flex flex-col"
             >
               <div className="relative w-full h-64 overflow-hidden">
