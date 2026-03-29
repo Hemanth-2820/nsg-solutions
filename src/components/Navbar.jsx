@@ -5,183 +5,120 @@ import { motion, AnimatePresence } from 'framer-motion';
 import logonavbar from "../assets/logonavbar.png";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [isServicesHovered, setIsServicesHovered] = useState(false);
-  const location = useLocation();
+    const [isOpen, setIsOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [isServicesHovered, setIsServicesHovered] = useState(false);
+    const location = useLocation();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 20);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
-  useEffect(() => setIsOpen(false), [location]);
+    useEffect(() => setIsOpen(false), [location]);
 
-  const mainLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Services', path: '/services', hasDropdown: true },
-    { name: 'Solutions', path: '/solutions' },
-    { name: 'Blog', path: '/blog' },
-    { name: 'Careers', path: '/careers' },
-    { name: 'Contact', path: '/contact' }
-  ];
+    const mainLinks = [
+        { name: 'Home', path: '/' },
+        { name: 'About', path: '/about' },
+        { name: 'Services', path: '/services', hasDropdown: true },
+        { name: 'Solutions', path: '/solutions' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'Careers', path: '/careers' },
+        { name: 'Contact', path: '/contact' }
+    ];
 
-  const serviceSubLinks = [
-    { name: 'IT Services', path: '/services/it' },
-    { name: 'Video Production & Animation', path: '/services/creative' },
-    { name: 'Digital Marketing', path: '/services/marketing' },
-    { name: 'Publishing Solutions', path: 'https://nsgpublishers.com', external: true },
-    { name: 'Branding & Design', path: '/solutions/branding' },
-    { name: 'Enterprise Strategy', path: '/services/enterprise' }
-  ];
+    const serviceSubLinks = [
+        { name: 'IT Services', path: '/services/it' },
+        { name: 'Video Production', path: '/services/creative' },
+        { name: 'Digital Marketing', path: '/services/marketing' },
+        { name: 'Publishing Solutions', path: 'https://nsgpublishers.com', external: true },
+        { name: 'Branding & Design', path: '/solutions/branding' },
+        { name: 'Enterprise Strategy', path: '/services/enterprise' }
+    ];
 
-  const forceDarkNav = ['/client-login'].includes(location.pathname);
-
-  return (
-    <nav
-      className={`fixed w-full z-[99999] transition-all duration-500 ${scrolled ? 'bg-[#0A0E27] shadow-[0_15px_40px_rgba(0,0,0,0.8)]' : location.pathname === '/' ? 'bg-black/20 backdrop-blur-md border-b border-white/5' : 'bg-transparent'}`}
-      style={scrolled ? {
-        background: 'linear-gradient(135deg, #0B0F2F, #1A1F5A, #2C1983)',
-        backgroundSize: '200% 200%',
-        animation: 'gradient-shift 15s ease infinite alternate'
-      } : {}}
-    >
-      <div className="max-w-[1550px] mx-auto px-6 h-32 flex items-center justify-between relative">
-
-        {/* Logo */}
-        <Link to="/" className="flex-shrink-0 z-[110] relative group block">
-          <img src={logonavbar} alt="NSG Solutions Logo" className="h-[95px] md:h-[110px] w-auto transition-transform duration-300 group-hover:scale-105" />
-        </Link>
-
-        {/* Desktop Navigation */}
-        <div className="hidden xl:flex items-center h-full">
-          <div className="flex items-center space-x-8 h-full">
-            {mainLinks.map((link, idx) => (
-              <div
-                key={idx}
-                className="relative h-full flex items-center"
-                onMouseEnter={() => link.hasDropdown && setIsServicesHovered(true)}
-                onMouseLeave={() => link.hasDropdown && setIsServicesHovered(false)}
-              >
-                <Link
-                  to={link.path}
-                  className="text-white font-bold tracking-[0.2em] uppercase text-[12px] hover:text-[#38bdf8] transition-colors flex items-center gap-1.5 py-10"
-                >
-                  {link.name}
-                  {link.hasDropdown && <ChevronDown size={14} className={`transition-transform duration-300 ${isServicesHovered ? 'rotate-180' : ''}`} />}
+    return (
+        <nav
+            className={`fixed w-full z-[1000] transition-all duration-500 ${scrolled ? 'bg-[#0A0E27] shadow-2xl' : 'bg-transparent'}`}
+        >
+            <div className="max-w-[1550px] mx-auto px-6 h-28 md:h-32 flex items-center justify-between relative">
+                
+                {/* Logo */}
+                <Link to="/" className="flex-shrink-0 z-[1002] relative">
+                    <img src={logonavbar} alt="NSG Solutions" className="h-[85px] md:h-[110px] w-auto transition-transform hover:scale-105" />
                 </Link>
 
-                {link.hasDropdown && (
-                  <AnimatePresence>
-                    {isServicesHovered && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 15 }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 w-[300px] bg-[#0A0E27] border border-white/10 rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.8)] p-4 z-[5001]"
-                      >
-                        <div className="space-y-1">
-                          {serviceSubLinks.map((sub, i) => (
-                            sub.external ? (
-                              <a key={i} href={sub.path} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between px-5 py-4 text-[13px] text-white/70 hover:text-white hover:bg-white/5 transition-all rounded-xl">
-                                <span className="font-bold">{sub.name}</span>
-                                <ArrowRight size={14} className="text-[#38bdf8]" />
-                              </a>
-                            ) : (
-                              <Link key={i} to={sub.path} className="flex items-center justify-between px-5 py-4 text-[13px] text-white/70 hover:text-white hover:bg-white/5 transition-all rounded-xl">
-                                <span className="font-bold">{sub.name}</span>
-                                <ArrowRight size={14} className="text-[#38bdf8]" />
-                              </Link>
-                            )
-                          ))}
+                {/* Desktop Nav */}
+                <div className="hidden xl:flex items-center space-x-10">
+                    {mainLinks.map((link, idx) => (
+                        <div 
+                            key={idx} 
+                            className="relative group py-10"
+                            onMouseEnter={() => link.hasDropdown && setIsServicesHovered(true)}
+                            onMouseLeave={() => link.hasDropdown && setIsServicesHovered(false)}
+                        >
+                            <Link to={link.path} className="text-white font-bold uppercase text-[12px] tracking-[0.2em] flex items-center gap-2 hover:text-blue-400 transition-colors">
+                                {link.name}
+                                {link.hasDropdown && <ChevronDown size={14} />}
+                            </Link>
+
+                            {link.hasDropdown && isServicesHovered && (
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-[#0A0E27] border border-white/10 p-4 rounded-xl shadow-2xl"
+                                >
+                                    {serviceSubLinks.map((sub, i) => (
+                                        <Link key={i} to={sub.external ? { pathname: sub.path } : sub.path} target={sub.external ? "_blank" : "_self"} className="block p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-lg text-xs font-bold transition-all">
+                                            {sub.name}
+                                        </Link>
+                                    ))}
+                                </motion.div>
+                            )}
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                )}
-              </div>
-            ))}
+                    ))}
+                    <Link to="/client-login" className="bg-[#007cc3] text-white px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-white hover:text-[#007cc3] transition-all">Login</Link>
+                </div>
 
-            <div className="h-6 w-[1px] bg-white/20 mx-2"></div>
-
-            <div className="flex items-center gap-6">
-              <button className="text-white hover:text-[#38bdf8] transition-transform hover:scale-110">
-                <Search size={20} />
-              </button>
-              <Link to="/client-login" className="px-8 py-3 bg-[#007cc3] text-white rounded-full text-[12px] font-black tracking-widest uppercase hover:bg-white hover:text-[#007cc3] transition-all flex items-center gap-2 group shadow-lg">
-                Login <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Toggle */}
-        <div className="xl:hidden">
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center text-white z-[130] relative border border-white/20 active:scale-95 transition-transform"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ x: '100%', opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: '100%', opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-[#0A0E27] z-[110] flex flex-col p-8 pt-24"
-          >
-            {/* Background Aesthetic Blur */}
-            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/20 blur-[120px] rounded-full"></div>
-            
-            <div className="flex flex-col gap-4 overflow-y-auto hide-scrollbar flex-grow relative z-20">
-              {mainLinks.map((link, idx) => (
-                <motion.div 
-                  key={link.name}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className="border-b border-white/5 pb-3"
+                {/* Mobile Toggle */}
+                <button 
+                    onClick={() => setIsOpen(!isOpen)} 
+                    className="xl:hidden z-[1002] w-10 h-10 flex items-center justify-center text-white relative"
                 >
-                  {!link.hasDropdown ? (
-                    <Link to={link.path} className="text-[2rem] font-black text-white active:text-[#38bdf8] transition-colors">{link.name}</Link>
-                  ) : (
-                    <div className="space-y-4 py-2">
-                       <span className="text-[2rem] font-black text-white/40 uppercase tracking-widest text-xs block mb-2">Capabilities</span>
-                        {serviceSubLinks.map((sub, i) => (
-                          <Link 
-                            key={i} 
-                            to={sub.path} 
-                            className="text-white font-bold text-xl hover:text-[#38bdf8] flex items-center justify-between"
-                          >
-                            {sub.name}
-                            <ArrowRight size={18} className="text-[#38bdf8]" />
-                          </Link>
-                        ))}
-                    </div>
-                  )}
-                </motion.div>
-              ))}
-              
-              <Link to="/client-login" className="mt-8 p-6 bg-[#007cc3] rounded-[2rem] text-white text-center font-black tracking-[0.2em] uppercase shadow-2xl active:scale-95 transition-transform border border-white/10">
-                Client Dashboard
-              </Link>
+                    {isOpen ? <X size={28} /> : <Menu size={28} />}
+                </button>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
-  );
+
+            {/* Mobile Menu Overlay */}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div 
+                        initial={{ x: '100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ type: 'spring', damping: 30, stiffness: 200 }}
+                        className="fixed inset-0 bg-[#0A0E27] z-[1001] flex flex-col p-8 pt-32"
+                    >
+                        <div className="flex flex-col gap-6 overflow-y-auto">
+                            {mainLinks.map((link) => (
+                                <div key={link.name}>
+                                    <Link to={link.path} className="text-4xl font-black text-white">{link.name}</Link>
+                                    {link.hasDropdown && (
+                                        <div className="mt-4 grid grid-cols-1 gap-3 pl-4 border-l border-white/10">
+                                            {serviceSubLinks.map((sub, i) => (
+                                                <Link key={i} to={sub.path} className="text-white/50 font-bold text-lg">{sub.name}</Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                            <Link to="/client-login" className="mt-10 p-5 bg-[#007cc3] text-white text-center font-bold tracking-widest uppercase rounded-xl">Client Login</Link>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </nav>
+    );
 };
 
 export default Navbar;
