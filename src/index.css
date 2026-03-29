@@ -232,6 +232,10 @@
   .premium-card:hover .premium-card-line {
     width: 100%;
   }
+  .bg-service-vibrant {
+    background: #1baade !important;
+    min-height: 100vh !important;
+  }
 }
 
 html {

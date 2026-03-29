@@ -10,21 +10,21 @@ const subServices = [
 ];
 
 const DigitalMarketingPage = () => (
-  <div className="min-h-screen bg-[#0a1122] font-sans overflow-x-hidden pt-32 pb-20">
+  <div className="min-h-screen bg-service-vibrant font-sans overflow-x-hidden pt-32 pb-20">
     <div className="max-w-[1500px] mx-auto px-6 lg:px-12">
-      <Link 
-        to="/services" 
+      <Link
+        to="/services"
         className="mb-8 inline-flex items-center gap-2 text-[#007cc3] font-black text-xs uppercase tracking-widest hover:-translate-x-2 transition-transform duration-300"
       >
         <ArrowLeft size={14} /> Back to Services
       </Link>
 
       <div className="mb-20">
-        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight italic">
+        <h1 className="text-5xl md:text-7xl font-black text-[#0a0e27] mb-6 tracking-tight italic">
           Digital Marketing
         </h1>
         <div className="w-24 h-1.5 bg-[#007cc3] rounded-full mb-8"></div>
-        <p className="text-white/60 text-xl font-light max-w-3xl leading-relaxed">
+        <p className="text-[#0a0e27]/60 text-xl font-light max-w-3xl leading-relaxed">
           Grow your digital presence — data-driven marketing strategies engineered to scale brands in the modern digital landscape.
         </p>
       </div>
@@ -56,15 +56,15 @@ const DigitalMarketingPage = () => (
                 </svg>
               </div>
 
-              <div className="relative z-10 mb-6 p-6 bg-[#0a1122]/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl group-hover:rotate-[360deg] transition-transform duration-700">
-                <Icon size={42} className="text-white" />
+              <div className="relative z-10 mb-6 p-6 bg-[#f1f5f9]/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl group-hover:rotate-[360deg] transition-transform duration-700">
+                <Icon size={42} className="text-[#0a0e27]" />
               </div>
 
-              <h4 className="relative z-10 text-[1.4rem] font-black text-white px-8 tracking-tight leading-tight group-hover:scale-110 transition-transform duration-500">
+              <h4 className="relative z-10 text-[1.4rem] font-black text-[#0a0e27] px-8 tracking-tight leading-tight group-hover:scale-110 transition-transform duration-500">
                 {item.name}
               </h4>
 
-              <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#0a1122]/10 blur-2xl rounded-full group-hover:bg-[#0a1122]/30 transition-all duration-500"></div>
+              <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#f1f5f9]/10 blur-2xl rounded-full group-hover:bg-[#f1f5f9]/30 transition-all duration-500"></div>
             </motion.div>
           );
         })}
@@ -74,6 +74,7 @@ const DigitalMarketingPage = () => (
 );
 
 export default DigitalMarketingPage;
+
 
 
 

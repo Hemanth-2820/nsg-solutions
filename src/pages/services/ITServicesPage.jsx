@@ -12,11 +12,11 @@ const subServices = [
 ];
 
 const ITServicesPage = () => (
-  <div className="min-h-screen bg-[#0a1122] font-sans overflow-x-hidden pt-32 pb-20">
+  <div className="min-h-screen font-sans overflow-x-hidden pt-32 pb-20 bg-service-vibrant">
     <div className="max-w-[1500px] mx-auto px-6 lg:px-12">
-      <Link 
-        to="/services" 
-        className="mb-8 inline-flex items-center gap-2 text-[#007cc3] font-black text-xs uppercase tracking-widest hover:-translate-x-2 transition-transform duration-300"
+      <Link
+        to="/services"
+        className="mb-8 inline-flex items-center gap-2 text-white/80 font-black text-xs uppercase tracking-widest hover:-translate-x-2 transition-transform duration-300"
       >
         <ArrowLeft size={14} /> Back to Services
       </Link>
@@ -25,8 +25,8 @@ const ITServicesPage = () => (
         <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight italic">
           IT Services
         </h1>
-        <div className="w-24 h-1.5 bg-[#007cc3] rounded-full mb-8"></div>
-        <p className="text-white/60 text-xl font-light max-w-3xl leading-relaxed">
+        <div className="w-24 h-1.5 bg-white/30 rounded-full mb-8"></div>
+        <p className="text-white/80 text-xl font-light max-w-3xl leading-relaxed">
           Scalable enterprise solutions powered by modern technologies. Engineered for reliability, designed for global scale.
         </p>
       </div>
@@ -58,7 +58,7 @@ const ITServicesPage = () => (
                 </svg>
               </div>
 
-              <div className="relative z-10 mb-6 p-6 bg-[#0a1122]/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl group-hover:rotate-[360deg] transition-transform duration-700">
+              <div className="relative z-10 mb-6 p-6 bg-white/20 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl group-hover:rotate-[360deg] transition-transform duration-700">
                 <Icon size={42} className="text-white" />
               </div>
 
@@ -66,7 +66,7 @@ const ITServicesPage = () => (
                 {item.name}
               </h4>
 
-              <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#0a1122]/10 blur-2xl rounded-full group-hover:bg-[#0a1122]/30 transition-all duration-500"></div>
+              <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#f1f5f9]/10 blur-2xl rounded-full group-hover:bg-[#f1f5f9]/30 transition-all duration-500"></div>
             </motion.div>
           );
         })}
@@ -76,6 +76,7 @@ const ITServicesPage = () => (
 );
 
 export default ITServicesPage;
+
 
 
 

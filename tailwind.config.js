@@ -7,12 +7,12 @@ export default {
     extend: {
       colors: {
         infosys: {
-          blue: '#007cc3', 
-          dark: '#111111', 
-          gray: '#f8f8f8', 
+          blue: '#007cc3',
+          dark: '#111111',
+          gray: '#f8f8f8',
           lightBlue: '#5bb8e4',
-          purple: '#813388', 
-          ochre: '#a66300' 
+          purple: '#813388',
+          ochre: '#a66300'
         }
       },
       fontFamily: {

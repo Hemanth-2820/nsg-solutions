@@ -75,37 +75,37 @@ const AboutPage = () => {
 
             <div className="lg:w-1/2 grid grid-cols-2 gap-4">
               {[
-                { 
-                  num: "50+", 
-                  label: "Global Clients", 
+                {
+                  num: "50+",
+                  label: "Global Clients",
                   icon: <Users size={32} />,
                   bg: "bg-[#007cc3]", // NSG Blue
                   hover: "hover:bg-[#006bb0]"
                 },
-                { 
-                  num: "3M+", 
-                  label: "Code Deployed", 
+                {
+                  num: "3M+",
+                  label: "Code Deployed",
                   icon: <Activity size={32} />,
                   bg: "bg-[#4f46e5]", // Indigo
                   hover: "hover:bg-[#4338ca]"
                 },
-                { 
-                  num: "99%", 
-                  label: "Uptime Guaranteed", 
+                {
+                  num: "99%",
+                  label: "Uptime Guaranteed",
                   icon: <CheckCircle2 size={32} />,
                   bg: "bg-[#10b981]", // Emerald
                   hover: "hover:bg-[#059669]"
                 },
-                { 
-                  num: "A+", 
-                  label: "Security Rating", 
+                {
+                  num: "A+",
+                  label: "Security Rating",
                   icon: <ShieldCheck size={32} />,
                   bg: "bg-[#e11d48]", // Rose
                   hover: "hover:bg-[#be123c]"
                 }
               ].map((metric, i) => (
-                <motion.div 
-                  key={i} 
+                <motion.div
+                  key={i}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: i * 0.1 }}
@@ -116,7 +116,7 @@ const AboutPage = () => {
                   <div className="opacity-40 mb-10 group-hover:opacity-100 transition-opacity">
                     {metric.icon}
                   </div>
-                  
+
                   <div className="relative z-10">
                     <h3 className="text-5xl md:text-6xl font-black mb-3 tracking-tighter leading-none">{metric.num}</h3>
                     <p className="text-[11px] font-black tracking-[0.3em] uppercase opacity-80">{metric.label}</p>
@@ -133,11 +133,11 @@ const AboutPage = () => {
 
       <section className="bg-white py-20 border-y border-gray-100 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-50/50 rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-        
+
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 font-sans text-white">
-          
+
           {/* Mission Card: More Compact with Blueprint Accents */}
-          <motion.div 
+          <motion.div
             whileHover={{ y: -8, scale: 1.01 }}
             className="group cursor-default bg-gradient-to-br from-[#007cc3] to-[#00a3ff] p-8 md:p-10 rounded-[2.5rem] shadow-2xl transition-all duration-500 relative overflow-hidden flex flex-col items-start border border-white/20"
           >
@@ -148,7 +148,7 @@ const AboutPage = () => {
             <div className="mb-6 w-16 h-16 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-all duration-500 shadow-lg border border-white/30">
               <Target size={32} className="text-white group-hover:scale-125 transition-transform" />
             </div>
-            
+
             <h3 className="text-3xl font-bold mb-4 tracking-tight">Our Mission</h3>
             <p className="text-white/90 font-medium text-lg leading-relaxed border-l-2 border-white/40 pl-6 group-hover:border-white transition-colors duration-500">
               Deliver high-quality software and enable growth through innovative strategies. Streamline IT architectures globally.
@@ -158,7 +158,7 @@ const AboutPage = () => {
           </motion.div>
 
           {/* Vision Card: Bold Straight Font */}
-          <motion.div 
+          <motion.div
             whileHover={{ y: -8, scale: 1.01 }}
             className="group cursor-default bg-gradient-to-br from-[#4f46e5] to-[#7c3aed] p-8 md:p-10 rounded-[2.5rem] shadow-2xl transition-all duration-500 relative overflow-hidden flex flex-col items-start border border-white/20"
           >
@@ -169,7 +169,7 @@ const AboutPage = () => {
             <div className="mb-6 w-16 h-16 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-all duration-500 shadow-lg border border-white/30">
               <Flag size={32} className="text-white group-hover:scale-125 transition-transform" />
             </div>
-            
+
             <h3 className="text-3xl font-bold mb-4 tracking-tight text-white">Our Vision</h3>
             <p className="text-white/90 font-medium text-lg leading-relaxed border-l-2 border-white/40 pl-6 group-hover:border-white transition-colors duration-500">
               Become the definitive global leader in digital transformation, shaping the technological frontier worldwide.
