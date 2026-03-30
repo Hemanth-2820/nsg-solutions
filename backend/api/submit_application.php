@@ -1,6 +1,8 @@
 <?php
-header('Content-Type: text/html; charset=utf-8');
+header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
+ob_start();
+error_reporting(0);
 
 require_once 'config.php';
 
@@ -32,13 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $stmt = $pdo->prepare("INSERT INTO job_applications (job_id, name, email, phone, resume_path, portfolio_url, message) VALUES (?, ?, ?, ?, ?, ?, ?)");
             if ($stmt->execute([$job_id, $name, $email, $phone, $resume_path, $portfolio_url, $message])) {
+                ob_end_clean();
                 echo json_encode(["status" => "success", "message" => "Application submitted"]);
+                exit();
             }
         } catch (PDOException $e) {
+            ob_end_clean();
             echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+            exit();
         }
     } else {
+        ob_end_clean();
         echo json_encode(["status" => "error", "message" => "Missing required fields"]);
+        exit();
     }
 }
 ?>

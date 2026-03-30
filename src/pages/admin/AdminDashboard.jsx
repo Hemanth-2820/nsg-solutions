@@ -682,22 +682,61 @@ const AdminDashboard = () => {
                                 <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Deterministic Candidates</h2>
                                 <div className="bg-white/5 px-8 py-5 rounded-2xl border border-white/10 text-center shadow-lg"><span className="block text-[10px] uppercase font-black text-[#007cc3] mb-1">Total Intelligence</span><span className="text-3xl font-black tracking-tighter">{applications.length}</span></div>
                              </div>
-                             <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
-                                <table className="w-full text-left">
-                                    <thead className="bg-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white/30 border-b border-white/5">
-                                        <tr><th className="px-10 py-8">Identity</th><th className="px-10 py-8">Target Project</th><th className="px-10 py-8 text-right">Archived CV</th></tr>
+                              <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
+                                <table className="w-full text-left border-collapse">
+                                    <thead className="bg-[#0f172a] text-[10px] font-black uppercase tracking-[0.2em] text-white/30 border-b border-white/5">
+                                        <tr>
+                                            <th className="px-10 py-8">Candidate Identity</th>
+                                            <th className="px-10 py-8">Project Target</th>
+                                            <th className="px-10 py-8">Digital Footprint</th>
+                                            <th className="px-10 py-8">Narrative Detail</th>
+                                            <th className="px-10 py-8 text-right">Resume Data</th>
+                                        </tr>
                                     </thead>
                                     <tbody className="divide-y divide-white/5">
                                         {applications.map(app => (
                                             <tr key={app.id} className="hover:bg-white/[0.02] transition-all group">
-                                                <td className="px-10 py-8"><div className="font-bold text-lg mb-1">{app.name}</div><div className="text-[10px] font-black uppercase tracking-widest text-white/30">{app.email}</div></td>
-                                                <td className="px-10 py-8"><span className="px-4 py-2 bg-[#007cc3]/10 text-[#007cc3] text-[9px] font-black uppercase tracking-widest rounded-full border border-[#007cc3]/20">{app.job_title || 'General Entry'}</span></td>
-                                                <td className="px-10 py-8 text-right"><a href={`https://new.nsgsolutions.in/api/${app.resume_path}`} target="_blank" className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-[#007cc3] text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl"><Download size={14} /> Analyze CV</a></td>
+                                                <td className="px-10 py-8">
+                                                    <div className="font-bold text-lg mb-1">{app.name}</div>
+                                                    <div className="flex flex-col gap-1">
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-[#007cc3]">{app.email}</span>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-white/20">{app.phone || '+XX XXXX XXXXX'}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="px-10 py-8">
+                                                    <span className="px-4 py-2 bg-[#007cc3]/10 text-[#007cc3] text-[9px] font-black uppercase tracking-widest rounded-full border border-[#007cc3]/20 shadow-lg shadow-blue-500/5">
+                                                        {app.job_title || 'General Entry'}
+                                                    </span>
+                                                </td>
+                                                <td className="px-10 py-8">
+                                                    {app.portfolio_url ? (
+                                                        <a href={app.portfolio_url} target="_blank" className="flex items-center gap-2 text-[10px] font-black uppercase text-white/40 hover:text-white transition-all underline decoration-[#007cc3] decoration-2 underline-offset-4">
+                                                            <Globe size={12} /> View Repository
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-[10px] font-black uppercase text-white/10 italic">Not Disclosed</span>
+                                                    )}
+                                                </td>
+                                                <td className="px-10 py-8">
+                                                    <div className="max-w-[300px] overflow-hidden">
+                                                        <p className="text-[11px] text-white/30 italic line-clamp-2 leading-relaxed" title={app.message}>
+                                                            "{app.message || 'No speculative briefing provided.'}"
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                                <td className="px-10 py-8 text-right">
+                                                    <a href={`https://new.nsgsolutions.in/${app.resume_path}`} target="_blank" className="inline-flex items-center gap-2 px-6 py-4 bg-white/5 hover:bg-[#007cc3] text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl border border-white/5">
+                                                        <Download size={14} /> Extract PDF
+                                                    </a>
+                                                </td>
                                             </tr>
                                         ))}
+                                        {applications.length === 0 && (
+                                            <tr><td colSpan="5" className="px-10 py-20 text-center opacity-20 text-[10px] font-black tracking-widest uppercase italic">The candidate registry is currently empty.</td></tr>
+                                        )}
                                     </tbody>
                                 </table>
-                             </div>
+                              </div>
                         </motion.div>
                     )}
 
