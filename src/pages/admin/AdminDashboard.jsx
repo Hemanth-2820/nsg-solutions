@@ -118,6 +118,26 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleDeleteApplication = async (id) => {
+        setConfirm({
+            isOpen: true,
+            title: 'Permanently purge this candidate from the hiring registry?',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch('/api/manage_applications.php?action=delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    if ((await res.json()).status === 'success') { 
+                        showToast('Candidate record purged', 'success'); 
+                        fetchApplications(); 
+                    }
+                } catch (err) { showToast('Sync Fail', 'error'); }
+            }
+        });
+    };
+
     // BLOG ACTIONS
     const handleSaveBlog = async (e) => {
         e.preventDefault();
@@ -725,9 +745,18 @@ const AdminDashboard = () => {
                                                     </div>
                                                 </td>
                                                 <td className="px-10 py-8 text-right">
-                                                    <a href={`https://new.nsgsolutions.in/${app.resume_path}`} target="_blank" className="inline-flex items-center gap-2 px-6 py-4 bg-white/5 hover:bg-[#007cc3] text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl border border-white/5">
-                                                        <Download size={14} /> Extract PDF
-                                                    </a>
+                                                    <div className="flex justify-end items-center gap-3">
+                                                        <a href={`https://new.nsgsolutions.in/${app.resume_path}`} target="_blank" className="inline-flex items-center gap-2 px-6 py-4 bg-white/5 hover:bg-[#007cc3] text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl border border-white/5">
+                                                            <Download size={14} /> Extract PDF
+                                                        </a>
+                                                        <button 
+                                                            onClick={() => handleDeleteApplication(app.id)}
+                                                            className="p-4 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all shadow-lg shadow-red-900/10"
+                                                            title="Purge Intelligence"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}
