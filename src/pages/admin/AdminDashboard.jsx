@@ -28,6 +28,8 @@ const AdminDashboard = () => {
     const [isEditingHighlight, setIsEditingHighlight] = useState(false);
     const [currentHighlight, setCurrentHighlight] = useState({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
     const [confirm, setConfirm] = useState({ isOpen: false, title: '', onConfirm: null });
+    const [isEditingTestimonial, setIsEditingTestimonial] = useState(false);
+    const [currentTestimonial, setCurrentTestimonial] = useState({ client_name: '', service_name: '', content: '', rating: 5 });
 
     const navigate = useNavigate();
 
@@ -49,7 +51,7 @@ const AdminDashboard = () => {
         if (!navigator.onLine) return;
         setLoading(true);
         try {
-            if (activeTab === 'testimonials') await fetchPending();
+            if (activeTab === 'testimonials') await fetchTestimonials();
             else if (activeTab === 'blogs') await fetchBlogs();
             else if (activeTab === 'jobs') await fetchJobs();
             else if (activeTab === 'applications') await fetchApplications();
@@ -60,10 +62,10 @@ const AdminDashboard = () => {
         setLoading(false);
     };
 
-    const fetchPending = async () => {
-        const res = await fetch('/api/admin/get_pending.php');
+    const fetchTestimonials = async () => {
+        const res = await fetch('/api/admin_manage_testimonials.php?action=list');
         const data = await res.json();
-        if (data.status === 'success') setTestimonials(data.data);
+        if (data.status === 'success') setTestimonials(data.all || []);
     };
 
     const fetchBlogs = async () => {
@@ -271,15 +273,56 @@ const AdminDashboard = () => {
 
     const handleUpdateTestimonial = async (id, status) => {
         try {
-            const response = await fetch('/api/admin/update_status.php', {
+            const response = await fetch('/api/admin_manage_testimonials.php?action=status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ testimonial_id: id, status: status })
+                body: JSON.stringify({ id, status })
             });
             const data = await response.json();
-            if (data.status === 'success') { showToast(`Moderated!`, 'success'); fetchPending(); }
-        } catch (error) { showToast('Update failed.', 'error'); }
+            if (data.status === 'success') { 
+                showToast(`Manifest updated: ${status.toUpperCase()}`, 'success'); 
+                fetchTestimonials(); 
+            }
+        } catch (err) { showToast('Sync Fail', 'error'); }
     };
+
+    const handleSaveTestimonial = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await fetch('/api/admin_manage_testimonials.php?action=save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentTestimonial)
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                showToast('Intelligence Synchronized!', 'success');
+                setIsEditingTestimonial(false);
+                setCurrentTestimonial({ client_name: '', service_name: '', content: '', rating: 5 });
+                fetchTestimonials();
+            }
+        } catch (err) { showToast('Save Fail', 'error'); }
+    }
+
+    const handleDeleteTestimonial = async (id) => {
+        setConfirm({
+            isOpen: true,
+            title: 'Purge this client review from repository?',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch('/api/admin_manage_testimonials.php?action=delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    if ((await res.json()).status === 'success') { 
+                        showToast('Purged Admin Registry', 'success'); 
+                        fetchTestimonials(); 
+                    }
+                } catch (err) { showToast('Purge Fail', 'error'); }
+            }
+        });
+    }
 
     const handleLogout = () => {
         localStorage.removeItem('nsg_admin_user');
@@ -346,25 +389,132 @@ const AdminDashboard = () => {
                 <AnimatePresence mode="wait">
                     {activeTab === 'testimonials' && (
                         <motion.div key="testimonials" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <h2 className="text-3xl font-black uppercase italic mb-8">Testimonial Queue</h2>
-                            <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
-                                {loading ? <p className="text-center opacity-20 py-10 uppercase font-black">Syncing...</p> : testimonials.length === 0 ? <p className="text-center opacity-40 uppercase tracking-[0.3em] text-[10px] font-black py-20 italic">No items pending.</p> : (
-                                    <div className="space-y-4">
-                                        {testimonials.map(item => (
-                                            <div key={item.id} className="bg-white/5 p-6 rounded-2xl flex flex-col lg:flex-row justify-between items-center gap-6 border border-white/5 shadow-lg relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-[#007cc3]"></div>
-                                                <div className="flex-1">
-                                                    <div className="font-bold uppercase text-xs mb-2 flex items-center gap-2">{item.client_name} <span className="opacity-30">@{item.company}</span></div>
-                                                    <p className="italic opacity-70 text-sm leading-relaxed">"{item.content}"</p>
-                                                </div>
-                                                <div className="flex gap-2">
-                                                    <button onClick={() => handleUpdateTestimonial(item.id, 'approved')} className="px-6 py-2 bg-green-500/10 hover:bg-green-500 text-green-500 hover:text-white rounded-lg font-black uppercase text-[10px] tracking-widest transition-all">Accept</button>
-                                                    <button onClick={() => handleUpdateTestimonial(item.id, 'rejected')} className="px-6 py-2 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-lg font-black uppercase text-[10px] tracking-widest transition-all">Decline</button>
-                                                </div>
+                             <div className="flex justify-between items-center mb-10">
+                                <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Voices of Success</h2>
+                                <div className="flex gap-4">
+                                    <div className="bg-white/5 px-6 py-3 rounded-xl border border-white/10 text-center"><span className="block text-[8px] uppercase font-black text-[#007cc3] mb-1">Queue</span><span className="text-xl font-black">{testimonials.filter(t => t.status === 'pending').length}</span></div>
+                                    <div className="bg-[#007cc3]/10 px-6 py-3 rounded-xl border border-[#007cc3]/20 text-center"><span className="block text-[8px] uppercase font-black text-[#007cc3] mb-1">Active</span><span className="text-xl font-black">{testimonials.filter(t => t.status === 'approved').length}</span></div>
+                                </div>
+                             </div>
+
+                             <div className="grid lg:grid-cols-[1fr_400px] gap-12">
+                                <div className="space-y-12">
+                                    {/* PENDING SECTION */}
+                                    {testimonials.filter(t => t.status === 'pending').length > 0 && (
+                                        <div className="bg-white/5 p-8 rounded-[40px] border-2 border-dashed border-[#007cc3]/30">
+                                            <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 tracking-[0.2em] flex items-center gap-3"><Clock size={16} /> Incoming Intelligence</h3>
+                                            <div className="space-y-4">
+                                                {testimonials.filter(t => t.status === 'pending').map(item => (
+                                                    <div key={item.id} className="bg-[#0f172a] p-6 rounded-3xl flex flex-col lg:flex-row justify-between items-center gap-6 border border-white/5 shadow-2xl relative overflow-hidden group">
+                                                        <div className="absolute left-0 top-0 w-1.5 h-full bg-[#007cc3]"></div>
+                                                        <div className="flex-1">
+                                                            <div className="flex items-center gap-3 mb-2">
+                                                                <div className="font-black uppercase text-[10px] text-white tracking-widest">{item.client_name}</div>
+                                                                <span className="w-1 h-1 rounded-full bg-white/10"></span>
+                                                                <div className="text-[10px] font-black text-[#007cc3]/60 uppercase tracking-widest">{item.service_name || 'General Project'}</div>
+                                                                <div className="flex gap-0.5 ml-4">
+                                                                    {[...Array(5)].map((_, i) => (
+                                                                        <div key={i} className={`w-2 h-2 rounded-full ${i < (item.rating || 5) ? 'bg-[#1baade]' : 'bg-white/5'}`}></div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                            <p className="italic text-white/40 text-sm leading-relaxed font-medium">"{item.content}"</p>
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => handleUpdateTestimonial(item.id, 'approved')} className="px-6 py-3 bg-[#007cc3] hover:bg-[#1baade] text-white rounded-xl font-black uppercase text-[9px] tracking-widest transition-all shadow-lg shadow-blue-500/20">Authorize</button>
+                                                            <button onClick={() => handleUpdateTestimonial(item.id, 'rejected')} className="px-6 py-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl font-black uppercase text-[9px] tracking-widest transition-all border border-red-500/10">Discard</button>
+                                                        </div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        ))}
+                                        </div>
+                                    )}
+
+                                    {/* PUBLISHED SECTION */}
+                                    <div className="bg-white/5 p-8 rounded-[40px] border border-white/10 shadow-2xl backdrop-blur-3xl min-h-[400px]">
+                                        <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 tracking-[0.2em] flex items-center gap-3"><CheckCircle size={16} /> Active Reputation</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            {testimonials.filter(t => t.status === 'approved' || t.status === 'rejected').map(item => (
+                                                <div key={item.id} className="bg-white/5 p-6 rounded-3xl border border-white/5 shadow-xl group hover:border-[#007cc3]/20 transition-all">
+                                                    <div className="flex justify-between items-start mb-6">
+                                                        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center font-black text-white/40">{item.client_name?.[0]}</div>
+                                                        <div className="flex flex-col items-end">
+                                                            <div className="text-[10px] font-black text-white/20 uppercase mb-2">Rating</div>
+                                                            <div className="flex gap-1">
+                                                                {[...Array(5)].map((_, i) => (
+                                                                    <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < (item.rating || 5) ? 'bg-[#007cc3]' : 'bg-white/5'}`}></div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="mb-6 h-[80px] overflow-hidden">
+                                                        <h4 className="font-black text-white text-sm uppercase tracking-tighter mb-1 truncate">{item.service_name}</h4>
+                                                        <p className="text-[11px] text-white/30 italic line-clamp-2 leading-relaxed font-medium">"{item.content}"</p>
+                                                    </div>
+                                                    <div className="flex justify-between items-center pt-6 border-t border-white/5">
+                                                        <span className={`text-[8px] font-black uppercase tracking-widest ${item.status === 'approved' ? 'text-green-500' : 'text-red-500'}`}>{item.status}</span>
+                                                        <div className="flex gap-1 opacity-10 group-hover:opacity-100 transition-opacity">
+                                                            <button 
+                                                                onClick={() => { setIsEditingTestimonial(true); setCurrentTestimonial(item); }}
+                                                                className="p-3 bg-white/5 hover:bg-[#007cc3] text-white rounded-xl transition-all"
+                                                                title="Format Entry"
+                                                            >
+                                                                <Edit2 size={14} />
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => handleDeleteTestimonial(item.id)}
+                                                                className="p-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all"
+                                                                title="Purge Entry"
+                                                            >
+                                                                <Trash2 size={14} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {testimonials.filter(t => t.status === 'approved' || t.status === 'rejected').length === 0 && (
+                                                <div className="col-span-2 py-20 text-center opacity-20 text-[10px] font-black tracking-widest uppercase italic">No managed testimonials found.</div>
+                                            )}
+                                        </div>
                                     </div>
-                                )}
-                            </div>
+                                </div>
+
+                                {/* EDITING SIDEBAR */}
+                                <div className="space-y-6">
+                                    <div className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl animate-fade-in shadow-blue-900/10 overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#007cc3]/5 rounded-full -translate-y-16 translate-x-16 blur-2xl"></div>
+                                        <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 tracking-[0.2em] flex items-center gap-3">
+                                            {isEditingTestimonial ? <Edit2 size={16} /> : <Plus size={16} />} {isEditingTestimonial ? 'Intelligence Refactoring' : 'Manual Entry'}
+                                        </h3>
+                                        <form onSubmit={handleSaveTestimonial} className="space-y-6 relative z-10">
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Client Identity</label>
+                                                <input required value={currentTestimonial.client_name} onChange={e=>setCurrentTestimonial({...currentTestimonial, client_name:e.target.value})} placeholder="Full Name" className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Service Title (Card Header)</label>
+                                                <input required value={currentTestimonial.service_name} onChange={e=>setCurrentTestimonial({...currentTestimonial, service_name:e.target.value})} placeholder="e.g. Cloud Migration" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Performance Rating</label>
+                                                <select value={currentTestimonial.rating} onChange={e=>setCurrentTestimonial({...currentTestimonial, rating:parseInt(e.target.value)})} className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none appearance-none">
+                                                    {[1,2,3,4,5].map(v => <option key={v} value={v} className="bg-[#0f172a]">{v} Star Intelligence</option>)}
+                                                </select>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Quote Contents</label>
+                                                <textarea required rows="6" value={currentTestimonial.content} onChange={e=>setCurrentTestimonial({...currentTestimonial, content:e.target.value})} placeholder="Feedback data..." className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
+                                            </div>
+                                            <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl shadow-blue-500/20 hover:bg-[#0088d8] transition-all flex items-center justify-center gap-3">
+                                                {isEditingTestimonial ? <CheckCircle size={18} /> : <Send size={18} />} {isEditingTestimonial ? 'Commit Changes' : 'Inject Entry'}
+                                            </button>
+                                            {isEditingTestimonial && (
+                                                <button type="button" onClick={() => { setIsEditingTestimonial(false); setCurrentTestimonial({ client_name: '', service_name: '', content: '', rating: 5 }); }} className="w-full text-[9px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all">Cancel Refactoring</button>
+                                            )}
+                                        </form>
+                                    </div>
+                                </div>
+                             </div>
                         </motion.div>
                     )}
 

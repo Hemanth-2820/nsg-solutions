@@ -77,9 +77,16 @@ const TestimonialCard = ({ item }) => {
                 </p>
                 <div className="pt-4 border-t border-white/20">
                   <p className="font-bold text-lg text-white uppercase italic tracking-tight">{item.author}</p>
-                  <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold tracking-[0.2em] mt-0.5">
-                    {item.company}
-                  </p>
+                  <div className="flex justify-between items-center mt-1">
+                    <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold tracking-[0.2em]">
+                      {item.company}
+                    </p>
+                    <div className="flex gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < (item.rating || 5) ? 'bg-white' : 'bg-white/10'}`}></div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -108,12 +115,13 @@ const Testimonials = () => {
         if (data.status === 'success') {
           // Normalize DB data to match the UI structure
           const normalized = data.data.map((item, idx) => ({
-            id: `db-${idx}`,
-            miniTitle: item.client_role || "Project Excellence",
+            id: item.id || `db-${idx}`,
+            miniTitle: item.service_name || "Project Excellence",
             content: item.content,
+            rating: item.rating,
             author: item.client_name,
-            company: item.company,
-            color: ["bg-[#0164ff]", "bg-[#e50000]", "bg-[#003cff]", "bg-[#007cc3]"][idx % 4]
+            company: item.company || 'Enterprise Partner',
+            color: ["bg-[#007cc3]", "bg-[#0164ff]", "bg-[#e50000]", "bg-[#003cff]"][idx % 4]
           }));
           setDynamicTestimonials(normalized);
         }

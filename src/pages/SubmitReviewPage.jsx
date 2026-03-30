@@ -6,16 +6,44 @@ import StarRating from '../components/reviews/StarRating';
 const SubmitReviewPage = () => {
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState('');
+  const [selectedService, setSelectedService] = useState('');
+  const [services, setServices] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
 
+  // Fetch available services/solutions for the dropdown
+  React.useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch('/api/get_solutions.php');
+        const result = await response.json();
+        if (result.status === 'success') {
+          // Flatten categories: { itservices: [...], branding: [...] } -> [...]
+          const flatList = [];
+          Object.keys(result.data).forEach(cat => {
+            flatList.push(...result.data[cat]);
+          });
+          setServices(flatList);
+        }
+      } catch (err) {
+        console.error("Failed to sync services registry.");
+      }
+    };
+    fetchServices();
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (rating === 0) {
+        setError('Please provide a quality rating before submission.');
+        return;
+    }
+
     setError('');
 
     const clientData = JSON.parse(localStorage.getItem('nsg_client_user'));
     if (!clientData || !clientData.id) {
-      setError('Session expired. Please login again.');
+      setError('Intelligence Session expired. Please re-authenticate.');
       return;
     }
 
@@ -25,7 +53,9 @@ const SubmitReviewPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           client_id: clientData.id, 
-          content: content 
+          feedback: content,
+          service_name: selectedService,
+          rating: rating
         })
       });
 
@@ -34,10 +64,10 @@ const SubmitReviewPage = () => {
       if (data.status === 'success') {
         setIsSubmitted(true);
       } else {
-        setError(data.message || 'Submission failed');
+        setError(data.message || 'Transmission failed.');
       }
     } catch (err) {
-      setError('Connection error. Please try again.');
+      setError('Neural connection error. Please verify link.');
     }
   };
 
@@ -86,11 +116,19 @@ const SubmitReviewPage = () => {
             
             {/* Project Select */}
             <div className="relative">
-              <select defaultValue="" required className="w-full bg-[#334155] rounded-sm px-6 py-5 text-white focus:ring-1 focus:ring-white/20 outline-none appearance-none cursor-pointer">
+              <select 
+                value={selectedService} 
+                onChange={(e) => setSelectedService(e.target.value)}
+                required 
+                className="w-full bg-[#334155] rounded-sm px-6 py-5 text-white focus:ring-1 focus:ring-white/20 outline-none appearance-none cursor-pointer"
+              >
                 <option value="" disabled className="text-white/50">SELECT PROJECT (Choose a completed project...)</option>
-                <option value="cloud" className="text-black bg-white">Cloud Migration Enterprise</option>
-                <option value="ai" className="text-black bg-white">AI Recommendation Engine</option>
-                <option value="sap" className="text-black bg-white">SAP ERP Implementation</option>
+                {services.map(service => (
+                    <option key={service.id} value={service.title} className="text-black bg-white">{service.title}</option>
+                ))}
+                {/* Fallback internal categories if DB is empty */}
+                <option value="IT Consultancy" className="text-black bg-white">General IT Consultancy</option>
+                <option value="System Optimization" className="text-black bg-white">System Optimization</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-6 text-white/60">
                 <svg className="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
