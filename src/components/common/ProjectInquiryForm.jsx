@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, X, Send, CheckCircle2, Building, Globe, User, Mail, Phone, Briefcase, MessageSquare, AlertCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const ProjectInquiryForm = ({ projectName, onClose }) => {
   const [formData, setFormData] = useState({
@@ -19,6 +20,8 @@ const ProjectInquiryForm = ({ projectName, onClose }) => {
 
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
   const [generatedId, setGeneratedId] = useState('');
 
   const countries = [
@@ -135,30 +138,31 @@ const ProjectInquiryForm = ({ projectName, onClose }) => {
             setGeneratedId(submissionData.requestId);
             setSubmitStatus('success');
             setStatus('success');
+            toast.success('Inquiry transmitted successfully!');
             setTimeout(() => {
                 if (onClose) onClose();
             }, 3000);
         } else {
             setSubmitStatus('error');
+            setIsSubmitting(false);
+            toast.error(result.message || 'Transmission failed.');
         }
     } catch (err) {
-      setStatus('success');
+      setSubmitStatus('error');
+      setIsSubmitting(false);
+      toast.error('Server communication error.');
     }
   };
 
   if (status === 'success') {
     return (
-      <div className="p-12 text-center flex flex-col items-center justify-center h-full min-h-[500px]">
-        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }}>
-          <CheckCircle2 size={80} className="text-green-500 mb-6" />
+      <div className="p-12 text-center flex flex-col items-center justify-center h-full min-h-[400px]">
+        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+          <CheckCircle2 size={60} className="text-green-500 mb-6" />
         </motion.div>
-        <h2 className="text-4xl font-black text-[#0a0e27] mb-4 tracking-tighter">Inquiry Logged!</h2>
-        <p className="text-gray-500 mb-10 text-lg">Thank you, <span className="text-[#1baade] font-bold">{formData.firstName}</span>. Your project inquiry has been successfully transmitted to our team.</p>
-        <div className="bg-[#f8fafc] border-2 border-[#1baade]/10 p-10 rounded-[2.5rem] w-full max-w-sm shadow-xl shadow-blue-500/5">
-          <p className="text-[10px] text-gray-400 uppercase font-black tracking-[0.3em] mb-4">Unique Request ID</p>
-          <p className="text-4xl font-mono font-black text-[#0a0e27] tracking-tight">{generatedId}</p>
-        </div>
-        <button onClick={onClose} className="mt-12 bg-[#0a0e27] text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-[#1baade] transition-all active:scale-95 shadow-lg shadow-[#0a0e27]/20">Close Registry</button>
+        <h2 className="text-3xl font-black text-[#0a0e27] mb-2 tracking-tighter">Transmission Successful</h2>
+        <p className="text-gray-500 text-sm">Your inquiry has been logged in our Command Center. An NSG representative will respond shortly.</p>
+        <p className="mt-8 text-[10px] uppercase font-black text-[#1baade] tracking-widest animate-pulse italic">Auto-redirecting to registry...</p>
       </div>
     );
   }
@@ -262,13 +266,18 @@ const ProjectInquiryForm = ({ projectName, onClose }) => {
       </div>
 
       {/* Sticky Submit Footer */}
-      <div className="p-8 border-t border-gray-50 bg-white flex justify-center bg-white/80 backdrop-blur-md">
+      <div className="p-8 border-t border-gray-50 bg-white flex flex-col items-center gap-4 bg-white/80 backdrop-blur-md">
+         {submitStatus === 'error' && (
+           <p className="text-red-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+             <AlertCircle size={14} /> Failed to transmit. Please verify your connection.
+           </p>
+         )}
          <button 
            onClick={handleSubmit}
-           disabled={status === 'submitting'}
-           className="w-full max-w-lg bg-[#0a0e27] hover:bg-[#1baade] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-4 transition-all shadow-2xl shadow-[#0a0e27]/10"
+           disabled={isSubmitting}
+           className="w-full max-w-lg bg-[#0a0e27] hover:bg-[#1baade] text-white py-5 rounded-2xl font-bold uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-4 transition-all shadow-2xl shadow-[#0a0e27]/10 disabled:opacity-50 disabled:cursor-not-allowed"
          >
-           {status === 'submitting' ? 'Processing Transaction...' : <>Finalize Product Inquiry <Send size={18} /></>}
+           {isSubmitting ? 'Processing Transaction...' : <>Finalize Product Inquiry <Send size={18} /></>}
          </button>
       </div>
 

@@ -7,6 +7,10 @@
 require_once 'api_headers.php';
 require_once 'config.php';
 
+// Suppress all non-fatal warnings to ensure clean JSON output
+error_reporting(0);
+ob_start();
+
 // Enable CORS for frontend submissions
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
@@ -51,6 +55,9 @@ try {
         phone, 
         role, 
         company, 
+        website, 
+        country, 
+        message, 
         project_name, 
         service_category, 
         request_id
@@ -61,6 +68,9 @@ try {
         :phone, 
         :role, 
         :company, 
+        :website, 
+        :country, 
+        :message, 
         :projectName, 
         :serviceCategory, 
         :requestId
@@ -72,15 +82,21 @@ try {
         ':email' => $data['email'],
         ':phone' => $data['phone'],
         ':role' => isset($data['role']) ? $data['role'] : null,
-        'company' => isset($data['company']) ? $data['company'] : null,
+        ':company' => isset($data['company']) ? $data['company'] : null,
+        ':website' => isset($data['website']) ? $data['website'] : null,
+        ':country' => isset($data['country']) ? $data['country'] : null,
+        ':message' => isset($data['message']) ? $data['message'] : null,
         ':projectName' => $data['projectName'],
         ':serviceCategory' => isset($data['serviceCategory']) ? $data['serviceCategory'] : null,
         ':requestId' => isset($data['requestId']) ? $data['requestId'] : null
     ]);
 
+    // Clean the output buffer to remove any warnings/notices
+    ob_end_clean();
     echo json_encode(['status' => 'success', 'message' => 'Your inquiry has been successfully registered.']);
 
 } catch (PDOException $e) {
+    ob_end_clean();
     http_response_code(500);
     echo json_encode(['status' => 'error', 'message' => 'Database storage error: ' . $e->getMessage()]);
 }

@@ -3,6 +3,7 @@ import logonavbar from "../../assets/logonavbar.png";
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Clock, CheckCircle, XCircle, LogOut, Layout, BookOpen, Plus, Trash2, Edit2, FileText, Tag, Image as ImageIcon, Send, Briefcase, Users, MapPin, Download, ExternalLink, Zap, ArrowRight } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('testimonials'); 
@@ -141,8 +142,10 @@ const AdminDashboard = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id })
             });
-            if ((await res.json()).status === 'success') { showToast('Deleted!', 'success'); fetchBlogs(); }
-        } catch (err) { showToast('Fails', 'error'); }
+            const data = await res.json();
+            if (data.status === 'success') { showToast('Deleted!', 'success'); fetchBlogs(); }
+            else { showToast(data.message || 'Purge failed', 'error'); }
+        } catch (err) { showToast('Server communication error', 'error'); }
     }
 
     // JOB ACTIONS
@@ -172,8 +175,10 @@ const AdminDashboard = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id })
             });
-            if ((await res.json()).status === 'success') { showToast('Deleted!', 'success'); fetchJobs(); }
-        } catch (err) { showToast('Fails', 'error'); }
+            const data = await res.json();
+            if (data.status === 'success') { showToast('Deleted!', 'success'); fetchJobs(); }
+            else { showToast(data.message || 'Purge failed', 'error'); }
+        } catch (err) { showToast('Server communication error', 'error'); }
     }
 
     // SOLUTION ACTIONS
@@ -200,8 +205,10 @@ const AdminDashboard = () => {
         if (!window.confirm('Delete project entries?')) return;
         try {
             const res = await fetch(`/api/manage_solutions.php?id=${id}`, { method: 'DELETE' });
-            if ((await res.json()).status === 'success') { showToast('Deleted!', 'success'); fetchSolutions(); }
-        } catch (err) { showToast('Fails', 'error'); }
+            const data = await res.json();
+            if (data.status === 'success') { showToast('Deleted!', 'success'); fetchSolutions(); }
+            else { showToast(data.message || 'Purge failed', 'error'); }
+        } catch (err) { showToast('Server communication error', 'error'); }
     }
 
     // HIGHLIGHT ACTIONS
@@ -231,6 +238,16 @@ const AdminDashboard = () => {
         } catch (err) { showToast('Fails', 'error'); }
     }
 
+    const handleDeleteInquiry = async (id) => {
+        if (!window.confirm('Permanently purge this inquiry record?')) return;
+        try {
+            const res = await fetch(`/api/manage_inquiries.php?id=${id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (data.status === 'success') { showToast('Purged Admin Registry', 'success'); fetchInquiries(); }
+            else { showToast(data.message || 'Purge failed', 'error'); }
+        } catch (err) { showToast('Server communication error', 'error'); }
+    }
+
     const handleUpdateTestimonial = async (id, status) => {
         try {
             const response = await fetch('/api/admin/update_status.php', {
@@ -249,8 +266,9 @@ const AdminDashboard = () => {
     };
 
     const showToast = (text, type) => {
-        setStatusMessage({ text, type });
-        setTimeout(() => setStatusMessage(null), 3000);
+        if (type === 'success') toast.success(text);
+        else if (type === 'error') toast.error(text);
+        else toast(text);
     };
 
     const adminTabs = [
@@ -512,7 +530,7 @@ const AdminDashboard = () => {
                         </motion.div>
                     )}
 
-                    {activeTab === 'inquiries' && (
+                     {activeTab === 'inquiries' && (
                         <motion.div key="leads" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
                              <div className="flex justify-between items-center mb-12">
                                 <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Intelligence Inbound</h2>
@@ -521,11 +539,41 @@ const AdminDashboard = () => {
                              <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
                                 <table className="w-full text-left">
                                     <thead className="bg-[#0f172a] text-[10px] font-black uppercase tracking-[0.2em] text-white/20 border-b border-white/5">
-                                        <tr><th className="px-10 py-8">Identity</th><th className="px-10 py-8">Target Project</th><th className="px-10 py-8 text-right">Observation</th></tr>
+                                        <tr>
+                                            <th className="px-10 py-8">Identity</th>
+                                            <th className="px-10 py-8">Org & Project</th>
+                                            <th className="px-10 py-8">Full Dialogue / Country</th>
+                                            <th className="px-10 py-8 text-right">Actions</th>
+                                        </tr>
                                     </thead>
                                     <tbody className="divide-y divide-white/5">
                                         {inquiries.map(lead => (
-                                            <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors"><td className="px-10 py-8"><div className="font-bold text-lg text-white mb-1">{lead.first_name} {lead.last_name}</div><div className="text-[10px] font-black text-white/30 uppercase tracking-widest mt-1">{lead.email} | {lead.phone}</div></td><td className="px-10 py-8"><div className="text-sm font-black text-[#007cc3] mb-1">{lead.project_name}</div><div className="text-[9px] font-black uppercase tracking-widest text-white/20">{lead.company} | {lead.role}</div></td><td className="px-10 py-8 text-right text-[11px] font-black text-white/20 uppercase tracking-[0.1em]">{new Date(lead.created_at).toLocaleDateString()}</td></tr>
+                                            <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors group">
+                                                <td className="px-10 py-8">
+                                                    <div className="font-bold text-lg text-white mb-1">{lead.first_name} {lead.last_name}</div>
+                                                    <div className="text-[10px] font-black text-white/30 uppercase tracking-widest">{lead.email} | {lead.phone}</div>
+                                                </td>
+                                                <td className="px-10 py-8">
+                                                    <div className="text-sm font-black text-[#007cc3] mb-1 uppercase tracking-tight">{lead.project_name}</div>
+                                                    <div className="text-[9px] font-black uppercase tracking-widest text-white/20">{lead.company} | {lead.role}</div>
+                                                </td>
+                                                <td className="px-10 py-8 max-w-[300px]">
+                                                    <div className="text-[11px] font-medium text-white/70 italic leading-relaxed mb-2">"{lead.message}"</div>
+                                                    <div className="text-[9px] font-black uppercase text-[#007cc3] tracking-widest flex items-center gap-2"><MapPin size={10} /> {lead.country || 'Global'}</div>
+                                                </td>
+                                                <td className="px-10 py-8 text-right">
+                                                    <div className="flex flex-col items-end gap-2">
+                                                        <div className="text-[10px] font-black text-white/20 uppercase mb-2">{new Date(lead.created_at).toLocaleDateString()}</div>
+                                                        <button 
+                                                            onClick={() => handleDeleteInquiry(lead.id)}
+                                                            className="p-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                                                            title="Purge Entry"
+                                                        >
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         ))}
                                     </tbody>
                                 </table>
@@ -535,9 +583,7 @@ const AdminDashboard = () => {
                 </AnimatePresence>
             </main>
 
-            {statusMessage && (
-                <motion.div initial={{ opacity:0, y:50 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:50 }} className={`fixed bottom-10 right-10 p-6 rounded-3xl shadow-2xl font-black uppercase text-[10px] tracking-widest z-[500] flex items-center gap-3 backdrop-blur-3xl border border-white/10 ${statusMessage.type === 'success' ? 'bg-[#007cc3] text-white shadow-blue-500/20' : 'bg-red-500 text-white shadow-red-500/20'}`}>{statusMessage.text}</motion.div>
-            )}
+
         </div>
     );
 };

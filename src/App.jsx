@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -49,6 +50,7 @@ function App() {
   return (
     <>
       <ScrollToTop />
+      <Toaster position="top-right" />
       <div className={`flex flex-col min-h-screen font-sans ${isAdminRoute ? 'bg-[#0f172a]' : ''}`}>
         {!isAdminRoute && <Navbar />}
         <main className="flex-grow">

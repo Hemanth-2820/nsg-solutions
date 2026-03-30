@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Send, ShieldCheck, Zap, Briefcase, MapPin, Clock, Loader2, CheckCircle2, FileUp } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const CareersApplyPage = () => {
     const { role: jobId } = useParams();
@@ -94,12 +95,16 @@ const CareersApplyPage = () => {
             
             if (result.status === 'success') {
                 setSubmitted(true);
+                toast.success('Application transmitted successfully!');
             } else {
-                setError(result.message || 'Submission failed. Please try again.');
+                const errMsg = result.message || 'Submission failed. Please try again.';
+                setError(errMsg);
+                toast.error(errMsg);
             }
         } catch (err) {
             console.error("Submission error:", err);
             setError('Network error. Check your connection.');
+            toast.error('Network error. Please try again.');
         } finally {
             setSubmitting(false);
         }
