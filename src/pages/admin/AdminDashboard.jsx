@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logonavbar from "../../assets/logonavbar.png";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Clock, CheckCircle, XCircle, LogOut, Layout, BookOpen, Plus, Trash2, Edit2, FileText, Tag, Image as ImageIcon, Send, Briefcase, Users, MapPin, Download, ExternalLink, Zap, ArrowRight } from 'lucide-react';
+import { Shield, Clock, CheckCircle, XCircle, LogOut, Layout, BookOpen, Plus, Trash2, Edit2, FileText, Tag, Image as ImageIcon, Send, Briefcase, Users, MapPin, Download, ExternalLink, Zap, ArrowRight, Globe, AlertTriangle } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -27,6 +27,7 @@ const AdminDashboard = () => {
     const [currentSolution, setCurrentSolution] = useState({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
     const [isEditingHighlight, setIsEditingHighlight] = useState(false);
     const [currentHighlight, setCurrentHighlight] = useState({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
+    const [confirm, setConfirm] = useState({ isOpen: false, title: '', onConfirm: null });
 
     const navigate = useNavigate();
 
@@ -135,17 +136,22 @@ const AdminDashboard = () => {
     }
 
     const handleDeleteBlog = async (id) => {
-        if (!window.confirm('Delete article?')) return;
-        try {
-            const res = await fetch('/api/admin/delete_blog.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id })
-            });
-            const data = await res.json();
-            if (data.status === 'success') { showToast('Deleted!', 'success'); fetchBlogs(); }
-            else { showToast(data.message || 'Purge failed', 'error'); }
-        } catch (err) { showToast('Server communication error', 'error'); }
+        setConfirm({
+            isOpen: true,
+            title: 'Permanently remove this Insight Article?',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch('/api/admin/delete_blog.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    const data = await res.json();
+                    if (data.status === 'success') { showToast('Deleted!', 'success'); fetchBlogs(); }
+                    else { showToast(data.message || 'Purge failed', 'error'); }
+                } catch (err) { showToast('Server communication error', 'error'); }
+            }
+        });
     }
 
     // JOB ACTIONS
@@ -168,17 +174,22 @@ const AdminDashboard = () => {
     }
 
     const handleDeleteJob = async (id) => {
-        if (!window.confirm('Delete job listing?')) return;
-        try {
-            const res = await fetch('/api/manage_jobs.php?action=delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id })
-            });
-            const data = await res.json();
-            if (data.status === 'success') { showToast('Deleted!', 'success'); fetchJobs(); }
-            else { showToast(data.message || 'Purge failed', 'error'); }
-        } catch (err) { showToast('Server communication error', 'error'); }
+        setConfirm({
+            isOpen: true,
+            title: 'Delete this professional vacancy listing?',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch('/api/manage_jobs.php?action=delete', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id })
+                    });
+                    const data = await res.json();
+                    if (data.status === 'success') { showToast('Deleted!', 'success'); fetchJobs(); }
+                    else { showToast(data.message || 'Purge failed', 'error'); }
+                } catch (err) { showToast('Server communication error', 'error'); }
+            }
+        });
     }
 
     // SOLUTION ACTIONS
@@ -202,13 +213,18 @@ const AdminDashboard = () => {
     }
 
     const handleDeleteSolution = async (id) => {
-        if (!window.confirm('Delete project entries?')) return;
-        try {
-            const res = await fetch(`/api/manage_solutions.php?id=${id}`, { method: 'DELETE' });
-            const data = await res.json();
-            if (data.status === 'success') { showToast('Deleted!', 'success'); fetchSolutions(); }
-            else { showToast(data.message || 'Purge failed', 'error'); }
-        } catch (err) { showToast('Server communication error', 'error'); }
+        setConfirm({
+            isOpen: true,
+            title: 'Purge this Solution Portfolio entry?',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch(`/api/manage_solutions.php?id=${id}`, { method: 'DELETE' });
+                    const data = await res.json();
+                    if (data.status === 'success') { showToast('Deleted!', 'success'); fetchSolutions(); }
+                    else { showToast(data.message || 'Purge failed', 'error'); }
+                } catch (err) { showToast('Server communication error', 'error'); }
+            }
+        });
     }
 
     // HIGHLIGHT ACTIONS
@@ -239,13 +255,18 @@ const AdminDashboard = () => {
     }
 
     const handleDeleteInquiry = async (id) => {
-        if (!window.confirm('Permanently purge this inquiry record?')) return;
-        try {
-            const res = await fetch(`/api/manage_inquiries.php?id=${id}`, { method: 'DELETE' });
-            const data = await res.json();
-            if (data.status === 'success') { showToast('Purged Admin Registry', 'success'); fetchInquiries(); }
-            else { showToast(data.message || 'Purge failed', 'error'); }
-        } catch (err) { showToast('Server communication error', 'error'); }
+        setConfirm({
+            isOpen: true,
+            title: 'Permanently purge this Intelligent Lead from registry?',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch(`/api/manage_inquiries.php?id=${id}`, { method: 'DELETE' });
+                    const data = await res.json();
+                    if (data.status === 'success') { showToast('Purged Admin Registry', 'success'); fetchInquiries(); }
+                    else { showToast(data.message || 'Purge failed', 'error'); }
+                } catch (err) { showToast('Server communication error', 'error'); }
+            }
+        });
     }
 
     const handleUpdateTestimonial = async (id, status) => {
@@ -538,38 +559,71 @@ const AdminDashboard = () => {
                              </div>
                              <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
                                 <table className="w-full text-left">
-                                    <thead className="bg-[#0f172a] text-[10px] font-black uppercase tracking-[0.2em] text-white/20 border-b border-white/5">
+                                    <thead className="bg-[#0f172a] text-[9px] font-black uppercase tracking-[0.2em] text-white/10 border-b border-white/5">
                                         <tr>
-                                            <th className="px-10 py-8">Identity</th>
-                                            <th className="px-10 py-8">Org & Project</th>
-                                            <th className="px-10 py-8">Full Dialogue / Country</th>
-                                            <th className="px-10 py-8 text-right">Actions</th>
+                                            <th className="px-10 py-10">Client Identity</th>
+                                            <th className="px-10 py-10">Project Scope</th>
+                                            <th className="px-10 py-10">Intelligence Detail</th>
+                                            <th className="px-10 py-10 text-right">Archival Date</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-white/5">
                                         {inquiries.map(lead => (
-                                            <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors group">
-                                                <td className="px-10 py-8">
-                                                    <div className="font-bold text-lg text-white mb-1">{lead.first_name} {lead.last_name}</div>
-                                                    <div className="text-[10px] font-black text-white/30 uppercase tracking-widest">{lead.email} | {lead.phone}</div>
+                                            <tr key={lead.id} className="hover:bg-white/[0.03] transition-all group border-b border-white/[0.02] last:border-0">
+                                                <td className="px-10 py-10">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#007cc3] to-[#1baade] flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-500/10 uppercase italic">
+                                                            {lead.first_name?.[0] || 'U'}
+                                                        </div>
+                                                        <div>
+                                                            <div className="font-black text-xl text-white tracking-tighter mb-0.5">{lead.first_name} {lead.last_name}</div>
+                                                            <div className="text-[10px] font-bold text-white/40 uppercase tracking-[0.1em] flex items-center gap-2">
+                                                                <span className="text-[#007cc3] tracking-normal lowercase">{lead.email}</span>
+                                                                <span className="w-1 h-1 rounded-full bg-white/10"></span>
+                                                                <span>{lead.phone}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
-                                                <td className="px-10 py-8">
-                                                    <div className="text-sm font-black text-[#007cc3] mb-1 uppercase tracking-tight">{lead.project_name}</div>
-                                                    <div className="text-[9px] font-black uppercase tracking-widest text-white/20">{lead.company} | {lead.role}</div>
+                                                <td className="px-10 py-10">
+                                                    <div className="inline-block px-4 py-2 bg-[#007cc3]/10 border border-[#007cc3]/30 rounded-xl text-[#1baade] text-[10px] font-black uppercase tracking-widest mb-2 shadow-sm italic">
+                                                        {lead.project_name}
+                                                    </div>
+                                                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 flex items-center gap-2">
+                                                        <Briefcase size={10} className="text-white/10" /> {lead.company} <span className="text-white/5 mx-1">/</span> {lead.role}
+                                                    </div>
                                                 </td>
-                                                <td className="px-10 py-8 max-w-[300px]">
-                                                    <div className="text-[11px] font-medium text-white/70 italic leading-relaxed mb-2">"{lead.message}"</div>
-                                                    <div className="text-[9px] font-black uppercase text-[#007cc3] tracking-widest flex items-center gap-2"><MapPin size={10} /> {lead.country || 'Global'}</div>
+                                                <td className="px-10 py-10 max-w-[400px]">
+                                                    <div className="relative group/msg">
+                                                        <div className="bg-white/[0.03] p-5 rounded-3xl border border-white/5 text-[11px] font-medium text-white/80 italic leading-relaxed mb-3 group-hover:bg-white/[0.05] transition-colors relative overflow-hidden">
+                                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#007cc3]/50"></div>
+                                                            "{lead.message}"
+                                                        </div>
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="text-[9px] font-black uppercase text-[#1baade] tracking-[0.2em] flex items-center gap-2 bg-[#1baade]/10 px-3 py-1.5 rounded-full border border-[#1baade]/20">
+                                                                <MapPin size={10} /> {lead.country || 'Global'}
+                                                            </div>
+                                                            {lead.website && (
+                                                                <a href={lead.website} target="_blank" rel="noopener noreferrer" className="text-[9px] font-black uppercase text-white/30 tracking-[0.2em] hover:text-[#007cc3] transition-colors flex items-center gap-2">
+                                                                    <Globe size={10} /> {lead.website.replace(/^https?:\/\//, '')}
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                    </div>
                                                 </td>
-                                                <td className="px-10 py-8 text-right">
-                                                    <div className="flex flex-col items-end gap-2">
-                                                        <div className="text-[10px] font-black text-white/20 uppercase mb-2">{new Date(lead.created_at).toLocaleDateString()}</div>
+                                                <td className="px-10 py-10 text-right">
+                                                    <div className="flex flex-col items-end gap-6">
+                                                        <div className="flex flex-col items-end">
+                                                            <div className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-1 italic">Logged Entry</div>
+                                                            <div className="text-sm font-black text-white/60 tracking-tighter">{new Date(lead.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                                                        </div>
                                                         <button 
                                                             onClick={() => handleDeleteInquiry(lead.id)}
-                                                            className="p-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                                                            className="flex items-center gap-5 px-6 py-3 bg-red-500/5 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all border border-red-500/10 hover:border-red-500 shadow-lg group-hover:translate-x-0 translate-x-4 opacity-0 group-hover:opacity-100"
                                                             title="Purge Entry"
                                                         >
-                                                            <Trash2 size={16} />
+                                                            <span className="text-[9px] font-black uppercase tracking-widest">Purge Registry</span>
+                                                            <Trash2 size={14} />
                                                         </button>
                                                     </div>
                                                 </td>
@@ -583,7 +637,56 @@ const AdminDashboard = () => {
                 </AnimatePresence>
             </main>
 
+            {/* Premium Confirm Modal Replacement for window.confirm */}
+            <AnimatePresence>
+                {confirm.isOpen && (
+                    <div className="fixed inset-0 z-[999] flex items-center justify-center p-6">
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }}
+                            onClick={() => setConfirm({ ...confirm, isOpen: false })}
+                            className="absolute inset-0 bg-[#0a0e27]/80 backdrop-blur-xl"
+                        />
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative w-full max-w-lg bg-[#0f172a] border border-white/10 rounded-[40px] p-12 shadow-[0_50px_100px_rgba(0,0,0,0.5)] overflow-hidden"
+                        >
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-[#007cc3] to-red-500"></div>
+                            
+                            <div className="w-20 h-20 bg-red-500/10 rounded-3xl flex items-center justify-center text-red-500 mb-8 mx-auto">
+                                <AlertTriangle size={40} />
+                            </div>
 
+                            <h3 className="text-2xl font-black text-center text-white mb-4 italic tracking-tight">Security Verification</h3>
+                            <p className="text-white/40 text-center text-sm font-medium leading-relaxed mb-10 px-4">
+                                {confirm.title} <br/> 
+                                <span className="text-red-500/50 uppercase text-[10px] font-black tracking-widest mt-4 block">This action is permanent and deterministic.</span>
+                            </p>
+
+                            <div className="flex gap-4">
+                                <button 
+                                    onClick={() => setConfirm({ ...confirm, isOpen: false })}
+                                    className="flex-1 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black uppercase text-[11px] tracking-widest transition-all border border-white/5"
+                                >
+                                    Cancel
+                                </button>
+                                <button 
+                                    onClick={() => {
+                                        confirm.onConfirm();
+                                        setConfirm({ ...confirm, isOpen: false });
+                                    }}
+                                    className="flex-1 py-5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black uppercase text-[11px] tracking-widest transition-all shadow-xl shadow-red-500/20"
+                                >
+                                    Purge Data
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
