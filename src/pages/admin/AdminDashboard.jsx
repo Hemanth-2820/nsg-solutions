@@ -506,7 +506,7 @@ const AdminDashboard = () => {
                                 </div>
 
                                 {/* EDITING SIDEBAR */}
-                                <div className="space-y-6">
+                                <div className="space-y-6 order-1 lg:order-2">
                                     <div className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl animate-fade-in shadow-blue-900/10 overflow-hidden">
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-[#007cc3]/5 rounded-full -translate-y-16 translate-x-16 blur-2xl"></div>
                                         <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 tracking-[0.2em] flex items-center gap-3">
@@ -519,7 +519,7 @@ const AdminDashboard = () => {
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Service Title (Card Header)</label>
-                                                <input required value={currentTestimonial.service_name} onChange={e => setCurrentTestimonial({ ...currentTestimonial, service_name: e.target.value })} placeholder="e.g. Cloud Migration" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                                <input required value={currentTestimonial.service_name} onChange={e => setCurrentTestimonial({ ...currentTestimonial, service_name: e.target.value })} placeholder="e.g. Cloud Migration" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none" />
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Performance Rating</label>
@@ -545,44 +545,79 @@ const AdminDashboard = () => {
                     )}
 
                     {activeTab === 'blogs' && (
-                        <motion.div key="blogs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                            <div className="flex justify-between items-center mb-10">
-                                <h2 className="text-3xl font-black uppercase italic">Insight Flow</h2>
-                                <button onClick={() => { setIsEditingBlog(false); setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' }); }} className="bg-[#007cc3] text-white px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all shadow-xl active:scale-95"><Plus size={18} /> Compose</button>
+                        <motion.div key="blogs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="w-full max-w-full overflow-hidden">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10 px-4 sm:px-0">
+                                <h2 className="text-3xl font-black uppercase italic tracking-tighter">Insight Flow</h2>
+                                <button onClick={() => { setIsEditingBlog(false); setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' }); }} className="w-full sm:w-auto bg-[#007cc3] text-white px-8 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95 shadow-blue-500/10"><Plus size={18} /> Compose</button>
                             </div>
-                            <div className="grid lg:grid-cols-[1fr_450px] gap-12">
-                                <div className="space-y-4">
+                            <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] gap-12 sm:gap-10">
+                                <div className="space-y-6 order-1 lg:order-1 px-4 sm:px-0">
+                                    <div className="border-b border-white/5 pb-4 mb-8">
+                                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#007cc3]">Registry Entries</h3>
+                                    </div>
                                     {blogs.map(blog => (
-                                        <div key={blog.id} className="bg-white/5 border border-white/5 p-5 rounded-3xl flex items-center justify-between group hover:border-[#007cc3]/30 transition-all shadow-xl backdrop-blur-sm">
-                                            <div className="flex items-center gap-5">
-                                                <div className="w-16 h-16 bg-black rounded-2xl overflow-hidden border border-white/10 flex-shrink-0 shadow-2xl">
-                                                    <img src={blog.displayImg} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                        <div key={blog.id} className="bg-[#1e293b]/90 border border-white/10 p-6 rounded-[2.5rem] relative overflow-hidden group hover:border-[#007cc3]/50 transition-all shadow-2xl backdrop-blur-3xl mb-4">
+                                            <div className="relative z-10 space-y-6">
+                                                <div className="flex items-start gap-5">
+                                                    <div className="w-16 h-16 bg-black rounded-2xl overflow-hidden border border-white/10 flex-shrink-0 shadow-2xl">
+                                                        <img src={blog.displayImg} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <h4 className="font-bold text-base text-white mb-2 leading-snug line-clamp-2">{blog.title}</h4>
+                                                        <div className="flex flex-wrap items-center gap-3">
+                                                            <span className="px-2.5 py-1 bg-[#007cc3]/10 text-[#007cc3] text-[8px] font-black uppercase tracking-widest rounded-md border border-[#007cc3]/20">{blog.tag}</span>
+                                                            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest flex items-center gap-1.5"><Clock size={11} className="text-[#007cc3]" /> {blog.time_to_read?.replace(/min read/gi, '') || '5'} MIN READ</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h4 className="font-bold text-base mb-1 truncate max-w-[250px]">{blog.title}</h4>
-                                                    <span className="text-[10px] uppercase font-black text-[#007cc3] opacity-60 tracking-widest">{blog.tag}</span>
+                                                
+                                                <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/5">
+                                                    <button onClick={() => { setIsEditingBlog(true); setCurrentBlog(blog); }} className="h-14 flex items-center justify-center gap-3 bg-white/5 hover:bg-[#007cc3] text-white/60 hover:text-white rounded-2xl transition-all font-black uppercase text-[10px] tracking-widest shadow-xl border border-white/5">
+                                                        <Edit2 size={16} /> Edit
+                                                    </button>
+                                                    <button onClick={() => handleDeleteBlog(blog.id)} className="h-14 flex items-center justify-center gap-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all font-black uppercase text-[10px] tracking-widest shadow-xl">
+                                                        <Trash2 size={16} /> Purge
+                                                    </button>
                                                 </div>
-                                            </div>
-                                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => { setIsEditingBlog(true); setCurrentBlog(blog); }} className="p-3 text-white/40 hover:text-white bg-white/5 rounded-xl"><Edit2 size={18} /></button>
-                                                <button onClick={() => handleDeleteBlog(blog.id)} className="p-3 text-white/40 hover:text-red-400 bg-red-500/5 rounded-xl"><Trash2 size={18} /></button>
                                             </div>
                                         </div>
                                     ))}
+                                    {blogs.length === 0 && <div className="py-20 text-center opacity-20 text-[10px] font-black uppercase tracking-widest italic">The Insight Repository is empty.</div>}
                                 </div>
-                                <form onSubmit={handleSaveBlog} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-[0_0_100px_rgba(0,0,0,0.5)]">
-                                    <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-5 flex items-center gap-3">{isEditingBlog ? <Edit2 size={16} /> : <Plus size={16} />} {isEditingBlog ? 'Revise Article' : 'New Publication'}</h3>
-                                    <div className="space-y-6">
-                                        <input required value={currentBlog.title} onChange={e => setCurrentBlog({ ...currentBlog, title: e.target.value })} placeholder="Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:border-[#007cc3] outline-none transition-all" />
-                                        <div className="flex gap-4">
-                                            <input required value={currentBlog.tag} onChange={e => setCurrentBlog({ ...currentBlog, tag: e.target.value })} placeholder="Category" className="flex-1 bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                            <input required value={currentBlog.time_to_read} onChange={e => setCurrentBlog({ ...currentBlog, time_to_read: e.target.value })} placeholder="Min" className="w-32 bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+
+                                <div className="order-2 lg:order-2 lg:sticky lg:top-40 h-fit pb-12">
+                                    <form onSubmit={handleSaveBlog} className="bg-[#1e293b]/95 p-8 sm:p-10 rounded-[3rem] border border-white/20 shadow-2xl relative mx-4 sm:mx-0 overflow-visible">
+                                        <div className="absolute top-0 right-0 w-40 h-40 bg-[#007cc3]/10 rounded-full -translate-y-20 translate-x-20 blur-[80px] pointer-events-none"></div>
+                                        <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/10 pb-5 flex items-center gap-3">{isEditingBlog ? <Edit2 size={16} /> : <Plus size={16} />} {isEditingBlog ? 'Revise Article' : 'New Publication'}</h3>
+                                        <div className="space-y-6">
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Headline</label>
+                                                <input required value={currentBlog.title} onChange={e => setCurrentBlog({ ...currentBlog, title: e.target.value })} placeholder="Title" className="w-full bg-black/20 border border-white/10 rounded-2xl px-6 py-4 text-sm focus:border-[#007cc3] outline-none transition-all text-white placeholder:text-white/10" />
+                                            </div>
+                                            <div className="flex gap-4">
+                                                <div className="flex-1 space-y-1">
+                                                    <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Tag</label>
+                                                    <input required value={currentBlog.tag} onChange={e => setCurrentBlog({ ...currentBlog, tag: e.target.value })} placeholder="Category" className="w-full bg-black/20 border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] text-white" />
+                                                </div>
+                                                <div className="w-32 space-y-1">
+                                                    <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Read</label>
+                                                    <input required value={currentBlog.time_to_read} onChange={e => setCurrentBlog({ ...currentBlog, time_to_read: e.target.value })} placeholder="Min" className="w-full bg-black/20 border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] text-white" />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Visual Asset</label>
+                                                <input required value={currentBlog.image} onChange={e => setCurrentBlog({ ...currentBlog, image: e.target.value })} placeholder="Image Path (/blog.png)" className="w-full bg-black/20 border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] text-white" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Body Content</label>
+                                                <textarea required rows="8" value={currentBlog.content} onChange={e => setCurrentBlog({ ...currentBlog, content: e.target.value })} placeholder="Markdown Content" className="w-full bg-black/20 border border-white/10 rounded-3xl px-6 py-4 text-sm outline-none resize-none focus:border-[#007cc3] text-white" />
+                                            </div>
+                                            <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[12px] tracking-[0.2em] shadow-xl hover:bg-[#0088d8] transition-all flex items-center justify-center gap-3 text-white border border-white/10 active:scale-95">
+                                                <Send size={20} /> Finalize Post
+                                            </button>
                                         </div>
-                                        <input required value={currentBlog.image} onChange={e => setCurrentBlog({ ...currentBlog, image: e.target.value })} placeholder="Image Path (/blog.png)" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                        <textarea required rows="8" value={currentBlog.content} onChange={e => setCurrentBlog({ ...currentBlog, content: e.target.value })} placeholder="Markdown Content" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
-                                        <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[12px] tracking-widest shadow-blue-500/20 shadow-xl hover:bg-[#0088d8] transition-all flex items-center justify-center gap-3"><Send size={20} /> Finalize Post</button>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </motion.div>
                     )}
