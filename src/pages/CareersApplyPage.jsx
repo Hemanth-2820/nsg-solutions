@@ -112,7 +112,7 @@ const CareersApplyPage = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#f5f7fa]">
+            <div className="min-h-screen flex items-center justify-center bg-[#B3EBF2]">
                 <Loader2 size={48} className="animate-spin text-[#007cc3]" />
             </div>
         );
@@ -123,7 +123,7 @@ const CareersApplyPage = () => {
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="min-h-screen flex items-center justify-center bg-[#f5f7fa] p-6"
+                className="min-h-screen flex items-center justify-center bg-[#B3EBF2] p-6"
             >
                 <div className="bg-white rounded-[3rem] p-12 text-center max-w-xl shadow-2xl border border-emerald-100">
                     <div className="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-8 border border-emerald-200">
@@ -142,7 +142,7 @@ const CareersApplyPage = () => {
     }
 
   return (
-    <div className="min-h-screen bg-[#f5f7fa] font-sans pb-32 pt-40">
+    <div className="min-h-screen bg-[#B3EBF2] font-sans pb-32 pt-40">
       <div className="max-w-4xl mx-auto px-6">
         <Link 
           to="/careers" 
