@@ -548,7 +548,11 @@ const AdminDashboard = () => {
                         <motion.div key="blogs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="w-full max-w-full overflow-hidden">
                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10 px-4 sm:px-0">
                                 <h2 className="text-3xl font-black uppercase italic tracking-tighter">Insight Flow</h2>
-                                <button onClick={() => { setIsEditingBlog(false); setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' }); }} className="w-full sm:w-auto bg-[#007cc3] text-white px-8 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95 shadow-blue-500/10"><Plus size={18} /> Compose</button>
+                                <button onClick={() => { 
+                                    setIsEditingBlog(false); 
+                                    setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' }); 
+                                    document.getElementById('blog-form')?.scrollIntoView({ behavior: 'smooth' });
+                                }} className="w-full sm:w-auto bg-[#007cc3] text-white px-8 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95 shadow-blue-500/10"><Plus size={18} /> New Publication</button>
                             </div>
                             <div className="grid grid-cols-1 lg:grid-cols-[1fr_450px] gap-12 sm:gap-10">
                                 <div className="space-y-6 order-1 lg:order-1 px-4 sm:px-0">
@@ -585,7 +589,7 @@ const AdminDashboard = () => {
                                     {blogs.length === 0 && <div className="py-20 text-center opacity-20 text-[10px] font-black uppercase tracking-widest italic">The Insight Repository is empty.</div>}
                                 </div>
 
-                                <div className="order-2 lg:order-2 lg:sticky lg:top-40 h-fit pb-12">
+                                <div id="blog-form" className="order-2 lg:order-2 lg:sticky lg:top-40 h-fit pb-12">
                                     <form onSubmit={handleSaveBlog} className="bg-[#1e293b]/95 p-8 sm:p-10 rounded-[3rem] border border-white/20 shadow-2xl relative mx-4 sm:mx-0 overflow-visible">
                                         <div className="absolute top-0 right-0 w-40 h-40 bg-[#007cc3]/10 rounded-full -translate-y-20 translate-x-20 blur-[80px] pointer-events-none"></div>
                                         <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/10 pb-5 flex items-center gap-3">{isEditingBlog ? <Edit2 size={16} /> : <Plus size={16} />} {isEditingBlog ? 'Revise Article' : 'New Publication'}</h3>
