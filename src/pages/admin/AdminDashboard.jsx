@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import logonavbar from "../../assets/logonavbar.png";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Clock, CheckCircle, XCircle, LogOut, Layout, BookOpen, Plus, Trash2, Edit2, FileText, Tag, Image as ImageIcon, Send, Briefcase, Users, MapPin, Download, ExternalLink, Zap, ArrowRight, Globe, AlertTriangle } from 'lucide-react';
+import {
+    Users, Briefcase, FileText, Globe, Settings, LogOut, Plus,
+    Trash2, Edit2, CheckCircle2, CheckCircle, XCircle, Search, Download,
+    Eye, Save, Send, Image as ImageIcon, MessageSquare, Layout, Shield,
+    ChevronRight, ArrowRight, ShieldCheck, Mail, Phone, Clock, MapPin,
+    Tag, ExternalLink, Zap, AlertTriangle, BookOpen
+} from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const AdminDashboard = () => {
-    const [activeTab, setActiveTab] = useState('testimonials'); 
+    const [activeTab, setActiveTab] = useState('testimonials');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [testimonials, setTestimonials] = useState([]);
     const [blogs, setBlogs] = useState([]);
@@ -17,7 +23,7 @@ const AdminDashboard = () => {
     const [highlights, setHighlights] = useState({ left: [], right: [] });
     const [loading, setLoading] = useState(true);
     const [statusMessage, setStatusMessage] = useState(null);
-    
+
     // Sub-states
     const [isEditingBlog, setIsEditingBlog] = useState(false);
     const [currentBlog, setCurrentBlog] = useState({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' });
@@ -35,7 +41,7 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         const adminUser = JSON.parse(localStorage.getItem('nsg_admin_user'));
-        if (!adminUser) navigate('/admin-login'); 
+        if (!adminUser) navigate('/admin-login');
         else fetchData();
     }, [navigate, activeTab]);
 
@@ -129,9 +135,9 @@ const AdminDashboard = () => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id })
                     });
-                    if ((await res.json()).status === 'success') { 
-                        showToast('Candidate record purged', 'success'); 
-                        fetchApplications(); 
+                    if ((await res.json()).status === 'success') {
+                        showToast('Candidate record purged', 'success');
+                        fetchApplications();
                     }
                 } catch (err) { showToast('Sync Fail', 'error'); }
             }
@@ -299,9 +305,9 @@ const AdminDashboard = () => {
                 body: JSON.stringify({ id, status })
             });
             const data = await response.json();
-            if (data.status === 'success') { 
-                showToast(`Manifest updated: ${status.toUpperCase()}`, 'success'); 
-                fetchTestimonials(); 
+            if (data.status === 'success') {
+                showToast(`Manifest updated: ${status.toUpperCase()}`, 'success');
+                fetchTestimonials();
             }
         } catch (err) { showToast('Sync Fail', 'error'); }
     };
@@ -335,9 +341,9 @@ const AdminDashboard = () => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id })
                     });
-                    if ((await res.json()).status === 'success') { 
-                        showToast('Purged Admin Registry', 'success'); 
-                        fetchTestimonials(); 
+                    if ((await res.json()).status === 'success') {
+                        showToast('Purged Admin Registry', 'success');
+                        fetchTestimonials();
                     }
                 } catch (err) { showToast('Purge Fail', 'error'); }
             }
@@ -409,15 +415,15 @@ const AdminDashboard = () => {
                 <AnimatePresence mode="wait">
                     {activeTab === 'testimonials' && (
                         <motion.div key="testimonials" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                             <div className="flex justify-between items-center mb-10">
+                            <div className="flex justify-between items-center mb-10">
                                 <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Voices of Success</h2>
                                 <div className="flex gap-4">
                                     <div className="bg-white/5 px-6 py-3 rounded-xl border border-white/10 text-center"><span className="block text-[8px] uppercase font-black text-[#007cc3] mb-1">Queue</span><span className="text-xl font-black">{testimonials.filter(t => t.status === 'pending').length}</span></div>
                                     <div className="bg-[#007cc3]/10 px-6 py-3 rounded-xl border border-[#007cc3]/20 text-center"><span className="block text-[8px] uppercase font-black text-[#007cc3] mb-1">Active</span><span className="text-xl font-black">{testimonials.filter(t => t.status === 'approved').length}</span></div>
                                 </div>
-                             </div>
+                            </div>
 
-                             <div className="grid lg:grid-cols-[1fr_400px] gap-12">
+                            <div className="grid lg:grid-cols-[1fr_400px] gap-12">
                                 <div className="space-y-12">
                                     {/* PENDING SECTION */}
                                     {testimonials.filter(t => t.status === 'pending').length > 0 && (
@@ -474,14 +480,14 @@ const AdminDashboard = () => {
                                                     <div className="flex justify-between items-center pt-6 border-t border-white/5">
                                                         <span className={`text-[8px] font-black uppercase tracking-widest ${item.status === 'approved' ? 'text-green-500' : 'text-red-500'}`}>{item.status}</span>
                                                         <div className="flex gap-1 opacity-10 group-hover:opacity-100 transition-opacity">
-                                                            <button 
+                                                            <button
                                                                 onClick={() => { setIsEditingTestimonial(true); setCurrentTestimonial(item); }}
                                                                 className="p-3 bg-white/5 hover:bg-[#007cc3] text-white rounded-xl transition-all"
                                                                 title="Format Entry"
                                                             >
                                                                 <Edit2 size={14} />
                                                             </button>
-                                                            <button 
+                                                            <button
                                                                 onClick={() => handleDeleteTestimonial(item.id)}
                                                                 className="p-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all"
                                                                 title="Purge Entry"
@@ -509,21 +515,21 @@ const AdminDashboard = () => {
                                         <form onSubmit={handleSaveTestimonial} className="space-y-6 relative z-10">
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Client Identity</label>
-                                                <input required value={currentTestimonial.client_name} onChange={e=>setCurrentTestimonial({...currentTestimonial, client_name:e.target.value})} placeholder="Full Name" className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all" />
+                                                <input required value={currentTestimonial.client_name} onChange={e => setCurrentTestimonial({ ...currentTestimonial, client_name: e.target.value })} placeholder="Full Name" className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all" />
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Service Title (Card Header)</label>
-                                                <input required value={currentTestimonial.service_name} onChange={e=>setCurrentTestimonial({...currentTestimonial, service_name:e.target.value})} placeholder="e.g. Cloud Migration" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                                <input required value={currentTestimonial.service_name} onChange={e => setCurrentTestimonial({ ...currentTestimonial, service_name: e.target.value })} placeholder="e.g. Cloud Migration" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Performance Rating</label>
-                                                <select value={currentTestimonial.rating} onChange={e=>setCurrentTestimonial({...currentTestimonial, rating:parseInt(e.target.value)})} className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none appearance-none">
-                                                    {[1,2,3,4,5].map(v => <option key={v} value={v} className="bg-[#0f172a]">{v} Star Intelligence</option>)}
+                                                <select value={currentTestimonial.rating} onChange={e => setCurrentTestimonial({ ...currentTestimonial, rating: parseInt(e.target.value) })} className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none appearance-none">
+                                                    {[1, 2, 3, 4, 5].map(v => <option key={v} value={v} className="bg-[#0f172a]">{v} Star Intelligence</option>)}
                                                 </select>
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Quote Contents</label>
-                                                <textarea required rows="6" value={currentTestimonial.content} onChange={e=>setCurrentTestimonial({...currentTestimonial, content:e.target.value})} placeholder="Feedback data..." className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
+                                                <textarea required rows="6" value={currentTestimonial.content} onChange={e => setCurrentTestimonial({ ...currentTestimonial, content: e.target.value })} placeholder="Feedback data..." className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
                                             </div>
                                             <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl shadow-blue-500/20 hover:bg-[#0088d8] transition-all flex items-center justify-center gap-3">
                                                 {isEditingTestimonial ? <CheckCircle size={18} /> : <Send size={18} />} {isEditingTestimonial ? 'Commit Changes' : 'Inject Entry'}
@@ -534,7 +540,7 @@ const AdminDashboard = () => {
                                         </form>
                                     </div>
                                 </div>
-                             </div>
+                            </div>
                         </motion.div>
                     )}
 
@@ -567,13 +573,13 @@ const AdminDashboard = () => {
                                 <form onSubmit={handleSaveBlog} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-[0_0_100px_rgba(0,0,0,0.5)]">
                                     <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-5 flex items-center gap-3">{isEditingBlog ? <Edit2 size={16} /> : <Plus size={16} />} {isEditingBlog ? 'Revise Article' : 'New Publication'}</h3>
                                     <div className="space-y-6">
-                                        <input required value={currentBlog.title} onChange={e=>setCurrentBlog({...currentBlog, title:e.target.value})} placeholder="Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:border-[#007cc3] outline-none transition-all" />
+                                        <input required value={currentBlog.title} onChange={e => setCurrentBlog({ ...currentBlog, title: e.target.value })} placeholder="Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm focus:border-[#007cc3] outline-none transition-all" />
                                         <div className="flex gap-4">
-                                            <input required value={currentBlog.tag} onChange={e=>setCurrentBlog({...currentBlog, tag:e.target.value})} placeholder="Category" className="flex-1 bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                            <input required value={currentBlog.time_to_read} onChange={e=>setCurrentBlog({...currentBlog, time_to_read:e.target.value})} placeholder="Min" className="w-32 bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                            <input required value={currentBlog.tag} onChange={e => setCurrentBlog({ ...currentBlog, tag: e.target.value })} placeholder="Category" className="flex-1 bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                            <input required value={currentBlog.time_to_read} onChange={e => setCurrentBlog({ ...currentBlog, time_to_read: e.target.value })} placeholder="Min" className="w-32 bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
                                         </div>
-                                        <input required value={currentBlog.image} onChange={e=>setCurrentBlog({...currentBlog, image:e.target.value})} placeholder="Image Path (/blog.png)" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                        <textarea required rows="8" value={currentBlog.content} onChange={e=>setCurrentBlog({...currentBlog, content:e.target.value})} placeholder="Markdown Content" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
+                                        <input required value={currentBlog.image} onChange={e => setCurrentBlog({ ...currentBlog, image: e.target.value })} placeholder="Image Path (/blog.png)" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <textarea required rows="8" value={currentBlog.content} onChange={e => setCurrentBlog({ ...currentBlog, content: e.target.value })} placeholder="Markdown Content" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
                                         <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[12px] tracking-widest shadow-blue-500/20 shadow-xl hover:bg-[#0088d8] transition-all flex items-center justify-center gap-3"><Send size={20} /> Finalize Post</button>
                                     </div>
                                 </form>
@@ -583,11 +589,11 @@ const AdminDashboard = () => {
 
                     {activeTab === 'solutions' && (
                         <motion.div key="solutions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                             <div className="flex justify-between items-center mb-10">
+                            <div className="flex justify-between items-center mb-10">
                                 <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Portfolio Nexus</h2>
                                 <button onClick={() => { setIsEditingSolution(false); setCurrentSolution({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' }); }} className="bg-[#007cc3] text-white px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all"><Plus size={18} /> New Discovery</button>
-                             </div>
-                             <div className="grid lg:grid-cols-[1fr_450px] gap-12">
+                            </div>
+                            <div className="grid lg:grid-cols-[1fr_450px] gap-12">
                                 <div className="space-y-10">
                                     {Object.keys(solutions).map(cat => (
                                         <div key={cat} className="bg-white/5 p-8 rounded-[40px] border border-white/10 shadow-xl">
@@ -606,31 +612,31 @@ const AdminDashboard = () => {
                                 <form onSubmit={handleSaveSolution} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl overflow-hidden">
                                     <h3 className="uppercase text-[10px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 flex items-center gap-3"><ImageIcon size={16} /> Registry Entry</h3>
                                     <div className="space-y-4">
-                                        <select value={currentSolution.category} onChange={e=>setCurrentSolution({...currentSolution, category:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none">
+                                        <select value={currentSolution.category} onChange={e => setCurrentSolution({ ...currentSolution, category: e.target.value })} className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none">
                                             <option value="itservices">IT Services</option>
                                             <option value="digitalmarketing">Digital Marketing</option>
                                             <option value="videoproduction">Video Production</option>
                                             <option value="branding">Branding & Design</option>
                                         </select>
-                                        <input required value={currentSolution.title} onChange={e=>setCurrentSolution({...currentSolution, title:e.target.value})} placeholder="Project Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                        <input required value={currentSolution.img} onChange={e=>setCurrentSolution({...currentSolution, img:e.target.value})} placeholder="Asset Path (/img.jpg)" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                        <textarea required rows="5" value={currentSolution.desc} onChange={e=>setCurrentSolution({...currentSolution, desc:e.target.value})} placeholder="Briefing" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
+                                        <input required value={currentSolution.title} onChange={e => setCurrentSolution({ ...currentSolution, title: e.target.value })} placeholder="Project Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <input required value={currentSolution.img} onChange={e => setCurrentSolution({ ...currentSolution, img: e.target.value })} placeholder="Asset Path (/img.jpg)" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <textarea required rows="5" value={currentSolution.desc} onChange={e => setCurrentSolution({ ...currentSolution, desc: e.target.value })} placeholder="Briefing" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
                                         <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 transition-all"><Send size={18} /> Update Nexus</button>
                                     </div>
                                 </form>
-                             </div>
+                            </div>
                         </motion.div>
                     )}
 
-                     {activeTab === 'jobs' && (
+                    {activeTab === 'jobs' && (
                         <motion.div key="jobs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                             <div className="flex justify-between items-center mb-10">
+                            <div className="flex justify-between items-center mb-10">
                                 <h2 className="text-3xl font-black uppercase italic italic font-infosys-heading tracking-tight mb-2">Talent Acquisition</h2>
                                 <button onClick={() => { setIsEditingJob(false); setCurrentJob({ title: '', location: '', type: 'Full-time', stack: '', salary: '', description: '' }); }} className="bg-[#007cc3] text-white px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all shadow-xl"><Plus size={18} /> Add Vacancy</button>
-                             </div>
-                             <div className="grid lg:grid-cols-[1fr_450px] gap-12">
+                            </div>
+                            <div className="grid lg:grid-cols-[1fr_450px] gap-12">
                                 <div className="space-y-4">
-                                     {jobs.map(job => (
+                                    {jobs.map(job => (
                                         <div key={job.id} className="bg-white/5 border border-white/5 p-6 rounded-3xl flex items-center justify-between group hover:border-[#007cc3]/30 transition-all shadow-xl">
                                             <div>
                                                 <h4 className="font-bold text-xl mb-1">{job.title}</h4>
@@ -646,24 +652,24 @@ const AdminDashboard = () => {
                                 <form onSubmit={handleSaveJob} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl">
                                     <h3 className="uppercase text-[10px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 flex items-center gap-3"><Briefcase size={16} /> Job Registry</h3>
                                     <div className="space-y-5">
-                                        <input required value={currentJob.title} onChange={e=>setCurrentJob({...currentJob, title:e.target.value})} placeholder="Position Name" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none" />
-                                        <input required value={currentJob.location} onChange={e=>setCurrentJob({...currentJob, location:e.target.value})} placeholder="Location" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none" />
-                                        <select value={currentJob.type} onChange={e=>setCurrentJob({...currentJob, type:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-5 py-4 text-sm outline-none">
+                                        <input required value={currentJob.title} onChange={e => setCurrentJob({ ...currentJob, title: e.target.value })} placeholder="Position Name" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none" />
+                                        <input required value={currentJob.location} onChange={e => setCurrentJob({ ...currentJob, location: e.target.value })} placeholder="Location" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none" />
+                                        <select value={currentJob.type} onChange={e => setCurrentJob({ ...currentJob, type: e.target.value })} className="w-full bg-[#0f172a] border border-white/10 rounded-xl px-5 py-4 text-sm outline-none">
                                             <option value="Full-time">Full-time</option>
                                             <option value="Contract">Contract</option>
                                         </select>
-                                        <textarea rows="4" value={currentJob.description} onChange={e=>setCurrentJob({...currentJob, description:e.target.value})} placeholder="Description" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none resize-none" />
+                                        <textarea rows="4" value={currentJob.description} onChange={e => setCurrentJob({ ...currentJob, description: e.target.value })} placeholder="Description" className="w-full bg-white/5 border border-white/5 rounded-xl px-5 py-4 text-sm outline-none resize-none" />
                                         <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 hover:bg-[#0088d8] transition-all"><Send size={18} /> Update Careers</button>
                                     </div>
                                 </form>
-                             </div>
+                            </div>
                         </motion.div>
                     )}
 
                     {activeTab === 'highlights' && (
                         <motion.div key="highlights" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                             <h2 className="text-3xl font-black uppercase italic mb-8">High-Impact Highlights</h2>
-                             <div className="grid lg:grid-cols-[1fr_400px] gap-10">
+                            <h2 className="text-3xl font-black uppercase italic mb-8">High-Impact Highlights</h2>
+                            <div className="grid lg:grid-cols-[1fr_400px] gap-10">
                                 <div className="space-y-8">
                                     {['left', 'right'].map(side => (
                                         <div key={side} className="bg-white/5 p-8 rounded-[40px] border border-white/10 shadow-xl">
@@ -682,100 +688,97 @@ const AdminDashboard = () => {
                                 <form onSubmit={handleSaveHighlight} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl">
                                     <h3 className="uppercase text-[10px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4">Highlight Registry</h3>
                                     <div className="space-y-4">
-                                        <select value={currentHighlight.column_side} onChange={e=>setCurrentHighlight({...currentHighlight, column_side:e.target.value})} className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none">
+                                        <select value={currentHighlight.column_side} onChange={e => setCurrentHighlight({ ...currentHighlight, column_side: e.target.value })} className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none">
                                             <option value="left">Left Column</option>
                                             <option value="right">Right Column</option>
                                         </select>
-                                        <input required value={currentHighlight.title} onChange={e=>setCurrentHighlight({...currentHighlight, title:e.target.value})} placeholder="Card Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                        <input required value={currentHighlight.image_url} onChange={e=>setCurrentHighlight({...currentHighlight, image_url:e.target.value})} placeholder="Asset Path" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                        <input type="number" required value={currentHighlight.sort_order} onChange={e=>setCurrentHighlight({...currentHighlight, sort_order:parseInt(e.target.value)})} placeholder="Priority" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <input required value={currentHighlight.title} onChange={e => setCurrentHighlight({ ...currentHighlight, title: e.target.value })} placeholder="Card Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <input required value={currentHighlight.image_url} onChange={e => setCurrentHighlight({ ...currentHighlight, image_url: e.target.value })} placeholder="Asset Path" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <input type="number" required value={currentHighlight.sort_order} onChange={e => setCurrentHighlight({ ...currentHighlight, sort_order: parseInt(e.target.value) })} placeholder="Priority" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
                                         <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 transition-all hover:bg-[#0088d8]"><Send size={18} /> Sync Highlight</button>
                                     </div>
                                 </form>
-                             </div>
+                            </div>
                         </motion.div>
                     )}
 
                     {activeTab === 'applications' && (
                         <motion.div key="apps" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}>
-                             <div className="flex justify-between items-end mb-12">
+                            <div className="flex justify-between items-end mb-12">
                                 <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Deterministic Candidates</h2>
                                 <div className="bg-white/5 px-8 py-5 rounded-2xl border border-white/10 text-center shadow-lg"><span className="block text-[10px] uppercase font-black text-[#007cc3] mb-1">Total Intelligence</span><span className="text-3xl font-black tracking-tighter">{applications.length}</span></div>
-                             </div>
-                              <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
+                            </div>
+                            <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
                                 <table className="w-full text-left border-collapse">
-                                    <thead className="bg-[#0f172a] text-[10px] font-black uppercase tracking-[0.2em] text-white/30 border-b border-white/5">
+                                    <thead className="bg-[#0f172a] text-[11px] font-black uppercase tracking-[0.2em] text-white/50 border-b border-white/10">
                                         <tr>
-                                            <th className="px-10 py-8">Candidate Identity</th>
-                                            <th className="px-10 py-8">Project Target</th>
-                                            <th className="px-10 py-8">Digital Footprint</th>
-                                            <th className="px-10 py-8">Narrative Detail</th>
-                                            <th className="px-10 py-8 text-right">Resume Data</th>
+                                            <th className="px-10 py-10">Candidate Identity</th>
+                                            <th className="px-10 py-10">Target Role</th>
+                                            <th className="px-10 py-10">Digital Presence</th>
+                                            <th className="px-10 py-10">Professional Narrative</th>
+                                            <th className="px-10 py-10 text-right">Data Extraction</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-white/5">
+                                    <tbody className="divide-y divide-white/10">
                                         {applications.map(app => (
-                                            <tr key={app.id} className="hover:bg-white/[0.02] transition-all group">
-                                                <td className="px-10 py-8">
-                                                    <div className="font-bold text-lg mb-1">{app.name}</div>
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-[#007cc3]">{app.email}</span>
-                                                        <span className="text-[10px] font-black uppercase tracking-widest text-white/20">{app.phone || '+XX XXXX XXXXX'}</span>
+                                            <tr key={app.id} className="hover:bg-white/[0.03] transition-all group">
+                                                <td className="px-10 py-10">
+                                                    <div className="font-bold text-xl text-white mb-2">{app.name}</div>
+                                                    <div className="flex flex-col gap-1.5">
+                                                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#007cc3] flex items-center gap-2"><Mail size={12} /> {app.email}</span>
+                                                        <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 flex items-center gap-2"><Phone size={12} /> {app.phone || 'N/A'}</span>
                                                     </div>
                                                 </td>
-                                                <td className="px-10 py-8">
-                                                    <span className="px-4 py-2 bg-[#007cc3]/10 text-[#007cc3] text-[9px] font-black uppercase tracking-widest rounded-full border border-[#007cc3]/20 shadow-lg shadow-blue-500/5">
-                                                        {app.job_title || 'General Entry'}
-                                                    </span>
+                                                <td className="px-10 py-10">
+                                                    <div className="inline-flex px-5 py-2.5 bg-[#007cc3]/20 text-[#007cc3] text-[10px] font-black uppercase tracking-widest rounded-xl border border-[#007cc3]/30">
+                                                        {app.job_title || 'General Pipeline'}
+                                                    </div>
                                                 </td>
-                                                <td className="px-10 py-8">
+                                                <td className="px-10 py-10">
                                                     {app.portfolio_url ? (
-                                                        <a href={app.portfolio_url} target="_blank" className="flex items-center gap-2 text-[10px] font-black uppercase text-white/40 hover:text-white transition-all underline decoration-[#007cc3] decoration-2 underline-offset-4">
-                                                            <Globe size={12} /> View Repository
+                                                        <a href={app.portfolio_url} target="_blank" className="inline-flex items-center gap-2 text-[11px] font-black uppercase text-white/60 hover:text-white transition-all underline decoration-[#007cc3] decoration-2 underline-offset-4">
+                                                            <Globe size={14} /> View Portfolio
                                                         </a>
                                                     ) : (
-                                                        <span className="text-[10px] font-black uppercase text-white/10 italic">Not Disclosed</span>
+                                                        <span className="text-[11px] font-bold text-white/10 uppercase tracking-widest">No Link Provided</span>
                                                     )}
                                                 </td>
-                                                <td className="px-10 py-8">
-                                                    <div className="max-w-[300px] overflow-hidden">
-                                                        <p className="text-[11px] text-white/30 italic line-clamp-2 leading-relaxed" title={app.message}>
-                                                            "{app.message || 'No speculative briefing provided.'}"
+                                                <td className="px-10 py-10">
+                                                    <div className="max-w-[320px]">
+                                                        <p className="text-[13px] text-white/60 leading-relaxed font-medium italic border-l-2 border-[#007cc3]/30 pl-4 py-1" title={app.message}>
+                                                            {app.message ? `"${app.message}"` : 'No mission statement provided.'}
                                                         </p>
                                                     </div>
                                                 </td>
-                                                <td className="px-10 py-8 text-right">
-                                                    <div className="flex justify-end items-center gap-3">
-                                                        <a href={`https://new.nsgsolutions.in/${app.resume_path}`} target="_blank" className="inline-flex items-center gap-2 px-6 py-4 bg-white/5 hover:bg-[#007cc3] text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl border border-white/5">
-                                                            <Download size={14} /> Extract PDF
+                                                <td className="px-10 py-10 text-right">
+                                                    <div className="flex justify-end items-center gap-4">
+                                                        <a href={`https://new.nsgsolutions.in/${app.resume_path}`} target="_blank" className="h-14 px-8 bg-white/5 hover:bg-[#007cc3] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl border border-white/10 inline-flex items-center gap-3">
+                                                            <Download size={16} /> Download CV
                                                         </a>
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleDeleteApplication(app.id)}
-                                                            className="p-4 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-xl transition-all shadow-lg shadow-red-900/10"
-                                                            title="Purge Intelligence"
+                                                            className="w-14 h-14 flex items-center justify-center bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all shadow-lg"
+                                                            title="Purge Application"
                                                         >
-                                                            <Trash2 size={16} />
+                                                            <Trash2 size={20} />
                                                         </button>
                                                     </div>
                                                 </td>
                                             </tr>
                                         ))}
-                                        {applications.length === 0 && (
-                                            <tr><td colSpan="5" className="px-10 py-20 text-center opacity-20 text-[10px] font-black tracking-widest uppercase italic">The candidate registry is currently empty.</td></tr>
-                                        )}
                                     </tbody>
                                 </table>
-                              </div>
+                            </div>
                         </motion.div>
                     )}
 
-                     {activeTab === 'inquiries' && (
+                    {activeTab === 'inquiries' && (
                         <motion.div key="leads" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
-                             <div className="flex justify-between items-center mb-12">
+                            <div className="flex justify-between items-center mb-12">
                                 <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Intelligence Inbound</h2>
                                 <div className="bg-[#007cc3] px-8 py-5 rounded-2xl shadow-xl shadow-blue-500/20 text-center border border-white/10"><span className="block text-[10px] uppercase font-black text-white/50 mb-1">Global Intelligence</span><span className="text-3xl font-black tracking-tighter">{inquiries.length}</span></div>
-                             </div>
-                             <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
+                            </div>
+                            <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
                                 <table className="w-full text-left">
                                     <thead className="bg-[#0f172a] text-[9px] font-black uppercase tracking-[0.2em] text-white/10 border-b border-white/5">
                                         <tr>
@@ -835,7 +838,7 @@ const AdminDashboard = () => {
                                                             <div className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-1 italic">Logged Entry</div>
                                                             <div className="text-sm font-black text-white/60 tracking-tighter">{new Date(lead.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</div>
                                                         </div>
-                                                        <button 
+                                                        <button
                                                             onClick={() => handleDeleteInquiry(lead.id)}
                                                             className="flex items-center gap-5 px-6 py-3 bg-red-500/5 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all border border-red-500/10 hover:border-red-500 shadow-lg group-hover:translate-x-0 translate-x-4 opacity-0 group-hover:opacity-100"
                                                             title="Purge Entry"
@@ -849,7 +852,7 @@ const AdminDashboard = () => {
                                         ))}
                                     </tbody>
                                 </table>
-                             </div>
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -859,39 +862,39 @@ const AdminDashboard = () => {
             <AnimatePresence>
                 {confirm.isOpen && (
                     <div className="fixed inset-0 z-[999] flex items-center justify-center p-6">
-                        <motion.div 
-                            initial={{ opacity: 0 }} 
-                            animate={{ opacity: 1 }} 
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setConfirm({ ...confirm, isOpen: false })}
                             className="absolute inset-0 bg-[#0a0e27]/80 backdrop-blur-xl"
                         />
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             className="relative w-full max-w-lg bg-[#0f172a] border border-white/10 rounded-[40px] p-12 shadow-[0_50px_100px_rgba(0,0,0,0.5)] overflow-hidden"
                         >
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-[#007cc3] to-red-500"></div>
-                            
+
                             <div className="w-20 h-20 bg-red-500/10 rounded-3xl flex items-center justify-center text-red-500 mb-8 mx-auto">
                                 <AlertTriangle size={40} />
                             </div>
 
                             <h3 className="text-2xl font-black text-center text-white mb-4 italic tracking-tight">Security Verification</h3>
                             <p className="text-white/40 text-center text-sm font-medium leading-relaxed mb-10 px-4">
-                                {confirm.title} <br/> 
+                                {confirm.title} <br />
                                 <span className="text-red-500/50 uppercase text-[10px] font-black tracking-widest mt-4 block">This action is permanent and deterministic.</span>
                             </p>
 
                             <div className="flex gap-4">
-                                <button 
+                                <button
                                     onClick={() => setConfirm({ ...confirm, isOpen: false })}
                                     className="flex-1 py-5 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black uppercase text-[11px] tracking-widest transition-all border border-white/5"
                                 >
                                     Cancel
                                 </button>
-                                <button 
+                                <button
                                     onClick={() => {
                                         confirm.onConfirm();
                                         setConfirm({ ...confirm, isOpen: false });
