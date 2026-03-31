@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Users, Briefcase, FileText, Globe, Settings, LogOut, Plus,
     Trash2, Edit2, CheckCircle2, CheckCircle, XCircle, Search, Download,
-    Eye, Save, Send, Image as ImageIcon, MessageSquare, Layout, Shield,
+    Eye, Save, Send, Image as ImageIcon, FileUp, MessageSquare, Layout, Shield,
     ChevronRight, ArrowRight, ShieldCheck, Mail, Phone, Clock, MapPin,
     Tag, ExternalLink, Zap, AlertTriangle, BookOpen
 } from 'lucide-react';
@@ -33,8 +33,11 @@ const AdminDashboard = () => {
     const [currentSolution, setCurrentSolution] = useState({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
     const [isEditingHighlight, setIsEditingHighlight] = useState(false);
     const [currentHighlight, setCurrentHighlight] = useState({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
+    const [solutionImageFile, setSolutionImageFile] = useState(null);
+    const [highlightImageFile, setHighlightImageFile] = useState(null);
     const [confirm, setConfirm] = useState({ isOpen: false, title: '', onConfirm: null });
     const [isEditingTestimonial, setIsEditingTestimonial] = useState(false);
+    const [blogImageFile, setBlogImageFile] = useState(null);
     const [currentTestimonial, setCurrentTestimonial] = useState({ client_name: '', service_name: '', content: '', rating: 5 });
 
     const navigate = useNavigate();
@@ -148,19 +151,38 @@ const AdminDashboard = () => {
     const handleSaveBlog = async (e) => {
         e.preventDefault();
         const endpoint = isEditingBlog ? '/api/admin/update_blog.php' : '/api/admin/create_blog.php';
+        
         try {
+            const formData = new FormData();
+            
+            // Append current blog fields
+            Object.keys(currentBlog).forEach(key => {
+                formData.append(key, currentBlog[key]);
+            });
+            
+            // Append binary file if selected
+            if (blogImageFile) {
+                formData.append('imageFile', blogImageFile);
+            }
+
             const res = await fetch(endpoint, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(currentBlog)
+                body: formData
             });
-            if ((await res.json()).status === 'success') {
+            
+            const result = await res.json();
+            if (result.status === 'success') {
                 showToast(isEditingBlog ? 'Insight Updated!' : 'Insight Published!', 'success');
                 setIsEditingBlog(false);
+                setBlogImageFile(null);
                 setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' });
                 fetchBlogs();
+            } else {
+                showToast(result.message || 'Action failed', 'error');
             }
-        } catch (err) { showToast('Action failed', 'error'); }
+        } catch (err) { 
+            showToast('Sync error with server', 'error'); 
+        }
     }
 
     const handleDeleteBlog = async (id) => {
@@ -223,21 +245,42 @@ const AdminDashboard = () => {
     // SOLUTION ACTIONS
     const handleSaveSolution = async (e) => {
         e.preventDefault();
-        const method = isEditingSolution ? 'PUT' : 'POST';
-        const solData = { ...currentSolution, features: typeof currentSolution.features === 'string' ? currentSolution.features.split(',').map(f => f.trim()) : currentSolution.features };
         try {
-            const res = await fetch('/api/manage_solutions.php', {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(solData)
+            const formData = new FormData();
+            
+            // Append current solution fields
+            Object.keys(currentSolution).forEach(key => {
+                // Normalize features (expecting array or string)
+                if (key === 'features' && typeof currentSolution[key] === 'string') {
+                    formData.append(key, JSON.stringify(currentSolution[key].split(',').map(s => s.trim())));
+                } else {
+                    formData.append(key, currentSolution[key]);
+                }
             });
-            if ((await res.json()).status === 'success') {
-                showToast(isEditingSolution ? 'Project Revised!' : 'Project Added!', 'success');
+            
+            // Append binary file if selected
+            if (solutionImageFile) {
+                formData.append('imageFile', solutionImageFile);
+            }
+
+            const res = await fetch('/api/manage_solutions.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await res.json();
+            if (result.status === 'success') {
+                showToast(isEditingSolution ? 'Nexus Registry Updated!' : 'Project Discovered!', 'success');
                 setIsEditingSolution(false);
+                setSolutionImageFile(null);
                 setCurrentSolution({ category: 'itservices', title: '', shortDesc: '', desc: '', img: '', features: '' });
                 fetchSolutions();
+            } else {
+                showToast(result.message || 'Action failed', 'error');
             }
-        } catch (err) { showToast('Fails', 'error'); }
+        } catch (err) { 
+            showToast('Sync fail with Nexus server', 'error'); 
+        }
     }
 
     const handleDeleteSolution = async (id) => {
@@ -258,20 +301,37 @@ const AdminDashboard = () => {
     // HIGHLIGHT ACTIONS
     const handleSaveHighlight = async (e) => {
         e.preventDefault();
-        const method = isEditingHighlight ? 'PUT' : 'POST';
         try {
-            const res = await fetch('/api/manage_highlights.php', {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(currentHighlight)
+            const formData = new FormData();
+            
+            // Append current highlight fields
+            Object.keys(currentHighlight).forEach(key => {
+                formData.append(key, currentHighlight[key]);
             });
-            if ((await res.json()).status === 'success') {
-                showToast(isEditingHighlight ? 'Revised!' : 'Added!', 'success');
+            
+            // Append binary file if selected
+            if (highlightImageFile) {
+                formData.append('imageFile', highlightImageFile);
+            }
+
+            const res = await fetch('/api/manage_highlights.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await res.json();
+            if (result.status === 'success') {
+                showToast(isEditingHighlight ? 'Highlight Revitalized!' : 'Focus Added!', 'success');
                 setIsEditingHighlight(false);
+                setHighlightImageFile(null);
                 setCurrentHighlight({ id: null, title: '', image_url: '', column_side: 'left', sort_order: 0 });
                 fetchHighlights();
+            } else {
+                showToast(result.message || 'Action failed', 'error');
             }
-        } catch (err) { showToast('Fails', 'error'); }
+        } catch (err) { 
+            showToast('Sync error with Highlight engine', 'error'); 
+        }
     }
 
     const handleDeleteHighlight = async (id) => {
@@ -609,8 +669,35 @@ const AdminDashboard = () => {
                                                 </div>
                                             </div>
                                             <div className="space-y-1">
-                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Visual Asset</label>
-                                                <input required value={currentBlog.image} onChange={e => setCurrentBlog({ ...currentBlog, image: e.target.value })} placeholder="Image Path (/blog.png)" className="w-full bg-black/20 border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] text-white" />
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Visual Asset (Image File)</label>
+                                                <div className="relative group/upload">
+                                                    <input 
+                                                        type="file" 
+                                                        accept="image/*"
+                                                        onChange={e => setBlogImageFile(e.target.files[0])}
+                                                        className="hidden" 
+                                                        id="blog-image-upload" 
+                                                    />
+                                                    <label 
+                                                        htmlFor="blog-image-upload"
+                                                        className={`w-full flex items-center gap-4 bg-black/20 border border-white/10 rounded-2xl px-6 py-4 text-sm cursor-pointer hover:border-[#007cc3] transition-all ${blogImageFile ? 'bg-[#007cc3]/10 border-[#007cc3]' : ''}`}
+                                                    >
+                                                        {blogImageFile ? (
+                                                            <>
+                                                                <ImageIcon size={16} className="text-[#007cc3]" />
+                                                                <span className="text-white text-xs truncate max-w-[200px]">{blogImageFile.name}</span>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <FileUp size={16} className="text-white/20 group-hover/upload:text-[#007cc3]" />
+                                                                <span className="text-white/30 text-xs">Browse Device for Image</span>
+                                                            </>
+                                                        )}
+                                                    </label>
+                                                    {isEditingBlog && !blogImageFile && (
+                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[8px] font-black uppercase text-[#007cc3]">Using Current</div>
+                                                    )}
+                                                </div>
                                             </div>
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Body Content</label>
@@ -658,7 +745,37 @@ const AdminDashboard = () => {
                                             <option value="branding">Branding & Design</option>
                                         </select>
                                         <input required value={currentSolution.title} onChange={e => setCurrentSolution({ ...currentSolution, title: e.target.value })} placeholder="Project Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                        <input required value={currentSolution.img} onChange={e => setCurrentSolution({ ...currentSolution, img: e.target.value })} placeholder="Asset Path (/img.jpg)" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Project Thumbnail (Image)</label>
+                                            <div className="relative group/solution">
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*"
+                                                    onChange={e => setSolutionImageFile(e.target.files[0])}
+                                                    className="hidden" 
+                                                    id="solution-image-upload" 
+                                                />
+                                                <label 
+                                                    htmlFor="solution-image-upload"
+                                                    className={`w-full flex items-center gap-4 bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm cursor-pointer hover:border-[#007cc3] transition-all ${solutionImageFile ? 'bg-[#007cc3]/10 border-[#007cc3]' : ''}`}
+                                                >
+                                                    {solutionImageFile ? (
+                                                        <>
+                                                            <ImageIcon size={16} className="text-[#007cc3]" />
+                                                            <span className="text-white text-xs truncate max-w-[200px]">{solutionImageFile.name}</span>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <FileUp size={16} className="text-white/20 group-hover/solution:text-[#007cc3]" />
+                                                            <span className="text-white/30 text-xs">Browse Device for Asset</span>
+                                                        </>
+                                                    )}
+                                                </label>
+                                                {isEditingSolution && !solutionImageFile && (
+                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[8px] font-black uppercase text-[#007cc3]">Using Current</div>
+                                                )}
+                                            </div>
+                                        </div>
                                         <textarea required rows="5" value={currentSolution.desc} onChange={e => setCurrentSolution({ ...currentSolution, desc: e.target.value })} placeholder="Briefing" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none resize-none" />
                                         <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 transition-all"><Send size={18} /> Update Nexus</button>
                                     </div>
@@ -732,7 +849,37 @@ const AdminDashboard = () => {
                                             <option value="right">Right Column</option>
                                         </select>
                                         <input required value={currentHighlight.title} onChange={e => setCurrentHighlight({ ...currentHighlight, title: e.target.value })} placeholder="Card Title" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
-                                        <input required value={currentHighlight.image_url} onChange={e => setCurrentHighlight({ ...currentHighlight, image_url: e.target.value })} placeholder="Asset Path" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Cover Asset (Image)</label>
+                                            <div className="relative group/highlight">
+                                                <input 
+                                                    type="file" 
+                                                    accept="image/*"
+                                                    onChange={e => setHighlightImageFile(e.target.files[0])}
+                                                    className="hidden" 
+                                                    id="highlight-image-upload" 
+                                                />
+                                                <label 
+                                                    htmlFor="highlight-image-upload"
+                                                    className={`w-full flex items-center gap-4 bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm cursor-pointer hover:border-[#007cc3] transition-all ${highlightImageFile ? 'bg-[#007cc3]/10 border-[#007cc3]' : ''}`}
+                                                >
+                                                    {highlightImageFile ? (
+                                                        <>
+                                                            <ImageIcon size={16} className="text-[#007cc3]" />
+                                                            <span className="text-white text-xs truncate max-w-[200px]">{highlightImageFile.name}</span>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <FileUp size={16} className="text-white/20 group-hover/highlight:text-[#007cc3]" />
+                                                            <span className="text-white/30 text-xs">Browse Device for Cover</span>
+                                                        </>
+                                                    )}
+                                                </label>
+                                                {isEditingHighlight && !highlightImageFile && (
+                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[8px] font-black uppercase text-[#007cc3]">Using Current</div>
+                                                )}
+                                            </div>
+                                        </div>
                                         <input type="number" required value={currentHighlight.sort_order} onChange={e => setCurrentHighlight({ ...currentHighlight, sort_order: parseInt(e.target.value) })} placeholder="Priority" className="w-full bg-white/5 border border-white/5 rounded-2xl px-6 py-4 text-sm outline-none" />
                                         <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 transition-all hover:bg-[#0088d8]"><Send size={18} /> Sync Highlight</button>
                                     </div>
