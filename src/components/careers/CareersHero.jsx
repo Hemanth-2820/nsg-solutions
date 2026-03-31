@@ -8,7 +8,7 @@ const CareersHero = () => {
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const [showForm, setShowForm] = useState(false);
 
-  const title = "Engineering The Next Digital Frontier";
+  const title = "Build The Future With Us";
   const words = title.split(" ");
 
   const scrollToRoles = () => {
@@ -54,7 +54,7 @@ const CareersHero = () => {
             transition={{ duration: 0.8, delay: 1.2 }}
             className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-12 font-light leading-relaxed"
           >
-            Join a league of extraordinary engineers building the world's most complex digital ecosystems. Your journey to mastery starts here.
+            Join a team of skilled engineers solving real problems for global businesses. Grow fast. Do meaningful work.
           </motion.p>
 
           <motion.div

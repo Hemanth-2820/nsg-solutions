@@ -89,11 +89,11 @@ const CareersRoles = () => {
                 Current Openings
               </motion.span>
               <h2 className="text-4xl md:text-6xl font-bold text-gray-900 font-infosys-heading italic">
-                Join The <span className="text-[#007cc3]">Core Team</span>
+                Open <span className="text-[#007cc3]">Positions</span>
               </h2>
             </div>
             <p className="text-black/50 font-medium max-w-sm text-lg leading-relaxed">
-              We are looking for the 1% who thrive on complexity and deterministic engineering excellence.
+              We're hiring talented engineers across all levels. Find a role that fits you.
             </p>
           </div>
 
@@ -108,9 +108,9 @@ const CareersRoles = () => {
               Don't see your role?{' '}
               <span
                 className="text-[#007cc3] cursor-pointer hover:underline underline-offset-4"
-                onClick={() => openForm('Other / Speculative Application')}
+                onClick={() => openForm('Other / Open Application')}
               >
-                Send a Speculative Application
+                Send an Open Application
               </span>
             </p>
           </div>

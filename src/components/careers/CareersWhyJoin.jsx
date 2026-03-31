@@ -10,23 +10,23 @@ import impactIcon from '../../assets/generated/careers_impact_icon_1774529117324
 const reasons = [
   { 
     image: innovationIcon, 
-    title: 'Architectural Freedom', 
-    desc: 'We don’t just write code; we architect systems. Experience the freedom to solve complex engineering puzzles without the red tape.' 
+    title: 'Freedom to Solve Real Problems', 
+    desc: 'At NSG, engineers are trusted to make decisions. No unnecessary approvals or red tape — just clear goals and the freedom to build smart solutions.' 
   },
   { 
     image: growthIcon, 
-    title: 'Exponential Growth', 
-    desc: 'Our meritocratic culture ensures that high performers ascend rapidly. We provide the mentorship and the stage; you provide the ambition.' 
+    title: 'Grow Faster Than Anywhere Else', 
+    desc: 'We reward results, not titles. High performers move up quickly. We provide the mentorship and the stage — you bring the drive.' 
   },
   { 
     image: collabIcon, 
-    title: 'Collaborative Elite', 
-    desc: 'Work alongside a hand-picked team of specialists. At NSG, the "average" engineer is a world-class problem solver.' 
+    title: 'Work With Great People', 
+    desc: 'Every person on the team was chosen for their skills and mindset. Working here means learning from some of the best engineers around.' 
   },
   { 
     image: impactIcon, 
-    title: 'Global Scale Impact', 
-    desc: 'Our solutions power enterprise operations at a massive scale. See your contributions move the needle for Fortune 500 giants.' 
+    title: 'Your Work Reaches the World', 
+    desc: 'The systems you build here run inside some of the world\'s largest companies. Your contributions have real, visible impact at global scale.' 
   }
 ];
 
@@ -40,10 +40,10 @@ const CareersWhyJoin = () => {
             whileInView={{ opacity: 1 }}
             className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[11px] mb-4 block"
           >
-            Our Philosophy
+            Why Choose NSG
           </motion.span>
           <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-infosys-heading italic">
-            Engineered For the <span className="text-[#007cc3]">Ambitious</span>
+            A Place Where You Can Do <span className="text-[#007cc3]">Your Best Work</span>
           </h2>
         </div>
         

@@ -37,12 +37,12 @@ const BlogsAuthors = () => {
             whileInView={{ opacity: 1 }}
             className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[10px] mb-8 block"
           >
-            The Intellect
+            Meet Our Authors
           </motion.span>
           <h3 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 font-infosys-heading italic">
-            Minds Behind The <span className="text-[#007cc3]">Excellence</span>
+            The People Writing <span className="text-[#007cc3]">These Blogs</span>
           </h3>
-          <p className="text-black/50 text-xl font-medium max-w-2xl mx-auto italic">"Engineering is a human endeavor. Meet the architects of our digital future."</p>
+          <p className="text-black/50 text-xl font-medium max-w-2xl mx-auto italic">Every article is written by an engineer who has solved the problem firsthand.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-12">

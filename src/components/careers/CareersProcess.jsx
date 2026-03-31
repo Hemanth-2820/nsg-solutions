@@ -2,10 +2,10 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 
 const steps = [
-  { num: '01', title: 'Technical Intake', desc: 'Our journey begins with a meticulous review of your technical portfolio and engineering philosophy.' },
-  { num: '02', title: 'The Deep Dive', desc: 'A rigorous, peer-led exploration into your architecture skills and problem-solving intuition.' },
-  { num: '03', title: 'Cultural Synthesis', desc: 'A dialogue focused on shared values, engineering craftsmanship, and long-term vision.' },
-  { num: '04', title: 'The Ascension', desc: 'Final alignment, rapid offer delivery, and a structured launch into your first NSG project.' }
+  { num: '01', title: 'We Review Your Application', desc: 'We carefully look at your experience, work history, and what you\'ve built before making our next decision.' },
+  { num: '02', title: 'Technical Interview', desc: 'A focused conversation about your technical skills and how you solve problems. No trick questions — just real engineering challenges.' },
+  { num: '03', title: 'Team Conversation', desc: 'A casual chat with the team to see if we\'re a good fit for each other — your values, working style, and what you\'re looking for.' },
+  { num: '04', title: 'Offer & Onboarding', desc: 'If everything feels right, we move fast. You\'ll get an offer, and we\'ll make sure your first weeks at NSG are smooth and welcoming.' }
 ];
 
 const CareersProcess = () => {
@@ -30,10 +30,10 @@ const CareersProcess = () => {
             whileInView={{ opacity: 1 }}
             className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[11px] mb-4 block"
           >
-            The Journey
+            How It Works
           </motion.span>
-          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-infosys-heading italic">How We <span className="text-[#007cc3]">Scale Together</span></h2>
-          <p className="text-black/50 text-xl font-medium max-w-2xl mx-auto italic">"A focused, objective, and engineering-led selection process."</p>
+          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-infosys-heading italic">Our <span className="text-[#007cc3]">Hiring Process</span></h2>
+          <p className="text-black/50 text-xl font-medium max-w-2xl mx-auto italic">Simple, fair, and focused on finding the right fit — for you and for us.</p>
         </div>
         
         <div className="grid md:grid-cols-4 gap-12 relative">

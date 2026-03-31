@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const categories = ['All', 'AI Architecture', 'Cloud Native', 'Cyber Security', 'Digital Transformation', 'Engineering Culture'];
+const categories = ['All', 'Artificial Intelligence', 'Cloud Technology', 'Cyber Security', 'Digital Transformation', 'Team & Culture'];
 
 const BlogsCategories = ({ active, setActive }) => {
   return (

@@ -2,13 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const trending = [ 
-  "Generative Enterprise AI", 
-  "Deterministic Cloud Fabric", 
-  "Quantum-Resistant Security", 
-  "Zero-Trust Architecture", 
-  "Multi-Cloud Synchronicity",
-  "High-Concurrency Rust",
-  "Deterministic Engineering culture"
+  "Generative AI", 
+  "Cloud Infrastructure", 
+  "Future-Ready Security", 
+  "Zero-Trust Security", 
+  "Multi-Cloud Strategy",
+  "Rust Programming",
+  "Engineering Culture"
 ];
 
 const BlogsTrending = () => {

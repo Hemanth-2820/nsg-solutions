@@ -32,7 +32,7 @@ const CareersCTA = () => {
             whileInView={{ opacity: 1 }}
             className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[11px] mb-6 block"
           >
-            Final Step
+            Ready to Join?
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -41,10 +41,10 @@ const CareersCTA = () => {
             transition={{ duration: 0.8 }}
             className="text-4xl md:text-7xl font-bold text-gray-900 mb-8 font-infosys-heading italic"
           >
-            Begin Your <span className="text-[#007cc3]">Ascension</span>
+            Start Your Journey <span className="text-[#007cc3]">With NSG</span>
           </motion.h2>
           <p className="text-xl text-black/50 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-            The next decade of digital excellence is being built right here. We've reserved a seat for the extraordinary. Are you ready?
+            We're building something great, and we want great people to build it with us. Take the first step today.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-8">

@@ -33,11 +33,11 @@ const BlogsCTA = () => {
           whileInView={{ opacity: 1, y: 0 }}
           className="text-4xl md:text-7xl font-bold text-gray-900 mb-8 tracking-tight font-infosys-heading italic"
         >
-          From Insights to <br /> <span className="text-[#007cc3]">Implementation</span>
+          Ready to Build <br /> <span className="text-[#007cc3]">Something Great?</span>
         </motion.h2>
 
         <p className="text-xl text-black/50 mb-16 max-w-2xl leading-relaxed font-medium italic">
-          "The greatest engineering challenges aren't solved in isolation. Let's build the extraordinary together."
+          Our team is ready to help you turn these ideas into real solutions for your business.
         </p>
 
         <motion.button
@@ -46,7 +46,7 @@ const BlogsCTA = () => {
           onClick={() => navigate('/contact')}
           className="bg-black text-white px-16 py-6 rounded-full font-bold uppercase tracking-[0.2em] text-[13px] shadow-2xl hover:bg-[#007cc3] transition-all duration-500 flex items-center gap-4 group cursor-pointer"
         >
-          Initiate Collaboration
+          Let's Talk
           <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform duration-500" />
         </motion.button>
       </div>

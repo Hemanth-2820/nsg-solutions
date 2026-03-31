@@ -74,7 +74,7 @@ const BlogsHero = () => {
           transition={{ duration: 1, delay: 0.8 }}
           className="max-w-2xl mx-auto text-xl md:text-2xl text-white/50 font-medium leading-relaxed italic"
         >
-          "Architecting the future of enterprise intelligence, one insight at a time."
+          Real knowledge from real engineers. Read what's working in tech today.
         </motion.p>
       </div>
     </section>

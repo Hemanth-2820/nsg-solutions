@@ -24,10 +24,10 @@ const CultureBlock = ({ title, desc, index }) => (
 
 const CareersLife = () => {
   const blocks = [
-    { title: "Radical Transparency", desc: "We believe in open channels. From architectural reviews to company roadmaps, we share everything that matters." },
-    { title: "The Craftsmanship Vibe", desc: "Ours is a culture of makers. We obsess over clean code, elegant architecture, and deterministic results." },
-    { title: "Async-First Flow", desc: "We value deep work. Our processes are optimized for minimal interruptions and maximum engineering focus." },
-    { title: "Continuous Evolution", desc: "The tech stack of today isn't the stack of tomorrow. We allocate dedicated time for R&D and upskilling." }
+    { title: "Open & Honest Communication", desc: "Everyone at NSG knows what's happening in the company — from project decisions to long-term plans. No closed doors, no surprises." },
+    { title: "We Care About Quality", desc: "Our culture is built around doing things right. Clean code, clear documentation, and thoughtful architecture are things we take pride in every day." },
+    { title: "Deep Work, Fewer Interruptions", desc: "We respect focused work time. Our processes are designed to minimise unnecessary meetings and let engineers do their best thinking." },
+    { title: "Always Learning, Always Growing", desc: "Technology moves fast — and so do we. We set aside dedicated time for learning, research, and experimenting with new tools and approaches." }
   ];
 
   return (
@@ -64,7 +64,7 @@ const CareersLife = () => {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-6xl font-bold text-gray-900 mb-8 font-infosys-heading italic"
           >
-            The Culture Of <span className="text-[#007cc3]">Craftsmanship</span>
+            What It's Like to <span className="text-[#007cc3]">Work Here</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ const CareersLife = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-black/60 text-lg mb-12 leading-relaxed font-medium"
           >
-            We've built a sanctuary for engineers who care about "how" things are built as much as "what" is built. Join a team where excellence is the baseline.
+            We've built a workplace where engineers can focus, learn, and do their best work every day — without the distractions or politics that slow other teams down.
           </motion.p>
           
           <div className="space-y-12">

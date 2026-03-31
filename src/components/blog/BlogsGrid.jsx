@@ -12,57 +12,57 @@ import thumb6 from '../../assets/generated/careers_ui_tech_1774529165327.png';
 const posts = [
   {
     id: 1,
-    title: 'Zero-Trust Perimeters in Multi-Cloud Environments',
-    desc: 'A rigorous exploration into deterministic security for distributed enterprise systems operating at scale.',
+    title: 'How to Keep Your Business Safe Across Multiple Cloud Platforms',
+    desc: 'A practical guide to building strong security when your data and apps are spread across different cloud services.',
     tag: 'Cyber Security',
     image: thumb1,
     time: '8 min read',
-    content: 'Modern enterprises face unprecedented security challenges as workloads span multiple cloud providers. Zero-Trust architecture eliminates implicit trust and continuously validates every request. Our implementation leverages mutual TLS, identity-aware proxies, and real-time threat intelligence to create an impenetrable perimeter that scales with your infrastructure. By shifting from perimeter-based to identity-based trust, organisations achieve 60% faster incident response while reducing the blast radius of any breach.',
+    content: 'As more businesses move to the cloud, keeping data secure across multiple providers has become a real challenge. Zero-Trust security means you never automatically trust anyone — every user and device must prove who they are, every time. By using encrypted connections, identity checks, and real-time threat monitoring, businesses can protect themselves even if one part of their system is compromised. Companies that take this approach respond to threats 60% faster and limit the damage if something does go wrong.',
   },
   {
     id: 2,
-    title: 'Deterministic API Architecture: The Sub-100ms Goal',
-    desc: 'How we leverage gRPC and modern caching strategies to achieve global performance parity.',
-    tag: 'Cloud Native',
+    title: 'Why Fast APIs Matter — And How We Build Them',
+    desc: 'How we use modern tools and smart design to make our APIs respond in under 100 milliseconds, anywhere in the world.',
+    tag: 'Cloud Technology',
     image: thumb2,
     time: '10 min read',
-    content: 'Achieving consistent sub-100ms latency across globally distributed microservices requires a fundamentally different approach to API design. By combining gRPC with protocol buffers, edge caching, and intelligent load distribution, we consistently deliver 40% better performance than traditional REST-based architectures. The secret lies in co-locating compute with data, eliminating serialisation overhead, and using deterministic routing algorithms informed by real-time topology maps.',
+    content: 'When your app needs to respond quickly — whether loading data, processing a request, or syncing between systems — slow APIs ruin the experience. We use a faster communication format called gRPC (instead of the older REST approach) combined with smart caching to cut response times by 40%. The secret is simple: keep the data close to where it\'s needed, reduce the work required to send and receive it, and use smart routing to find the fastest path every time.',
   },
   {
     id: 3,
-    title: 'Generative AI: Moving Beyond Prompt Engineering',
-    desc: 'Building custom neural layers for specialized enterprise knowledge bases and reasoning systems.',
-    tag: 'AI Architecture',
+    title: 'Going Beyond Chatbots: How We Build AI That Actually Thinks',
+    desc: 'Building AI that understands your specific business — not just a generic chatbot that gives vague answers.',
+    tag: 'Artificial Intelligence',
     image: thumb3,
     time: '14 min read',
-    content: 'The next frontier in enterprise AI is not about crafting better prompts — it is about building domain-specific reasoning layers. Fine-tuned models combined with retrieval-augmented generation (RAG) and custom knowledge graphs deliver accuracy levels that generic LLMs simply cannot match for specialised domains. Our multi-agent orchestration framework routes complex queries through specialised sub-models, achieving 94% task-completion accuracy on enterprise benchmarks.',
+    content: 'Most businesses use AI tools that are trained on general information — so they give generic answers. The real value comes when AI is trained specifically on your industry, your data, and your processes. We build AI systems that combine custom-trained models with a technique called RAG (Retrieval-Augmented Generation) — which means the AI looks up real, up-to-date information before answering. This gives 94% accuracy on complex business tasks, compared to the hit-or-miss results of general AI tools.',
   },
   {
     id: 4,
-    title: 'Scalable Microservices with Rust and Go',
-    desc: 'Choosing the right language for high-concurrency enterprise pipelines that never compromise on safety.',
-    tag: 'Cloud Native',
+    title: 'Choosing the Right Tools for High-Speed Apps',
+    desc: 'How we use Rust and Go together to build applications that are fast, safe, and built to handle massive traffic.',
+    tag: 'Cloud Technology',
     image: thumb4,
     time: '12 min read',
-    content: 'Memory safety and raw throughput are no longer mutually exclusive. Rust handles the performance-critical data ingestion layer while Go orchestrates inter-service communication. This hybrid approach delivers 3x throughput improvement over Node.js equivalents with near-zero runtime allocation overhead. The key architectural decision was treating language boundaries as explicit contracts expressed as protobuf schemas, making cross-language debugging predictable and tooling-friendly.',
+    content: 'Building apps that are both fast and reliable used to be a trade-off. We use two modern programming languages — Rust for raw speed and safety, and Go for managing how different parts of the system talk to each other. Together, they deliver 3x more throughput than apps built with Node.js, with far fewer crashes or memory issues. The key insight is treating each language as a specialist — use Rust where speed matters most, use Go where coordination and simplicity matter most.',
   },
   {
     id: 5,
-    title: 'Quantum-Resistant Encryption Standards',
-    desc: 'Preparing the enterprise for the next era of computational threats with post-quantum cryptography.',
+    title: 'Preparing Your Business for the Future of Cybersecurity',
+    desc: 'Quantum computers will eventually break today\'s encryption. Here\'s how to start protecting your business now.',
     tag: 'Cyber Security',
     image: thumb5,
     time: '15 min read',
-    content: 'With quantum computing advancing rapidly, CISOs must begin migrating to post-quantum cryptographic standards today. NIST-approved algorithms like CRYSTALS-Kyber and CRYSTALS-Dilithium offer a practical migration path. Our phased adoption framework ensures backward compatibility while futureproofing your security posture. Crypto-agility — the ability to swap algorithms without re-architecting systems — is the defining engineering discipline of this decade.',
+    content: 'In the coming years, quantum computers will become powerful enough to break the encryption that protects most business data today. The good news: there are already new, quantum-resistant encryption methods available. Our approach is to start the transition now — using new standards approved by NIST (a leading security authority) — while making sure existing systems still work during the switch. The most important thing any business can do is build "crypto-agility" — the ability to change your encryption without overhauling your entire system.',
   },
   {
     id: 6,
-    title: 'The Engineering Mindset: Excellence as a Baseline',
-    desc: 'Defining the cultural pillars of a world-class technical organisation obsessed with craft.',
-    tag: 'Engineering Culture',
+    title: 'What Makes a Great Engineering Team?',
+    desc: 'Culture, ownership, and the shared belief that good enough is never good enough — the foundation of a high-performing team.',
+    tag: 'Team & Culture',
     image: thumb6,
     time: '6 min read',
-    content: 'Great engineering culture is not born from ping-pong tables or unlimited PTO. It is built on radical ownership, obsessive documentation, and a shared belief that "good enough" is never good enough. The most high-performing teams we have built share one trait: they treat every commit as a public declaration of their craft. Code review is not gatekeeping — it is mentorship delivered at the speed of git.',
+    content: 'A great engineering team is not built with perks or open offices. It is built on ownership — where every engineer takes full responsibility for their work — and a shared commitment to quality. The best teams we have built all share one trait: they treat every piece of code as a reflection of their craft. Code reviews are not checkpoints — they are mentorship moments. Documentation is not a chore — it is how knowledge gets shared. When everyone holds the same standard, the whole team gets better, faster.',
   },
 ];
 
@@ -217,7 +217,7 @@ const BlogCard = ({ post, index, onOpen }) => {
       {/* Category Badge - Top Left */}
       <div className="absolute top-8 left-8 z-20">
         <span className="px-4 py-2 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.25em] bg-black text-white">
-          {post.tag === 'Cyber Security' ? 'RESEARCH REPORT' : post.tag === 'Cloud Native' ? 'CASE STUDY' : 'BLOG'}
+          {post.tag === 'Cyber Security' ? 'SECURITY' : post.tag === 'Cloud Technology' ? 'CLOUD' : post.tag === 'Artificial Intelligence' ? 'AI' : post.tag === 'Team & Culture' ? 'CULTURE' : 'ARTICLE'}
         </span>
       </div>
 
@@ -290,7 +290,7 @@ const BlogsGrid = ({ activeCategory }) => {
               className="py-20 text-center"
             >
               <p className="text-black/30 text-xl italic">
-                "No insights found for this category yet. Check back soon."
+                No articles found for this category yet. Check back soon.
               </p>
             </motion.div>
           )}

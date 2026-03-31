@@ -28,10 +28,10 @@ const WorkAreaCard = ({ title, img, desc, index }) => (
 
 const CareersWork = () => {
   const areas = [
-    { title: "Cognitive AI", img: aiTechImg, desc: "Building neural networks that power the next generation of predictive enterprise analytics." },
-    { title: "Cloud Fabric", img: cloudTechImg, desc: "Architecting frictionless, multi-cloud environments for high-concurrency global operations." },
-    { title: "Quantum UI", img: uiTechImg, desc: "Crafting fluid, deterministic interfaces that redefine the boundary between human and machine." },
-    { title: "Hardened Backend", img: backendTechImg, desc: "Engineering the invisible spine of enterprise logic with uncompromising security and scale." }
+    { title: "Artificial Intelligence", img: aiTechImg, desc: "Build AI systems that help businesses make smarter, faster decisions using real data — not guesswork." },
+    { title: "Cloud Infrastructure", img: cloudTechImg, desc: "Design and manage cloud environments that keep businesses running reliably, no matter how large they grow." },
+    { title: "Frontend & UI", img: uiTechImg, desc: "Build beautiful, fast interfaces that make complex systems feel simple and intuitive for real users." },
+    { title: "Backend Engineering", img: backendTechImg, desc: "Write the core systems and APIs that power everything behind the scenes — reliably, securely, and at scale." }
   ];
 
   return (
@@ -44,14 +44,14 @@ const CareersWork = () => {
               whileInView={{ opacity: 1, x: 0 }}
               className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[11px] mb-4 block"
             >
-              The Work
+              What You'll Build
             </motion.span>
             <h2 className="text-4xl md:text-6xl font-bold text-gray-900 font-infosys-heading leading-tight">
-              Architecting <span className="text-[#007cc3]">Complex Systems</span> For Ambitious Brands
+              Real Work. <span className="text-[#007cc3]">Real Impact.</span>
             </h2>
           </div>
           <p className="text-black/50 font-medium max-w-sm text-lg leading-relaxed italic">
-            "Innovation is not about just building features; it's about solving the heavy problems that others shy away from."
+            We tackle the hard problems — so the solutions we build actually move businesses forward.
           </p>
         </div>
 

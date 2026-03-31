@@ -41,9 +41,9 @@ const StatCard = ({ number, suffix, title, index }) => {
 
 const CareersStats = () => {
   const stats = [
-    { number: "98", suffix: "%", title: "Engineering Excellence" },
-    { number: "15", suffix: "+", title: "Global Innovation Hubs" },
-    { number: "400", suffix: "+", title: "Scale Projects" },
+    { number: "98", suffix: "%", title: "Employee Satisfaction Rate" },
+    { number: "15", suffix: "+", title: "Office Locations Worldwide" },
+    { number: "400", suffix: "+", title: "Projects Delivered" },
   ];
 
   return (

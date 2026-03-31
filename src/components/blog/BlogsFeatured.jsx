@@ -41,13 +41,13 @@ const BlogsFeatured = () => {
                 layout
                 className="text-4xl md:text-6xl font-bold text-gray-900 mb-8 leading-[1.1] font-infosys-heading italic"
               >
-                The Architecture of <br /> <span className="text-[#007cc3]">Cognitive Enterprise</span>
+                How AI Is Changing the Way <br /> <span className="text-[#007cc3]">Businesses Work</span>
               </motion.h2>
               <motion.p 
                 layout
                 className="text-black/50 text-xl mb-12 leading-relaxed font-medium italic"
               >
-                "We are moving beyond simple automation into the realm of deterministic, AI-driven deterministic systems."
+                We're moving past simple chatbots into AI systems that actually make smart decisions on their own.
               </motion.p>
               
               <div className="flex items-center gap-8">
@@ -55,7 +55,7 @@ const BlogsFeatured = () => {
                   onClick={() => setIsOpen(!isOpen)}
                   className="flex items-center gap-4 py-4 px-10 bg-black text-white font-bold rounded-full hover:bg-[#007cc3] transition-all duration-500 uppercase tracking-widest text-[12px]"
                 >
-                  {isOpen ? 'Close Thesis' : 'Read Full Thesis'} 
+                  {isOpen ? 'Close Article' : 'Read Full Article'} 
                   {isOpen ? <X size={18} /> : <ArrowRight size={18} />}
                 </button>
                 <div className="text-black/30 font-bold uppercase tracking-[0.2em] text-[10px]">
@@ -78,21 +78,21 @@ const BlogsFeatured = () => {
                   <div className="max-w-4xl mx-auto space-y-12">
                      <div className="grid md:grid-cols-2 gap-12 border-b border-black/5 pb-12">
                         <div>
-                           <h4 className="text-[#007cc3] font-bold uppercase tracking-widest text-xs mb-4">The Objective</h4>
-                           <p className="text-black/60 italic leading-relaxed">To define the structural requirements of a truly cognitive enterprise where decision-making is distributed and AI is the core OS, not a plugin.</p>
+                           <h4 className="text-[#007cc3] font-bold uppercase tracking-widest text-xs mb-4">What We Set Out To Do</h4>
+                           <p className="text-black/60 italic leading-relaxed">To show how businesses can use AI not just as a tool, but as a core part of their decision-making — making operations smarter and faster every day.</p>
                         </div>
                         <div>
-                           <h4 className="text-[#007cc3] font-bold uppercase tracking-widest text-xs mb-4">Key Finding</h4>
-                           <p className="text-black/60 italic leading-relaxed">Transitioning from stochastic LLM responses to deterministic agentic workflows is the prerequisite for enterprise-grade deployment.</p>
+                           <h4 className="text-[#007cc3] font-bold uppercase tracking-widest text-xs mb-4">What We Found</h4>
+                           <p className="text-black/60 italic leading-relaxed">Businesses get better results when AI follows clear rules instead of guessing randomly. Structured AI is more reliable and ready for real-world use.</p>
                         </div>
                      </div>
 
                      <div className="space-y-8">
-                        <h3 className="text-3xl font-bold text-gray-900 font-infosys-heading italic">I. The Stochastic Barrier</h3>
-                        <p className="text-black/50 text-lg leading-relaxed italic">The primary challenge facing the modern enterprise is the inherent unpredictability of standard AI models. To build at scale, we must introduce "Guard-Rail Architectures" that wrap neural outputs in symbolic logic.</p>
+                        <h3 className="text-3xl font-bold text-gray-900 font-infosys-heading italic">I. The Problem With Unpredictable AI</h3>
+                        <p className="text-black/50 text-lg leading-relaxed italic">The biggest challenge for businesses using AI is that standard AI models can give different answers to the same question. To use AI reliably at scale, companies need systems that produce consistent, predictable results every time.</p>
                         
-                        <h3 className="text-3xl font-bold text-gray-900 font-infosys-heading italic">II. Distributed Intelligence</h3>
-                        <p className="text-black/50 text-lg leading-relaxed italic">Instead of a monolithic central AI, the cognitive enterprise relies on specialized agents orbiting a central "Knowledge Mesh." This ensures data integrity and reduces circular reasoning errors in complex task loops.</p>
+                        <h3 className="text-3xl font-bold text-gray-900 font-infosys-heading italic">II. Smarter AI Through Teamwork</h3>
+                        <p className="text-black/50 text-lg leading-relaxed italic">Instead of one AI trying to do everything, the smarter approach is using multiple specialised AI systems that each handle one job well. This keeps data accurate and makes complex tasks much easier to manage and debug.</p>
                      </div>
 
                      <div className="pt-12 text-center">
@@ -102,7 +102,7 @@ const BlogsFeatured = () => {
                            className="text-black/30 font-bold uppercase tracking-widest text-[10px] flex flex-col items-center gap-4 mx-auto"
                            onClick={() => setIsOpen(false)}
                         >
-                           End of Preview - Close Reader
+                           End of Preview — Close Article
                            <ChevronDown size={20} className="animate-bounce" />
                         </motion.button>
                      </div>

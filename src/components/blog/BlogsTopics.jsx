@@ -22,11 +22,11 @@ const Counter = ({ value }) => {
 };
 
 const topics = [
-  { name: 'Cloud Native', count: 24, icon: <img src={cloudTopicIcon} alt="Cloud" className="w-8 h-8 object-contain" /> },
-  { name: 'AI Architecture', count: 18, icon: <Cpu size={24} /> },
-  { name: 'Frontend Labs', count: 32, icon: <Layout size={24} /> },
-  { name: 'Data Fabric', count: 15, icon: <Database size={24} /> },
-  { name: 'Hardened Ops', count: 29, icon: <Shield size={24} /> }
+  { name: 'Cloud Technology', count: 24, icon: <img src={cloudTopicIcon} alt="Cloud" className="w-8 h-8 object-contain" /> },
+  { name: 'Artificial Intelligence', count: 18, icon: <Cpu size={24} /> },
+  { name: 'Frontend Dev', count: 32, icon: <Layout size={24} /> },
+  { name: 'Data Engineering', count: 15, icon: <Database size={24} /> },
+  { name: 'Security & Ops', count: 29, icon: <Shield size={24} /> }
 ];
 
 const BlogsTopics = () => {
@@ -38,10 +38,10 @@ const BlogsTopics = () => {
           whileInView={{ opacity: 1 }}
           className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[10px] mb-8"
         >
-          Explore Jurisdictions
+          Browse Topics
         </motion.span>
         <h3 className="text-3xl md:text-5xl font-bold text-gray-900 mb-16 text-center font-infosys-heading italic">
-          Engineering <span className="text-[#007cc3]">Domain Expertise</span>
+          What We <span className="text-[#007cc3]">Write About</span>
         </h3>
         
         <div className="flex flex-wrap justify-center gap-8 max-w-5xl">

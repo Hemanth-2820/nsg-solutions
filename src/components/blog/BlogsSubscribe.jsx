@@ -33,7 +33,7 @@ const BlogsSubscribe = () => {
             <CheckCircle2 size={20} className="text-green-500 flex-shrink-0" />
             <div>
               <p className="font-bold text-sm uppercase tracking-widest text-green-600">Subscribed!</p>
-              <p className="text-black/40 text-[12px] mt-0.5">You'll receive exclusive engineering intel in your inbox.</p>
+              <p className="text-black/40 text-[12px] mt-0.5">We'll send new articles straight to your inbox.</p>
             </div>
           </motion.div>
         )}
@@ -57,13 +57,13 @@ const BlogsSubscribe = () => {
             whileInView={{ opacity: 1 }}
             className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[10px] mb-8 block"
           >
-            Exclusive Intel
+            Stay Updated
           </motion.span>
           <h3 className="text-4xl md:text-6xl font-bold text-gray-900 mb-8 leading-[1.1] font-infosys-heading italic">
-            Architect The <br /> <span className="text-[#007cc3]">Unobvious</span>
+            Get New Articles <br /> <span className="text-[#007cc3]">In Your Inbox</span>
           </h3>
           <p className="text-black/50 text-xl font-medium leading-relaxed italic">
-            Subscribers receive first-access to our technical whitepapers, architectural deep-dives, and AI methodology reports.
+            Subscribe to receive our latest engineering articles, guides, and technology insights every week.
           </p>
         </div>
 
@@ -74,7 +74,7 @@ const BlogsSubscribe = () => {
               value={email}
               onChange={(e) => { setEmail(e.target.value); setError(''); }}
               onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-              placeholder="Enter your enterprise email..."
+              placeholder="Enter your email address..."
               className="w-full bg-transparent text-gray-900 px-8 py-4 outline-none placeholder:text-black/20 text-sm font-bold uppercase tracking-widest"
             />
             <motion.button
@@ -83,7 +83,7 @@ const BlogsSubscribe = () => {
               onClick={handleSubmit}
               className="w-full sm:w-auto bg-[#007cc3] text-white px-10 py-5 rounded-[1.5rem] font-bold flex items-center justify-center gap-3 transition-all"
             >
-              <span className="uppercase tracking-[0.2em] text-[11px]">Authorize</span>
+              <span className="uppercase tracking-[0.2em] text-[11px]">Subscribe</span>
               <Send size={16} />
             </motion.button>
           </div>
@@ -91,7 +91,7 @@ const BlogsSubscribe = () => {
             <p className="text-red-400 text-[11px] font-semibold uppercase tracking-widest mt-3 pl-4">{error}</p>
           )}
           <div className="flex items-center justify-center lg:justify-start gap-3 mt-6 text-black/30 font-bold uppercase tracking-[0.2em] text-[9px]">
-            <ShieldCheck size={14} className="text-[#007cc3]" /> Encrypted Connection & No Spam Guarantee
+            <ShieldCheck size={14} className="text-[#007cc3]" /> No spam. Unsubscribe anytime.
           </div>
         </div>
       </motion.div>

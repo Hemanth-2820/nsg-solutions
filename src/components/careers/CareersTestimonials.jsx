@@ -8,19 +8,19 @@ import avatar3 from '../../assets/generated/testimonial_avatar_3_1774529482337.p
 
 const testimonials = [
   {
-    quote: "At NSG, we've solved concurrency issues that would stop most teams in their tracks. It's a sanctuary for those who value deterministic results over 'just making it work'.",
+    quote: "I've worked in many companies, but NSG is different. We solve problems here that most teams won't even attempt. And when you solve them, you feel it — because the results matter to real businesses.",
     name: 'Priya Shankar',
     role: 'Principal Systems Lead',
     img: avatar1
   },
   {
-    quote: "The computational resources and the sheer engineering pedigree here are unmatched. We're not just implementing AI; we're redefining its enterprise utility.",
+    quote: "The level of technical depth here is unlike anything I've experienced. We're not just using AI tools — we're building them. And we have the resources and the talent to do it seriously.",
     name: 'Rohan Mehta',
     role: 'Senior AI Architect',
     img: avatar2
   },
   {
-    quote: "Ownership isn't a buzzword here; it's the core. I've had the autonomy to architect cloud infrastructures that power massive global transformations.",
+    quote: "From my very first week, I was trusted to lead a real cloud project. No hand-holding needed — just clear goals and the freedom to figure out the best solution. That level of ownership is rare.",
     name: 'Aisha Morten',
     role: 'Cloud Engineering Head',
     img: avatar3
@@ -37,10 +37,10 @@ const CareersTestimonials = () => {
             whileInView={{ opacity: 1 }}
             className="text-[#007cc3] font-bold uppercase tracking-[0.3em] text-[11px] mb-4 block"
           >
-            Voice of the Team
+            What Our Team Says
           </motion.span>
-          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-infosys-heading italic">Direct From The <span className="text-[#007cc3]">Core</span></h2>
-          <p className="text-black/50 text-xl font-medium max-w-2xl mx-auto italic">"We are defined by the quality of our people and the depth of our puzzles."</p>
+          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-infosys-heading italic">Hear It From People Who <span className="text-[#007cc3]">Work Here</span></h2>
+          <p className="text-black/50 text-xl font-medium max-w-2xl mx-auto italic">Don't take our word for it — here's what engineers at NSG experience every day.</p>
         </div>
         
         <div className="grid md:grid-cols-3 gap-12">
