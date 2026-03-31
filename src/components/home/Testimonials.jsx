@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight, Star } from 'lucide-react';
 
 const staticTestimonials = [
   {
@@ -81,9 +81,14 @@ const TestimonialCard = ({ item }) => {
                     <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold tracking-[0.2em]">
                       {item.company}
                     </p>
-                    <div className="flex gap-0.5">
+                    <div className="flex gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <div key={i} className={`w-1.5 h-1.5 rounded-full ${i < (item.rating || 5) ? 'bg-white' : 'bg-white/10'}`}></div>
+                        <Star 
+                          key={i} 
+                          size={10} 
+                          fill={i < (item.rating || 5) ? "#FFD700" : "transparent"} 
+                          className={i < (item.rating || 5) ? "text-[#FFD700] drop-shadow-[0_0_2px_rgba(255,215,0,0.5)]" : "text-white/10"} 
+                        />
                       ))}
                     </div>
                   </div>
