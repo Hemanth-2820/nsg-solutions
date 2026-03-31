@@ -10,6 +10,14 @@ const ITServices = () => {
   const [itProjects, setItProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const normalizeImg = (img) => {
+    if (!img) return '';
+    if (img.startsWith('http')) return img;
+    let clean = img;
+    if (!clean.startsWith('/')) clean = '/' + clean;
+    return `https://new.nsgsolutions.in${clean}`;
+  }
+
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -120,8 +128,8 @@ const ITServices = () => {
                 onClick={() => navigate(`/solutions/itservices/register/${project.title.replace(/[\s/]+/g, '-').toLowerCase()}`)}
                 className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-2xl cursor-pointer transition-all duration-300 group border border-gray-100 flex flex-col items-center"
               >
-              <div className="relative w-full h-64 overflow-hidden">
-                <img src={project.img} alt={project.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
+              <div className="relative w-full h-64 overflow-hidden text-center">
+                <img src={normalizeImg(project.img)} alt={project.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
               </div>
               <div className="p-8 flex-grow flex flex-col">
@@ -171,7 +179,7 @@ const ITServices = () => {
                 <>
                   {/* Modal Image Half */}
                   <div className="w-full md:w-2/5 min-h-[300px] md:min-h-full relative overflow-hidden bg-gray-100 flex items-center justify-center">
-                    <img src={selectedProject.img} alt={selectedProject.title} className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={normalizeImg(selectedProject.img)} alt={selectedProject.title} className="absolute inset-0 w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-r from-[#0a0e27]/40 to-transparent"></div>
                     <div className="absolute bottom-10 left-10 z-10">
                       <span className="bg-[#1baade] text-white px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-xl">Deliverable</span>
