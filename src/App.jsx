@@ -51,7 +51,7 @@ function App() {
     <>
       <ScrollToTop />
       <Toaster position="top-right" />
-      <div className={`flex flex-col min-h-screen font-sans ${isAdminRoute ? 'bg-[#0f172a]' : 'bg-[#B3EBF2]'}`}>
+      <div className={`flex flex-col min-h-screen font-sans ${isAdminRoute ? 'bg-[#0f172a]' : 'bg-white'}`}>
         {!isAdminRoute && <Navbar />}
         <main className="flex-grow">
           {/* Main application routing configuration */}
@@ -66,10 +66,10 @@ function App() {
             <Route path="/careers/apply/:role" element={<CareersApplyPage />} />
             <Route path="/client-login" element={<ClientLoginPage />} />
             <Route path="/submit-review" element={<SubmitReviewPage />} />
-            
+
             <Route path="/admin-portal" element={<AdminDashboard />} />
             <Route path="/admin-login" element={<AdminLoginPage />} />
-            
+
             <Route path="/blog/*" element={<BlogPage />} />
 
             {/* Solution sub-pages */}
@@ -78,16 +78,16 @@ function App() {
             <Route path="/solutions/digitalmarketing" element={<DigitalMarketing />} />
             <Route path="/solutions/publishing" element={<Publishing />} />
             <Route path="/solutions/branding" element={<BrandingDesign />} />
-            
+
             <Route path="/solutions/:service/register/:project" element={<SolutionInquiryPage />} />
-            
+
             {/* Catch-all route to handle 404s cleanly */}
             <Route path="*" element={
-                <div className="bg-[#B3EBF2] flex flex-col items-center justify-center min-h-[60vh] text-center p-10">
-                    <h1 className="text-8xl font-black text-slate-100 mb-4 opacity-10 italic">404</h1>
-                    <p className="text-xl font-bold uppercase tracking-widest text-slate-400">Node Not Found</p>
-                    <a href="/" className="mt-8 px-8 py-3 bg-[#007cc3] text-white rounded-full font-bold uppercase tracking-widest text-xs">Return to Main Terminal</a>
-                </div>
+              <div className="bg-[#B3EBF2] flex flex-col items-center justify-center min-h-[60vh] text-center p-10">
+                <h1 className="text-8xl font-black text-slate-100 mb-4 opacity-10 italic">404</h1>
+                <p className="text-xl font-bold uppercase tracking-widest text-slate-400">Node Not Found</p>
+                <a href="/" className="mt-8 px-8 py-3 bg-[#007cc3] text-white rounded-full font-bold uppercase tracking-widest text-xs">Return to Main Terminal</a>
+              </div>
             } />
           </Routes>
         </main>

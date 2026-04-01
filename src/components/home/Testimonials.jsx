@@ -83,11 +83,11 @@ const TestimonialCard = ({ item }) => {
                     </p>
                     <div className="flex gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <Star 
-                          key={i} 
-                          size={10} 
-                          fill={i < (item.rating || 5) ? "#FFD700" : "transparent"} 
-                          className={i < (item.rating || 5) ? "text-[#FFD700] drop-shadow-[0_0_2px_rgba(255,215,0,0.5)]" : "text-white/10"} 
+                        <Star
+                          key={i}
+                          size={10}
+                          fill={i < (item.rating || 5) ? "#FFD700" : "transparent"}
+                          className={i < (item.rating || 5) ? "text-[#FFD700] drop-shadow-[0_0_2px_rgba(255,215,0,0.5)]" : "text-white/10"}
                         />
                       ))}
                     </div>

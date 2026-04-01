@@ -151,15 +151,15 @@ const AdminDashboard = () => {
     const handleSaveBlog = async (e) => {
         e.preventDefault();
         const endpoint = isEditingBlog ? '/api/admin/update_blog.php' : '/api/admin/create_blog.php';
-        
+
         try {
             const formData = new FormData();
-            
+
             // Append current blog fields
             Object.keys(currentBlog).forEach(key => {
                 formData.append(key, currentBlog[key]);
             });
-            
+
             // Append binary file if selected
             if (blogImageFile) {
                 formData.append('imageFile', blogImageFile);
@@ -169,7 +169,7 @@ const AdminDashboard = () => {
                 method: 'POST',
                 body: formData
             });
-            
+
             const result = await res.json();
             if (result.status === 'success') {
                 showToast(isEditingBlog ? 'Insight Updated!' : 'Insight Published!', 'success');
@@ -180,8 +180,8 @@ const AdminDashboard = () => {
             } else {
                 showToast(result.message || 'Action failed', 'error');
             }
-        } catch (err) { 
-            showToast('Sync error with server', 'error'); 
+        } catch (err) {
+            showToast('Sync error with server', 'error');
         }
     }
 
@@ -247,7 +247,7 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             const formData = new FormData();
-            
+
             // Append current solution fields
             Object.keys(currentSolution).forEach(key => {
                 // Normalize features (expecting array or string)
@@ -257,7 +257,7 @@ const AdminDashboard = () => {
                     formData.append(key, currentSolution[key]);
                 }
             });
-            
+
             // Append binary file if selected
             if (solutionImageFile) {
                 formData.append('imageFile', solutionImageFile);
@@ -278,8 +278,8 @@ const AdminDashboard = () => {
             } else {
                 showToast(result.message || 'Action failed', 'error');
             }
-        } catch (err) { 
-            showToast('Sync fail with Nexus server', 'error'); 
+        } catch (err) {
+            showToast('Sync fail with Nexus server', 'error');
         }
     }
 
@@ -303,12 +303,12 @@ const AdminDashboard = () => {
         e.preventDefault();
         try {
             const formData = new FormData();
-            
+
             // Append current highlight fields
             Object.keys(currentHighlight).forEach(key => {
                 formData.append(key, currentHighlight[key]);
             });
-            
+
             // Append binary file if selected
             if (highlightImageFile) {
                 formData.append('imageFile', highlightImageFile);
@@ -329,8 +329,8 @@ const AdminDashboard = () => {
             } else {
                 showToast(result.message || 'Action failed', 'error');
             }
-        } catch (err) { 
-            showToast('Sync error with Highlight engine', 'error'); 
+        } catch (err) {
+            showToast('Sync error with Highlight engine', 'error');
         }
     }
 
@@ -608,9 +608,9 @@ const AdminDashboard = () => {
                         <motion.div key="blogs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="w-full max-w-full overflow-hidden">
                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10 px-4 sm:px-0">
                                 <h2 className="text-3xl font-black uppercase italic tracking-tighter">Insight Flow</h2>
-                                <button onClick={() => { 
-                                    setIsEditingBlog(false); 
-                                    setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' }); 
+                                <button onClick={() => {
+                                    setIsEditingBlog(false);
+                                    setCurrentBlog({ title: '', tag: '', description: '', content: '', image: '', time_to_read: '' });
                                     document.getElementById('blog-form')?.scrollIntoView({ behavior: 'smooth' });
                                 }} className="w-full sm:w-auto bg-[#007cc3] text-white px-8 py-5 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95 shadow-blue-500/10"><Plus size={18} /> New Publication</button>
                             </div>
@@ -634,7 +634,7 @@ const AdminDashboard = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/5">
                                                     <button onClick={() => { setIsEditingBlog(true); setCurrentBlog(blog); }} className="h-14 flex items-center justify-center gap-3 bg-white/5 hover:bg-[#007cc3] text-white/60 hover:text-white rounded-2xl transition-all font-black uppercase text-[10px] tracking-widest shadow-xl border border-white/5">
                                                         <Edit2 size={16} /> Edit
@@ -671,14 +671,14 @@ const AdminDashboard = () => {
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Visual Asset (Image File)</label>
                                                 <div className="relative group/upload">
-                                                    <input 
-                                                        type="file" 
+                                                    <input
+                                                        type="file"
                                                         accept="image/*"
                                                         onChange={e => setBlogImageFile(e.target.files[0])}
-                                                        className="hidden" 
-                                                        id="blog-image-upload" 
+                                                        className="hidden"
+                                                        id="blog-image-upload"
                                                     />
-                                                    <label 
+                                                    <label
                                                         htmlFor="blog-image-upload"
                                                         className={`w-full flex items-center gap-4 bg-black/20 border border-white/10 rounded-2xl px-6 py-4 text-sm cursor-pointer hover:border-[#007cc3] transition-all ${blogImageFile ? 'bg-[#007cc3]/10 border-[#007cc3]' : ''}`}
                                                     >
@@ -748,14 +748,14 @@ const AdminDashboard = () => {
                                         <div className="space-y-1">
                                             <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Project Thumbnail (Image)</label>
                                             <div className="relative group/solution">
-                                                <input 
-                                                    type="file" 
+                                                <input
+                                                    type="file"
                                                     accept="image/*"
                                                     onChange={e => setSolutionImageFile(e.target.files[0])}
-                                                    className="hidden" 
-                                                    id="solution-image-upload" 
+                                                    className="hidden"
+                                                    id="solution-image-upload"
                                                 />
-                                                <label 
+                                                <label
                                                     htmlFor="solution-image-upload"
                                                     className={`w-full flex items-center gap-4 bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm cursor-pointer hover:border-[#007cc3] transition-all ${solutionImageFile ? 'bg-[#007cc3]/10 border-[#007cc3]' : ''}`}
                                                 >
@@ -852,14 +852,14 @@ const AdminDashboard = () => {
                                         <div className="space-y-1">
                                             <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-[0.2em]">Cover Asset (Image)</label>
                                             <div className="relative group/highlight">
-                                                <input 
-                                                    type="file" 
+                                                <input
+                                                    type="file"
                                                     accept="image/*"
                                                     onChange={e => setHighlightImageFile(e.target.files[0])}
-                                                    className="hidden" 
-                                                    id="highlight-image-upload" 
+                                                    className="hidden"
+                                                    id="highlight-image-upload"
                                                 />
-                                                <label 
+                                                <label
                                                     htmlFor="highlight-image-upload"
                                                     className={`w-full flex items-center gap-4 bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm cursor-pointer hover:border-[#007cc3] transition-all ${highlightImageFile ? 'bg-[#007cc3]/10 border-[#007cc3]' : ''}`}
                                                 >

@@ -5,19 +5,35 @@ import { motion } from 'framer-motion';
 import LeadershipSection from '../components/about/LeadershipSection';
 import TeamSection from '../components/about/TeamSection';
 import OfficeGallery from '../components/about/OfficeGallery';
+import aboutbgImage from '../assets/about-bgImage.png';
 
 const InnerPageHero = ({ title, subtitle, bgImage }) => (
-  <section className="relative w-full min-h-[400px] md:h-[600px] flex items-center bg-[#111] py-20">
-    <div className="absolute inset-0 z-0 opacity-50">
-      <img src={bgImage} alt="Hero" className="w-full h-full object-cover grayscale mix-blend-overlay" />
+  <section className="relative w-full min-h-[500px] md:h-[700px] flex items-center bg-[#111] pt-[100px]">
+
+    <div className="absolute inset-0 z-0">
+      <img
+        src={bgImage}
+        alt="Hero"
+        className="w-full h-full object-cover object-center"
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent"></div>
     </div>
-    <div className="max-w-[1400px] mx-auto px-6 w-full pt-20 md:pt-32 relative z-10 font-sans">
-      <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] font-extrabold text-white leading-[1.05] tracking-tight mb-6 mt-10">
-        {title}
-      </h1>
-      <p className="border-l-[3px] border-[#007cc3] pl-6 text-white text-[1.1rem] md:text-[1.4rem] font-light max-w-2xl leading-relaxed opacity-90">
-        {subtitle}
-      </p>
+
+    <div className="max-w-[1400px] mx-auto px-6 w-full relative z-10 font-sans">
+
+      <div className="pl-2 md:pl-4">
+
+        <h1 className="text-[2.5rem] sm:text-[3.5rem] md:text-[5rem] font-extrabold text-white mb-8 drop-shadow-[0_6px_30px_rgba(0,0,0,1)]">
+          {title}
+        </h1>
+
+        <p className="border-l-[3px] border-[#00a3ff] pl-6 text-white text-[1.1rem] md:text-[1.4rem] font-medium leading-relaxed drop-shadow-[0_4px_20px_rgba(0,0,0,1)] max-w-lg">
+          {subtitle}
+        </p>
+
+      </div>
+
     </div>
   </section>
 );
@@ -51,7 +67,7 @@ const AboutPage = () => {
       <InnerPageHero
         title="Who We Are"
         subtitle="We navigate global enterprises through their digital transformation. Driven by innovation, engineered perfectly."
-        bgImage="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&q=80"
+        bgImage={aboutbgImage}
       />
 
       <section className="py-24">
@@ -184,7 +200,7 @@ const AboutPage = () => {
       {/* Placeholders handled by the Developer (Rahul) */}
       {/* Leadership Collective Section */}
       <LeadershipSection />
-      
+
       <TeamSection />
       <OfficeGallery />
     </div>

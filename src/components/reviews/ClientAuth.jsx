@@ -17,13 +17,13 @@ export default function ClientAuth() {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('/api/login.php', {
+      const res = await fetch('/api/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, role: 'client' })
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
       if (data.status === 'success') {
         localStorage.setItem('nsg_client_user', JSON.stringify(data.user));
@@ -31,35 +31,8 @@ export default function ClientAuth() {
       } else {
         setMessage({ type: 'error', text: data.message || 'Invalid credentials' });
       }
-    } catch (error) {
-      console.error('Login error:', error);
-      setMessage({ type: 'error', text: 'Server connection failed. If you moved the backend to cPanel, please check your database connection strings.' });
-    }
-  };
-
-  const handleSignupSubmit = async (e) => {
-    e.preventDefault();
-    setMessage({ type: '', text: '' });
-
-    try {
-      const response = await fetch('/api/signup.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName, email, password })
-      });
-
-      const data = await response.json();
-
-      if (data.status === 'success') {
-        setMessage({ type: 'success', text: 'Account created successfully! Please sign in with your new credentials.' });
-        setIsLogin(true);
-        setPassword('');
-      } else {
-        setMessage({ type: 'error', text: data.message || 'Signup failed' });
-      }
-    } catch (error) {
-      console.error('Signup error:', error);
-      setMessage({ type: 'error', text: 'Server connection failed. If you moved the backend to cPanel, please check your database connection strings.' });
+    } catch {
+      setMessage({ type: 'error', text: 'Server error' });
     }
   };
 
@@ -69,198 +42,171 @@ export default function ClientAuth() {
     setPassword('');
   };
 
-  // Animation variants
-  const formVariants = {
-    hidden: { opacity: 0, x: isLogin ? -20 : 20 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } },
-    exit: { opacity: 0, x: isLogin ? 20 : -20, transition: { duration: 0.3 } }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-  };
-
   return (
-    <div className="w-full h-full flex items-center justify-center p-4 sm:p-8 font-sans">
+    <div className="relative w-full min-h-screen flex items-center justify-center px-4 pt-28">
+
+      {/* 🔥 FULL BACKGROUND */}
+      <div className="fixed inset-0 bg-gradient-to-br from-[#E0F2FE] via-white to-[#F8FAFC] -z-10"></div>
+
+      {/* 🔥 CARD */}
       <motion.div
-        className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 bg-[#FFE5D9] rounded-3xl overflow-hidden shadow-2xl border border-gray-200"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
+        className="
+          w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2
+          bg-white/80 backdrop-blur-xl
+          rounded-3xl overflow-hidden
+          shadow-[0_40px_120px_rgba(0,0,0,0.08)]
+          border border-gray-200
+        "
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
       >
-        {/* Left Side: Visual / Brand Area */}
-        <div className="relative hidden lg:block group overflow-hidden bg-black">
-          {/* We use a placeholder premium abstract image or gradient block. In a real scenario, this would be an actual HD image src */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#007cc3]/20 via-[#111] to-[#813388]/20 z-0"></div>
 
-          <div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-out z-0">
-            <img
-              src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80"
-              alt="Corporate Architecture"
-              className="w-full h-full object-cover opacity-40 mix-blend-overlay"
-            />
-          </div>
+        {/* LEFT SIDE */}
+        <div className="relative hidden lg:block bg-black">
+          <img
+            src="https://images.unsplash.com/photo-1557804506-669a67965ba0"
+            className="absolute inset-0 w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-black/40"></div>
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10"></div>
-
-          <div className="relative z-20 h-full flex flex-col justify-end p-12 md:p-16">
-            <div className="flex items-center gap-3 mb-6 mix-blend-screen text-white/50">
-              <Star className="w-6 h-6 fill-[#007cc3] text-[#007cc3]" />
-              <Star className="w-6 h-6 fill-[#007cc3] text-[#007cc3]" />
-              <Star className="w-6 h-6 fill-[#007cc3] text-[#007cc3]" />
-              <Star className="w-6 h-6 fill-[#007cc3] text-[#007cc3]" />
-              <Star className="w-6 h-6 fill-[#007cc3] text-[#007cc3]" />
+          <div className="relative z-10 h-full flex flex-col justify-end p-12">
+            <div className="flex gap-2 mb-6">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="text-[#007cc3] fill-[#007cc3]" />
+              ))}
             </div>
-            <h2 className="font-infosys-heading text-[2.5rem] lg:text-[3rem] text-white leading-tight mb-4">
-              Premium IT <br /> Solutions that <br /> Transform <span className="text-[#5bb8e4]">Business.</span>
+
+            <h2 className="text-4xl text-white font-bold mb-4">
+              Premium IT <br />
+              Solutions that <br />
+              Transform <span className="text-[#5bb8e4]">Business.</span>
             </h2>
-            <p className="text-white/70 max-w-md leading-[1.6]">
-              Access your corporate portal to review services, manage active projects, and unlock new potential for your enterprise.
+
+            <p className="text-white/70">
+              Access your portal to manage projects and services.
             </p>
           </div>
         </div>
 
-        {/* Right Side: Form Area */}
-        <div className="p-8 sm:p-12 md:p-16 flex flex-col justify-center relative bg-transparent">
-          {/* decorative element */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#007cc3]/5 rounded-full blur-3xl rounded-tl-none pointer-events-none"></div>
+        {/* RIGHT SIDE */}
+        <div className="p-8 md:p-12 flex flex-col justify-center">
 
-          <div className="w-full max-w-md mx-auto relative z-10">
-            <h4 className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#007cc3] mb-3 flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4" /> Secure Client Portal
+          <div className="max-w-md mx-auto w-full">
+
+            <h4 className="text-xs uppercase font-bold text-[#007cc3] mb-3 flex items-center gap-2">
+              <ShieldCheck size={16} /> Secure Client Portal
             </h4>
 
             <AnimatePresence mode="wait">
               {isLogin ? (
-                <motion.div key="login" variants={formVariants} initial="hidden" animate="visible" exit="exit">
-                  <h1 className="font-infosys-heading text-[2rem] text-gray-900 mb-2">Welcome Back.</h1>
-                  <p className="text-gray-600 text-sm mb-8 leading-[1.6]">Enter your corporate credentials to access your dashboard.</p>
+                <motion.div key="login">
+                  <h1 className="text-2xl font-bold mb-2">Welcome Back</h1>
+                  <p className="text-gray-500 mb-6">Login to your dashboard</p>
 
-                  <form className="space-y-5" onSubmit={handleLoginSubmit}>
-                    <div className="space-y-4">
-                      <div className="relative group">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#007cc3] transition-colors w-5 h-5" />
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Corporate Email"
-                          className="w-full bg-white/60 border border-gray-300 rounded-xl pl-12 pr-4 py-4 text-gray-900 placeholder-gray-500 focus:border-[#007cc3] focus:ring-1 focus:ring-[#007cc3] outline-none transition-all hover:bg-white"
-                        />
-                      </div>
+                  <form onSubmit={handleLoginSubmit} className="space-y-4">
 
-                      <div className="relative group">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#007cc3] transition-colors w-5 h-5" />
-                        <input
-                          type="password"
-                          required
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Password"
-                          className="w-full bg-white/60 border border-gray-300 rounded-xl pl-12 pr-4 py-4 text-gray-900 placeholder-gray-500 focus:border-[#007cc3] focus:ring-1 focus:ring-[#007cc3] outline-none transition-all hover:bg-white"
-                        />
-                      </div>
+                    {/* EMAIL */}
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-4 text-gray-400" />
+                      <input
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Corporate Email"
+                        className="w-full pl-10 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#007cc3]/20 outline-none"
+                      />
                     </div>
 
-                    <div className="flex items-center justify-between text-sm py-2">
-                      <label className="flex items-center gap-2 cursor-pointer text-gray-600 hover:text-gray-900 transition-colors">
-                        <input type="checkbox" className="w-4 h-4 rounded border-gray-300 bg-white text-[#007cc3] focus:ring-[#007cc3]" />
-                        <span>Remember me</span>
-                      </label>
-                      <button type="button" className="text-[#007cc3] hover:text-[#005a8f] transition-colors font-semibold">Forgot Password?</button>
+                    {/* PASSWORD */}
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-4 text-gray-400" />
+                      <input
+                        type="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        className="w-full pl-10 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#007cc3]/20 outline-none"
+                      />
                     </div>
 
                     {message.text && (
-                      <div className={`text-sm text-center py-2 font-semibold ${message.type === 'error' ? 'text-red-500' : 'text-green-600'}`}>
+                      <p className="text-sm text-center text-red-500">
                         {message.text}
-                      </div>
+                      </p>
                     )}
 
-                    <button className="w-full bg-[#007cc3] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-[12px] hover:bg-[#005a8f] transition-all flex items-center justify-center gap-3">
-                      Sign In to Review Portal <ArrowRight className="w-4 h-4" />
+                    <button className="
+                      w-full py-3 rounded-full text-white font-bold
+                      bg-gradient-to-r from-[#007cc3] to-[#0ea5e9]
+                      hover:scale-105 transition
+                    ">
+                      Sign In <ArrowRight className="inline ml-2" size={16} />
                     </button>
                   </form>
 
-                  <p className="mt-8 text-center text-sm text-gray-600">
-                    Don't have a client account?{' '}
-                    <button onClick={() => toggleMode(false)} className="text-[#007cc3] hover:text-[#005a8f] transition-colors font-bold">
-                      Request Access
+                  <p className="mt-6 text-sm text-center">
+                    Don't have account?{" "}
+                    <button onClick={() => toggleMode(false)} className="text-[#007cc3] font-bold">
+                      Signup
                     </button>
                   </p>
                 </motion.div>
               ) : (
-                <motion.div key="signup" variants={formVariants} initial="hidden" animate="visible" exit="exit">
-                  <h1 className="font-infosys-heading text-[2rem] text-gray-900 mb-2">Create Account.</h1>
-                  <p className="text-gray-600 text-sm mb-8 leading-[1.6]">Partner with us and gain access to our premium suite of solutions.</p>
+                <motion.div key="signup">
+                  <h1 className="text-2xl font-bold mb-2">Create Account</h1>
 
-                  <form className="space-y-5" onSubmit={handleSignupSubmit}>
-                    <div className="space-y-4">
+                  <form className="space-y-4">
 
-                      <div className="relative group">
-                        <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#007cc3] transition-colors w-5 h-5" />
-                        <input
-                          type="text"
-                          required
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          placeholder="Full Name"
-                          className="w-full bg-white/60 border border-gray-300 rounded-xl pl-12 pr-4 py-4 text-gray-900 placeholder-gray-500 focus:border-[#007cc3] focus:ring-1 focus:ring-[#007cc3] outline-none transition-all hover:bg-white"
-                        />
-                      </div>
-
-                      <div className="relative group">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#007cc3] transition-colors w-5 h-5" />
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Corporate Email"
-                          className="w-full bg-white/60 border border-gray-300 rounded-xl pl-12 pr-4 py-4 text-gray-900 placeholder-gray-500 focus:border-[#007cc3] focus:ring-1 focus:ring-[#007cc3] outline-none transition-all hover:bg-white"
-                        />
-                      </div>
-
-                      <div className="relative group">
-                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#007cc3] transition-colors w-5 h-5" />
-                        <input
-                          type="password"
-                          required
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Create Password"
-                          className="w-full bg-white/60 border border-gray-300 rounded-xl pl-12 pr-4 py-4 text-gray-900 placeholder-gray-500 focus:border-[#007cc3] focus:ring-1 focus:ring-[#007cc3] outline-none transition-all hover:bg-white"
-                        />
-                      </div>
+                    <div className="relative">
+                      <User className="absolute left-3 top-4 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        className="w-full pl-10 py-3 rounded-xl border border-gray-200"
+                      />
                     </div>
 
-                    {message.text && (
-                      <div className={`text-sm text-center py-2 font-semibold ${message.type === 'error' ? 'text-red-500' : 'text-green-600'}`}>
-                        {message.text}
-                      </div>
-                    )}
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-4 text-gray-400" />
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        className="w-full pl-10 py-3 rounded-xl border border-gray-200"
+                      />
+                    </div>
 
-                    <button className="w-full bg-[#007cc3] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-[12px] hover:bg-[#005a8f] transition-all flex items-center justify-center gap-3 mt-6">
-                      Create Client Account <ArrowRight className="w-4 h-4" />
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-4 text-gray-400" />
+                      <input
+                        type="password"
+                        placeholder="Password"
+                        className="w-full pl-10 py-3 rounded-xl border border-gray-200"
+                      />
+                    </div>
+
+                    <button className="
+                      w-full py-3 rounded-full text-white font-bold
+                      bg-gradient-to-r from-[#007cc3] to-[#0ea5e9]
+                    ">
+                      Create Account
                     </button>
-
-                    <p className="text-gray-500 text-xs text-center mt-4">
-                      By registering, you agree to our corporate Terms of Service and Privacy Policy.
-                    </p>
                   </form>
 
-                  <p className="mt-8 text-center text-sm text-gray-600">
-                    Already a registered client?{' '}
-                    <button onClick={() => toggleMode(true)} className="text-[#007cc3] hover:text-[#005a8f] transition-colors font-bold">
-                      Sign In
+                  <p className="mt-6 text-sm text-center">
+                    Already have account?{" "}
+                    <button onClick={() => toggleMode(true)} className="text-[#007cc3] font-bold">
+                      Login
                     </button>
                   </p>
                 </motion.div>
               )}
             </AnimatePresence>
+
           </div>
         </div>
+
       </motion.div>
     </div>
   );

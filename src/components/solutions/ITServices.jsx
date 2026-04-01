@@ -128,18 +128,18 @@ const ITServices = () => {
                 onClick={() => navigate(`/solutions/itservices/register/${project.title.replace(/[\s/]+/g, '-').toLowerCase()}`)}
                 className="bg-white rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:shadow-2xl cursor-pointer transition-all duration-300 group border border-gray-100 flex flex-col items-center"
               >
-              <div className="relative w-full h-64 overflow-hidden text-center">
-                <img src={normalizeImg(project.img)} alt={project.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
-              </div>
-              <div className="p-8 flex-grow flex flex-col">
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">{project.title}</h3>
-                <p className="text-gray-600 mb-6 flex-grow">{project.shortDesc}</p>
-                <div className="text-[#007cc3] font-bold tracking-widest text-[11px] uppercase flex items-center gap-2 group-hover:gap-4 transition-all">
-                  Register Inquiry <ArrowRight size={14} strokeWidth={2.5} />
+                <div className="relative w-full h-64 overflow-hidden text-center">
+                  <img src={normalizeImg(project.img)} alt={project.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
                 </div>
-              </div>
-            </motion.div>
+                <div className="p-8 flex-grow flex flex-col">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-3">{project.title}</h3>
+                  <p className="text-gray-600 mb-6 flex-grow">{project.shortDesc}</p>
+                  <div className="text-[#007cc3] font-bold tracking-widest text-[11px] uppercase flex items-center gap-2 group-hover:gap-4 transition-all">
+                    Register Inquiry <ArrowRight size={14} strokeWidth={2.5} />
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
         )}
@@ -157,7 +157,7 @@ const ITServices = () => {
               className="absolute inset-0 bg-[#0a0e27]/90 backdrop-blur-xl cursor-pointer"
             ></motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -171,9 +171,9 @@ const ITServices = () => {
               </button>
 
               {showInquiry ? (
-                <ProjectInquiryForm 
-                  projectName={selectedProject.title} 
-                  onClose={() => { setSelectedProject(null); setShowInquiry(false); }} 
+                <ProjectInquiryForm
+                  projectName={selectedProject.title}
+                  onClose={() => { setSelectedProject(null); setShowInquiry(false); }}
                 />
               ) : (
                 <>

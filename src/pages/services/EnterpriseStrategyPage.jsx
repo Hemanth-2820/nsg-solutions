@@ -4,77 +4,111 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Briefcase, TrendingUp, Brain } from 'lucide-react';
 
 const subServices = [
-  { name: "Corporate Consulting", icon: Briefcase, color: "from-[#007cc3] to-cyan-500" },
-  { name: "Business Modeling", icon: TrendingUp, color: "from-purple-600 to-indigo-600" },
-  { name: "Strategic Transformation", icon: Brain, color: "from-emerald-600 to-teal-500" }
+  { name: "Corporate Consulting", icon: Briefcase },
+  { name: "Business Modeling", icon: TrendingUp },
+  { name: "Strategic Transformation", icon: Brain }
 ];
 
 const EnterpriseStrategyPage = () => (
-  <div className="min-h-screen bg-service-vibrant font-sans overflow-x-hidden pt-32 pb-20">
-    <div className="max-w-[1500px] mx-auto px-6 lg:px-12">
-      <Link
-        to="/services"
-        className="mb-8 inline-flex items-center gap-2 text-[#007cc3] font-black text-xs uppercase tracking-widest hover:-translate-x-2 transition-transform duration-300"
-      >
-        <ArrowLeft size={14} /> Back to Services
-      </Link>
+  <div className="min-h-screen font-sans overflow-x-hidden bg-gradient-to-br from-[#F8FAFC] to-[#E0F2FE]">
 
-      <div className="mb-20">
-        <h1 className="text-5xl md:text-7xl font-black text-[#0a0e27] mb-6 tracking-tight italic">
+    {/* HERO */}
+    <section className="pt-32 pb-20 relative">
+
+      {/* Soft corporate glow */}
+      <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-slate-300 blur-[120px] opacity-30"></div>
+
+      <div className="max-w-[1400px] mx-auto px-6">
+
+        <Link
+          to="/services"
+          className="mb-8 inline-flex items-center gap-2 text-[#007cc3] font-bold text-xs uppercase tracking-widest hover:-translate-x-1 transition"
+        >
+          <ArrowLeft size={14} /> Back to Services
+        </Link>
+
+        <h1 className="text-[3rem] md:text-[4.5rem] font-extrabold text-[#0f172a] mb-6 tracking-tight">
           Enterprise Strategy
         </h1>
-        <div className="w-24 h-1.5 bg-[#007cc3] rounded-full mb-8"></div>
-        <p className="text-[#0a0e27]/60 text-xl font-light max-w-3xl leading-relaxed">
-          Corporate business architecture & consulting — designed to architect, transform, and future-proof your enterprise.
+
+        <div className="w-24 h-[3px] bg-gradient-to-r from-[#007cc3] to-[#60a5fa] mb-8"></div>
+
+        <p className="text-[#475569] text-[1.2rem] max-w-2xl border-l-[4px] border-[#007cc3] pl-6 leading-relaxed">
+          Corporate business architecture & consulting — designed to architect,
+          transform, and future-proof your enterprise.
         </p>
+
       </div>
+    </section>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-        {subServices.map((item, i) => {
-          const Icon = item.icon;
-          return (
-            <motion.div
-              key={i}
-              whileHover={{ scale: 1.05, y: -12 }}
-              className={`
-                group relative h-[250px]
-                rounded-[2.5rem] flex flex-col items-center justify-center text-center
-                bg-gradient-to-br ${item.color}
-                transition-all duration-700
-                shadow-[0_20px_50px_rgba(0,0,0,0.15)]
-                cursor-pointer overflow-hidden
-              `}
-            >
-              <div className="absolute inset-0 opacity-20 mix-blend-soft-light pointer-events-none group-hover:scale-110 transition-transform duration-[2s]">
-                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <pattern id={`hex-strat-${i}`} width="30" height="50" patternUnits="userSpaceOnUse">
-                      <path d="M15 0L30 8.5V25.5L15 34L0 25.5V8.5L15 0Z" fill="none" stroke="white" strokeWidth="0.5" />
-                    </pattern>
-                  </defs>
-                  <rect width="100%" height="100%" fill={`url(#hex-strat-${i})`} />
-                </svg>
-              </div>
+    {/* SERVICES GRID */}
+    <section className="pb-20">
+      <div className="max-w-[1400px] mx-auto px-6">
 
-              <div className="relative z-10 mb-6 p-6 bg-[#f1f5f9]/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-xl group-hover:rotate-[360deg] transition-transform duration-700">
-                <Icon size={42} className="text-[#0a0e27]" />
-              </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-              <h4 className="relative z-10 text-[1.4rem] font-black text-[#0a0e27] px-8 tracking-tight leading-tight group-hover:scale-110 transition-transform duration-500">
-                {item.name}
-              </h4>
+          {subServices.map((item, i) => {
+            const Icon = item.icon;
 
-              <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#f1f5f9]/10 blur-2xl rounded-full group-hover:bg-[#f1f5f9]/30 transition-all duration-500"></div>
-            </motion.div>
-          );
-        })}
+            const cardStyles = [
+              "bg-gradient-to-br from-slate-100 to-slate-50 border-slate-200",
+              "bg-gradient-to-br from-blue-100 to-blue-50 border-blue-200",
+              "bg-gradient-to-br from-indigo-100 to-indigo-50 border-indigo-200"
+            ];
+
+            const iconStyles = [
+              "bg-slate-700 text-white",
+              "bg-blue-600 text-white",
+              "bg-indigo-600 text-white"
+            ];
+
+            const hoverGlow = [
+              "hover:shadow-slate-300/50",
+              "hover:shadow-blue-300/50",
+              "hover:shadow-indigo-300/50"
+            ];
+
+            return (
+              <motion.div
+                key={i}
+                whileHover={{ y: -10, scale: 1.03 }}
+                className={`
+                  group relative h-[220px] rounded-2xl flex flex-col items-center justify-center text-center
+                  border shadow-md
+                  transition-all duration-500 cursor-pointer
+                  ${cardStyles[i % 3]} ${hoverGlow[i % 3]}
+                `}
+              >
+
+                {/* Glow */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 bg-white/30 blur-2xl"></div>
+
+                {/* ICON */}
+                <div className={`
+                  relative z-10 mb-5 p-5 rounded-xl transition group-hover:scale-110
+                  ${iconStyles[i % 3]}
+                `}>
+                  <Icon size={30} />
+                </div>
+
+                {/* TITLE */}
+                <h4 className="relative z-10 text-[1.2rem] font-bold text-[#0f172a] group-hover:text-black transition">
+                  {item.name}
+                </h4>
+
+                {/* Bottom Accent */}
+                <div className="absolute bottom-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#007cc3] to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+
+              </motion.div>
+            );
+          })}
+
+        </div>
+
       </div>
-    </div>
+    </section>
+
   </div>
 );
 
 export default EnterpriseStrategyPage;
-
-
-
-

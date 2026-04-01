@@ -4,14 +4,14 @@ import { motion, useInView, useSpring, useTransform } from 'framer-motion';
 const Counter = ({ value, duration = 3 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  
+
   const spring = useSpring(0, {
     mass: 1,
     stiffness: 80, // Slightly slower, more deliberate for "MNC" feel
     damping: 30,
   });
 
-  const display = useTransform(spring, (current) => 
+  const display = useTransform(spring, (current) =>
     Math.round(current).toLocaleString()
   );
 
@@ -25,10 +25,10 @@ const Counter = ({ value, duration = 3 }) => {
 };
 
 const stats = [
-  { 
-    num: 50, 
+  {
+    num: 50,
     suffix: "+",
-    label: "CLIENTS", 
+    label: "CLIENTS",
     color: "bg-[#a35e00]", // Brownish Orange
     icon: (
       <svg width="100" height="100" viewBox="0 0 100 100" className="absolute bottom-4 right-4 opacity-20 text-white fill-none stroke-current stroke-[2px]">
@@ -38,10 +38,10 @@ const stats = [
       </svg>
     )
   },
-  { 
-    num: 200, 
+  {
+    num: 200,
     suffix: "+",
-    label: "PROJECTS", 
+    label: "PROJECTS",
     color: "bg-[#0069b4]", // Corporate Blue
     icon: (
       <svg width="100" height="100" viewBox="0 0 100 100" className="absolute bottom-4 right-4 opacity-20 text-white fill-none stroke-current stroke-[2px]">
@@ -52,10 +52,10 @@ const stats = [
       </svg>
     )
   },
-  { 
-    num: 15, 
+  {
+    num: 15,
     suffix: "+",
-    label: "YEARS EXP.", 
+    label: "YEARS EXP.",
     color: "bg-[#007b5d]", // Deep Teal
     icon: (
       <svg width="100" height="100" viewBox="0 0 100 100" className="absolute bottom-4 right-4 opacity-20 text-white fill-none stroke-current stroke-[2px]">
@@ -65,10 +65,10 @@ const stats = [
       </svg>
     )
   },
-  { 
-    num: 95, 
+  {
+    num: 95,
     suffix: "%",
-    label: "SATISFACTION", 
+    label: "SATISFACTION",
     color: "bg-[#c1391d]", // Terracotta Red
     icon: (
       <svg width="100" height="100" viewBox="0 0 100 100" className="absolute bottom-4 right-4 opacity-20 text-white fill-none stroke-current stroke-[2px]">
