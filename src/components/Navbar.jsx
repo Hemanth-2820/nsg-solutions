@@ -33,7 +33,7 @@ const Navbar = () => {
     { name: 'Video Production', path: '/services/creative' },
     { name: 'Digital Marketing', path: '/services/marketing' },
     { name: 'Publishing Solutions', path: 'https://nsgpublishers.com', external: true },
-    { name: 'Branding & Design', path: '/solutions/branding' },
+    { name: 'Branding & Design', path: '/services/branding' },
     { name: 'Enterprise Strategy', path: '/services/enterprise' }
   ]);
 
@@ -52,7 +52,7 @@ const Navbar = () => {
             if (m.category_key === 'itservices') path = '/services/it';
             else if (m.category_key === 'videoproduction') path = '/services/creative';
             else if (m.category_key === 'digitalmarketing') path = '/services/marketing';
-            else if (m.category_key === 'branding') path = '/solutions/branding';
+            else if (m.category_key === 'branding') path = '/services/branding';
             else if (m.category_key === 'publishing') {
               path = 'https://nsgpublishers.com';
               external = true;

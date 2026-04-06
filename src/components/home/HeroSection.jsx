@@ -183,12 +183,18 @@ const HeroSection = () => {
               </div>
 
               {/* Bold Typography Title - Sleek & Compact */}
-              <h1 className="text-[2.2rem] sm:text-[2.8rem] md:text-[3.8rem] lg:text-[3.5rem] xl:text-[4.5rem] font-extrabold text-white leading-[1.1] md:leading-[0.95] tracking-tighter mb-10 md:mb-12">
-                {slides[currentSlide].title.split(' ').map((word, index) => (
-                  <span key={index} className={slides[currentSlide].highlight.includes(word) ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-blue-600 block sm:inline" : "inline-block mr-2 md:mr-4"}>
-                    {word}{' '}
-                  </span>
-                ))}
+              <h1 className="text-[1.8rem] sm:text-[2.5rem] md:text-[3.8rem] lg:text-[3.5rem] xl:text-[4.5rem] font-black text-white leading-tight md:leading-[0.95] tracking-tighter mb-8 md:mb-12">
+                {slides[currentSlide].title.split(' ').map((word, index) => {
+                  const isHighlight = slides[currentSlide].highlight.includes(word);
+                  return (
+                    <span 
+                      key={index} 
+                      className={`inline-block mr-2 md:mr-4 ${isHighlight ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-blue-600" : "text-white"}`}
+                    >
+                      {word}
+                    </span>
+                  );
+                })}
               </h1>
             </motion.div>
           </AnimatePresence>
