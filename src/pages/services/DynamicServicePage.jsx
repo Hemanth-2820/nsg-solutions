@@ -104,7 +104,7 @@ const DynamicServicePage = () => {
             <ArrowLeft size={14} /> Back to Services
           </Link>
 
-          <h1 className="text-[3rem] md:text-[4.5rem] font-extrabold text-[#0f172a] mb-6 tracking-tight uppercase italic leading-tight">
+          <h1 className="text-[3rem] md:text-[4.5rem] font-extrabold text-[#0f172a] mb-6 tracking-tight">
             {mainService?.title || 'Service Sector'}
           </h1>
 
