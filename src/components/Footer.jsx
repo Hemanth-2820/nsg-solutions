@@ -46,14 +46,19 @@ const Footer = () => {
             <h4 className="text-[12px] font-black mb-8 text-gray-500 uppercase tracking-[0.2em]">Our Services</h4>
             <ul className="space-y-4 font-bold text-sm">
               {[
-                { name: 'IT Services', path: '/services?service=it' },
-                { name: 'Video Production', path: '/services?service=creative' },
-                { name: 'Digital Marketing', path: '/services?service=marketing' },
-                { name: 'Publishing Solutions', path: '/services?service=publishing' },
-                { name: 'Enterprise Strategy', path: '/services?service=enterprise' }
+                { name: 'IT Services', path: '/services/it' },
+                { name: 'Video Production', path: '/services/creative' },
+                { name: 'Digital Marketing', path: '/services/marketing' },
+                { name: 'Branding & Design', path: '/services/branding' },
+                { name: 'Publishing Solutions', path: 'https://nsgpublishers.com', external: true },
+                { name: 'Enterprise Strategy', path: '/services/enterprise' }
               ].map((service) => (
                 <li key={service.name} className="flex items-center text-infosys-dark hover:text-[#007cc3] cursor-pointer transition-all duration-300">
-                  <Link to={service.path}>{service.name}</Link>
+                  {service.external ? (
+                    <a href={service.path} target="_blank" rel="noopener noreferrer">{service.name}</a>
+                  ) : (
+                    <Link to={service.path}>{service.name}</Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -63,14 +68,12 @@ const Footer = () => {
             <h4 className="text-[12px] font-black mb-8 text-gray-500 uppercase tracking-[0.2em]">Quick Links</h4>
             <ul className="space-y-4 font-bold text-sm">
               {[
-                'Global Locations',
-                'Leadership Team',
-                'Client Stories',
-                'Newsroom',
-                'Sustainability'
+                { name: 'Client Login', path: '/client-login' },
+                { name: 'Privacy Policy', path: '#' },
+                { name: 'Support', path: '/contact' }
               ].map((item) => (
-                <li key={item} className="text-infosys-dark hover:text-[#007cc3] cursor-pointer transition-all duration-300">
-                  {item}
+                <li key={item.name} className="text-infosys-dark hover:text-[#007cc3] cursor-pointer transition-all duration-300">
+                  <Link to={item.path}>{item.name}</Link>
                 </li>
               ))}
             </ul>

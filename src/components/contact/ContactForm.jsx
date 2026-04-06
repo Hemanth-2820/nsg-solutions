@@ -40,7 +40,7 @@ const ContactForm = () => {
                     <MapPin size={18} className="text-[#5bb8e4]" />
                   </div>
                   <p className="font-light text-[#cbd5e1] leading-relaxed">
-                    Bengaluru, India 
+                    Bengaluru, India
                   </p>
                 </div>
 
@@ -60,23 +60,18 @@ const ContactForm = () => {
 
                 {/* Embedded Map Section */}
                 <div className="mt-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl h-[180px] md:h-[250px]">
-                  <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15555.22818958226!2d77.63666065541991!3d12.913702200000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae148d390a183f%3A0x67340cf3534d4077!2sHSR%20Layout%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1711728100000!5m2!1sen!2sin" 
-                    width="100%" 
-                    height="100%" 
-                    style={{ border: 0 }} 
-                    allowFullScreen="" 
-                    loading="lazy" 
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15555.22818958226!2d77.63666065541991!3d12.913702200000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae148d390a183f%3A0x67340cf3534d4077!2sHSR%20Layout%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1711728100000!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                   ></iframe>
                 </div>
 
-                <div className="flex items-center gap-5 pt-4">
-                  <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
-                    <Mail size={18} className="text-[#5bb8e4]" />
-                  </div>
-                  <p className="font-light text-[#cbd5e1]">connect@nsgsolutions.in</p>
-                </div>
+
               </div>
             </div>
 
@@ -135,7 +130,7 @@ const ContactForm = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                     {[
                       { id: 'firstName', label: 'First Name', type: 'text' },
-                      { id: 'lastName',  label: 'Last Name',  type: 'text' },
+                      { id: 'lastName', label: 'Last Name', type: 'text' },
                     ].map(({ id, label, type }) => (
                       <div key={id} className="relative">
                         <input
@@ -154,7 +149,7 @@ const ContactForm = () => {
                   </div>
 
                   {[
-                    { id: 'email',   label: 'Business Email',        type: 'email' },
+                    { id: 'email', label: 'Business Email', type: 'email' },
                     { id: 'company', label: 'Company / Organization', type: 'text', required: false },
                   ].map(({ id, label, type, required = true }) => (
                     <div key={id} className="relative">

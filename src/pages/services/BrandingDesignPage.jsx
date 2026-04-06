@@ -40,7 +40,9 @@ const BrandingDesignPage = () => {
   }, []);
 
   const getDynamicIcon = (iconName) => {
-    const Icon = LucideIcons[iconName] || LucideIcons.Palette;
+    if (!iconName) return <LucideIcons.Palette size={30} />;
+    const pascalName = iconName.split(/[-_\s]+/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('');
+    const Icon = LucideIcons[pascalName] || LucideIcons[iconName] || LucideIcons.Palette;
     return <Icon size={30} />;
   };
 
@@ -111,14 +113,10 @@ const BrandingDesignPage = () => {
                   <motion.div
                     key={item.id || i}
                     whileHover={{ y: -12, scale: 1.04 }}
-                    onClick={() => {
-                        const slug = item.title.replace(/[\s/]+/g, '-').toLowerCase();
-                        navigate(`/solutions/branding/register/${slug}`);
-                    }}
                     className={`
                       group relative h-[230px] rounded-2xl flex flex-col items-center justify-center text-center
                       border shadow-md
-                      transition-all duration-500 cursor-pointer
+                      transition-all duration-500
                       ${cardStyles[styleIdx]} ${hoverGlow[styleIdx]}
                     `}
                   >
