@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { Target, Flag, Users, Activity, CheckCircle2, ShieldCheck } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Target, Flag, Users, Activity, CheckCircle2, ShieldCheck, Rocket, Zap, Globe, Layers, ArrowRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { motion } from 'framer-motion';
 import LeadershipSection from '../components/about/LeadershipSection';
@@ -197,7 +197,7 @@ const AboutPage = () => {
         </div>
 
         {/* Motto Section */}
-        <div className="max-w-6xl mx-auto px-6 mt-16 font-sans">
+        <div className="max-w-6xl mx-auto px-6 mt-16 font-sans pb-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -208,21 +208,107 @@ const AboutPage = () => {
             {/* Ambient Atmosphere Blobs */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 pointer-events-none" />
-            
+
             <span className="relative z-10 text-[#00a3ff] font-black tracking-[0.6em] uppercase text-[10px] mb-8 block drop-shadow-lg">
               Our Motto
             </span>
-            
+
             <h2 className="relative z-10 text-4xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">
               Innovate. Build. <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00a3ff] to-[#60a5fa] drop-shadow-sm">Grow.</span>
             </h2>
-            
+
             <div className="relative z-10 flex justify-center gap-6 mt-10">
               <div className="h-1.5 w-16 bg-[#007cc3] rounded-full" />
               <div className="h-1.5 w-16 bg-[#4f46e5] rounded-full" />
               <div className="h-1.5 w-16 bg-[#00a3ff] rounded-full" />
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Corporate Summary Section (Why Choose Us / Strength / Future) */}
+      <section className="py-24 bg-white border-b border-gray-100 font-sans">
+        <div className="max-w-[1400px] mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+
+            {/* Why Choose Us */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="p-10 bg-gradient-to-br from-[#007cc3] to-[#00a3ff] rounded-[2.5rem] shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-white/10"
+            >
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-[#007cc3] mb-10 shadow-lg">
+                <Zap size={32} />
+              </div>
+              <h3 className="text-2xl font-black text-white mb-8 uppercase tracking-tighter">Why Choose Us</h3>
+              <ul className="space-y-5">
+                {[
+                  'End-to-end services under one roof',
+                  'Cost-effective & scalable solutions',
+                  'Client-focused approach',
+                  'Innovative and modern technology'
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-4 text-blue-50 font-bold text-sm tracking-tight border-l-4 border-white/40 pl-4">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* Our Strength */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="p-10 bg-gradient-to-br from-[#1e1b4b] to-[#312e81] rounded-[2.5rem] shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-white/10"
+            >
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-indigo-700 mb-10 shadow-lg">
+                <Rocket size={32} />
+              </div>
+              <h3 className="text-2xl font-black text-white mb-8 uppercase tracking-tighter">Our Strength</h3>
+              <ul className="space-y-5">
+                {[
+                  'Multi-domain expertise',
+                  'Real-time project execution',
+                  'Fast delivery with quality',
+                  'Strong support & maintenance'
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-4 text-indigo-50 font-bold text-sm tracking-tight border-l-4 border-white/40 pl-4">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* Future Goals */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="p-10 bg-gradient-to-br from-[#059669] to-[#10b981] rounded-[2.5rem] shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-white/10"
+            >
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-emerald-700 mb-10 shadow-lg">
+                <Globe size={32} />
+              </div>
+              <h3 className="text-2xl font-black text-white mb-8 uppercase tracking-tighter">Future Goals</h3>
+              <ul className="space-y-5">
+                {[
+                  'Expand AI & SaaS solutions',
+                  'Grow digital marketing division',
+                  'Enter global market',
+                  'Build scalable products'
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-4 text-emerald-50 font-bold text-sm tracking-tight border-l-4 border-white/40 pl-4">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+          </div>
         </div>
       </section>
 

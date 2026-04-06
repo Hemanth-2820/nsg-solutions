@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Mail, Phone, MapPin, CheckCircle } from 'lucide-react';
+import { ArrowRight, Mail, Phone, MapPin, CheckCircle, Linkedin, Youtube, Facebook, Instagram } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const ContactForm = () => {
@@ -40,10 +40,22 @@ const ContactForm = () => {
                     <MapPin size={18} className="text-[#5bb8e4]" />
                   </div>
                   <p className="font-light text-[#cbd5e1] leading-relaxed">
-                    HSR Layout, Sector 2,<br />
-                    Bengaluru, Karnataka,<br />
-                    India — 560102
+                    Bengaluru, India 
                   </p>
+                </div>
+
+                <div className="flex items-center gap-5 pt-4">
+                  <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                    <Phone size={18} className="text-[#5bb8e4]" />
+                  </div>
+                  <p className="font-light text-[#cbd5e1]">+91 7349525471, +91 8688009269</p>
+                </div>
+
+                <div className="flex items-center gap-5 pt-4">
+                  <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                    <Mail size={18} className="text-[#5bb8e4]" />
+                  </div>
+                  <p className="font-light text-[#cbd5e1]">shankar@nsgsolutions.in</p>
                 </div>
 
                 {/* Embedded Map Section */}
@@ -71,13 +83,21 @@ const ContactForm = () => {
             <div className="relative z-10 mt-16 pt-10 border-t border-white/10">
               <p className="text-xs font-bold tracking-[0.2em] text-white/40 uppercase mb-6">Follow Us</p>
               <div className="flex gap-4">
-                {['in', 'tw', 'fb', 'yt'].map((s) => (
-                  <div
-                    key={s}
-                    className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 text-[11px] font-bold uppercase hover:bg-[#5bb8e4] hover:border-[#5bb8e4] hover:text-white cursor-pointer transition-all duration-300"
+                {[
+                  { icon: <Linkedin size={18} />, link: 'https://www.linkedin.com/company/nsg-solutions/' },
+                  { icon: <Youtube size={18} />, link: 'https://www.youtube.com/@santhosh_official2' },
+                  { icon: <Facebook size={18} />, link: 'https://www.facebook.com/people/NSG-Solutions/61575743870267/' },
+                  { icon: <Instagram size={18} />, link: 'https://www.instagram.com/nsgsolutions?utm_source=qr&igsh=MTBuN21xdW96d3VieQ%3D%3D' },
+                ].map((s, idx) => (
+                  <a
+                    key={idx}
+                    href={s.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:bg-[#5bb8e4] hover:border-[#5bb8e4] hover:text-white cursor-pointer transition-all duration-300"
                   >
-                    {s}
-                  </div>
+                    {s.icon}
+                  </a>
                 ))}
               </div>
             </div>

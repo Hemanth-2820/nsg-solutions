@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Linkedin, Instagram, ArrowRight } from 'lucide-react';
+import { Facebook, Youtube, Linkedin, Instagram, ArrowRight } from 'lucide-react';
 import logo from '../assets/logo.png';
 
 const Footer = () => {
@@ -18,10 +18,10 @@ const Footer = () => {
               Driving digital transformation and high-end creative solutions for enterprises globally. Engineered for scale, secured for the future.
             </p>
             <div className="flex space-x-6 text-[#007cc3]">
-              <a href="#" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Linkedin size={26} /></a>
-              <a href="#" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Twitter size={26} /></a>
-              <a href="#" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Facebook size={26} /></a>
-              <a href="#" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Instagram size={26} /></a>
+              <a href="https://www.linkedin.com/company/nsg-solutions/" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Linkedin size={26} /></a>
+              <a href="https://www.youtube.com/@santhosh_official2" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Youtube size={26} /></a>
+              <a href="https://www.facebook.com/people/NSG-Solutions/61575743870267/" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Facebook size={26} /></a>
+              <a href="https://www.instagram.com/nsgsolutions?utm_source=qr&igsh=MTBuN21xdW96d3VieQ%3D%3D" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-all duration-300 hover:-translate-y-1"><Instagram size={26} /></a>
             </div>
           </div>
 
