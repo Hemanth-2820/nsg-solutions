@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { X, ChevronDown, Menu } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logonavbar from "../assets/logonavbar.png";
 
@@ -37,6 +38,13 @@ const Navbar = () => {
     { name: 'Enterprise Strategy', path: '/services/enterprise' }
   ]);
 
+  const getDynamicIcon = (iconName) => {
+    if (!iconName) return <ChevronDown size={14} />;
+    const pascalName = iconName.split(/[-_\s]+/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('');
+    const Icon = LucideIcons[pascalName] || LucideIcons[iconName] || ChevronDown;
+    return <Icon size={14} />;
+  };
+
   useEffect(() => {
     const fetchNavbarServices = async () => {
       try {
@@ -48,7 +56,6 @@ const Navbar = () => {
             let path = `/services/${m.category_key}`;
             let external = false;
 
-            // Maintain specific existing routes
             if (m.category_key === 'itservices') path = '/services/it';
             else if (m.category_key === 'videoproduction') path = '/services/creative';
             else if (m.category_key === 'digitalmarketing') path = '/services/marketing';
@@ -58,7 +65,7 @@ const Navbar = () => {
               external = true;
             }
 
-            return { name: m.title, path, external };
+            return { name: m.title, path, external, icon: m.icon };
           });
           setServiceSubLinks(dynamicLinks);
         }
@@ -115,15 +122,18 @@ const Navbar = () => {
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="absolute top-full left-1/2 -translate-x-1/2 w-64 bg-black/80 backdrop-blur-xl border border-white/10 p-4 rounded-xl shadow-2xl"
+                    className="absolute top-full left-1/2 -translate-x-1/2 w-72 bg-black/80 backdrop-blur-xl border border-white/10 p-3 rounded-2xl shadow-2xl"
                   >
                     {serviceSubLinks.map((sub, i) => (
                       <Link
                         key={i}
                         to={sub.external ? { pathname: sub.path } : sub.path}
                         target={sub.external ? "_blank" : "_self"}
-                        className="block p-3 text-white/70 hover:text-white hover:bg-white/5 rounded-lg text-xs font-bold transition-all"
+                        className="flex items-center gap-4 p-4 text-white/50 hover:text-[#00a3ff] hover:bg-white/5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all"
                       >
+                        <div className="p-2 bg-white/5 rounded-lg text-inherit">
+                          {getDynamicIcon(sub.icon)}
+                        </div>
                         {sub.name}
                       </Link>
                     ))}

@@ -1,13 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import logonavbar from "../../assets/logonavbar.png";
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Users, Briefcase, FileText, Globe, Settings, LogOut, Plus,
-    Trash2, Edit2, CheckCircle2, CheckCircle, XCircle, Search, Download,
-    Eye, Save, Send, Image as ImageIcon, FileUp, MessageSquare, Layout, Shield,
-    ChevronRight, ArrowRight, ShieldCheck, Mail, Phone, Clock, MapPin,
-    Tag, ExternalLink, Zap, AlertTriangle, BookOpen
+import { 
+    Layout, 
+    Users, 
+    Briefcase, 
+    MessageSquare, 
+    TrendingUp, 
+    ChevronRight, 
+    Plus, 
+    Edit2, 
+    Trash2, 
+    Send, 
+    LogOut, 
+    FileText, 
+    Globe, 
+    Package, 
+    Clock, 
+    Image as ImageIcon,
+    FileUp,
+    MapPin,
+    AlertCircle,
+    XCircle,
+    CheckCircle2,
+    Settings,
+    Search,
+    Download,
+    Eye,
+    Save,
+    Shield,
+    ArrowRight,
+    ShieldCheck,
+    Mail,
+    Phone,
+    Tag,
+    ExternalLink,
+    Zap,
+    AlertTriangle,
+    BookOpen,
+    CheckCircle
 } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -243,6 +276,13 @@ const AdminDashboard = () => {
         } catch (err) { showToast('Fails', 'error'); }
     }
 
+    const getDynamicIcon = (iconName) => {
+        if (!iconName) return <LucideIcons.Zap size={20} />;
+        const pascalName = iconName.split(/[-_\s]+/).map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join('');
+        const Icon = LucideIcons[pascalName] || LucideIcons[iconName] || LucideIcons.Zap;
+        return <Icon size={20} />;
+    };
+
     const handleDeleteJob = async (id) => {
         setConfirm({
             isOpen: true,
@@ -451,7 +491,7 @@ const AdminDashboard = () => {
             if (data.status === 'success') {
                 showToast(currentService.id ? 'Service Reconfigured' : 'New Service Engaged', 'success');
                 setIsEditingService(false);
-                setCurrentService({ parent_id: '', category_key: 'itservices', title: '', icon: 'Briefcase', description: '', sort_order: 0 });
+                setCurrentService({ parent_id: '', category_key: 'itservices', title: '', tag: '', icon: 'Briefcase', description: '', image_url: '', sort_order: 0 });
                 fetchServices();
             }
         } catch (err) { showToast('Sync Fail', 'error'); }
@@ -543,7 +583,7 @@ const AdminDashboard = () => {
                                 <h2 className="text-3xl font-black uppercase italic tracking-tight">Services Matrix</h2>
                                 <button onClick={() => { 
                                     setIsEditingService(false); 
-                                    setCurrentService({ parent_id: '', category_key: 'itservices', title: '', icon: 'Briefcase', description: '', sort_order: 0 }); 
+                                    setCurrentService({ parent_id: '', category_key: 'itservices', title: '', tag: '', icon: 'Briefcase', description: '', image_url: '', sort_order: 0 }); 
                                 }} className="bg-[#007cc3] text-white px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all"><Plus size={18} /> Add Entry</button>
                             </div>
 
@@ -556,7 +596,9 @@ const AdminDashboard = () => {
                                             {services.main.map(main => (
                                                 <div key={main.id} className="bg-[#0f172a] p-6 rounded-3xl border border-white/5 group relative shadow-xl overflow-hidden hover:border-[#007cc3]/30 transition-all">
                                                     <div className="flex justify-between items-start mb-4">
-                                                        <div className="bg-white/5 p-3 rounded-xl text-[#007cc3]"><Briefcase size={20} /></div>
+                                                        <div className="bg-white/5 p-3 rounded-xl text-[#007cc3]">
+                                                            {getDynamicIcon(main.icon)}
+                                                        </div>
                                                         <div className="flex gap-2">
                                                             <button onClick={() => { setIsEditingService(true); setCurrentService(main); }} className="p-2 hover:text-white text-white/30"><Edit2 size={16} /></button>
                                                             <button onClick={() => handleDeleteService(main.id)} className="p-2 hover:text-red-400 text-white/30"><Trash2 size={16} /></button>
@@ -593,53 +635,89 @@ const AdminDashboard = () => {
                                         {isEditingService ? <Edit2 size={16} /> : <Plus size={16} />} {isEditingService ? 'Service Modification' : 'Manual Registry'}
                                     </h3>
                                     
-                                    <div className="space-y-6 relative z-10">
-                                        <div className="space-y-1">
-                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Entry Hierarchy</label>
-                                            <select 
-                                                value={currentService.parent_id || ''} 
-                                                onChange={e => setCurrentService({ ...currentService, parent_id: e.target.value })} 
-                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
-                                            >
-                                                <option value="">Main Category (Top Level)</option>
-                                                {services.main.map(m => (
-                                                    <option key={m.id} value={m.id}>Sub-Service for: {m.title}</option>
-                                                ))}
-                                            </select>
-                                        </div>
+                                        <div className="space-y-4 relative z-10">
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Entry Hierarchy</label>
+                                                <select 
+                                                    value={currentService.parent_id || ''} 
+                                                    onChange={e => setCurrentService({ ...currentService, parent_id: e.target.value })} 
+                                                    className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                                >
+                                                    <option value="">Main Category (Top Level)</option>
+                                                    {services.main.map(m => (
+                                                        <option key={m.id} value={m.id}>Sub-Service for: {m.title}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            {/* Category/Tag Row */}
+                                            <div className={`grid ${!currentService.parent_id ? 'grid-cols-2' : 'grid-cols-1'} gap-4`}>
+                                                <div className="space-y-1">
+                                                    <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Internal Category Key</label>
+                                                    <input 
+                                                        required 
+                                                        value={currentService.category_key} 
+                                                        onChange={e => setCurrentService({ ...currentService, category_key: e.target.value })} 
+                                                        placeholder="e.g. itservices" 
+                                                        className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                                    />
+                                                </div>
+                                                {!currentService.parent_id && (
+                                                    <div className="space-y-1">
+                                                        <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Display Tag (Grid)</label>
+                                                        <input 
+                                                            value={currentService.tag || ''} 
+                                                            onChange={e => setCurrentService({ ...currentService, tag: e.target.value })} 
+                                                            placeholder="e.g. CORE" 
+                                                            className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
 
-                                        <div className="space-y-1">
-                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Internal Category Key</label>
-                                            <input 
-                                                required 
-                                                value={currentService.category_key} 
-                                                onChange={e => setCurrentService({ ...currentService, category_key: e.target.value })} 
-                                                placeholder="e.g. itservices, branding" 
-                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
-                                            />
-                                        </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Service Title</label>
+                                                <input 
+                                                    required 
+                                                    value={currentService.title} 
+                                                    onChange={e => setCurrentService({ ...currentService, title: e.target.value })} 
+                                                    placeholder="e.g. Cloud Architecture" 
+                                                    className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                                />
+                                            </div>
 
-                                        <div className="space-y-1">
-                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Service Title</label>
-                                            <input 
-                                                required 
-                                                value={currentService.title} 
-                                                onChange={e => setCurrentService({ ...currentService, title: e.target.value })} 
-                                                placeholder="e.g. Cloud Architecture" 
-                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
-                                            />
-                                        </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Icon Identifier (Lucide)</label>
+                                                <input 
+                                                    required 
+                                                    value={currentService.icon} 
+                                                    onChange={e => setCurrentService({ ...currentService, icon: e.target.value })} 
+                                                    placeholder="e.g. Shield" 
+                                                    className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                                />
+                                            </div>
 
-                                        <div className="space-y-1">
-                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Icon Identifier (Lucide)</label>
-                                            <input 
-                                                required 
-                                                value={currentService.icon} 
-                                                onChange={e => setCurrentService({ ...currentService, icon: e.target.value })} 
-                                                placeholder="e.g. Code, Zap, Globe" 
-                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
-                                            />
-                                        </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Brief Narrative</label>
+                                                <textarea 
+                                                    rows="3" 
+                                                    value={currentService.description} 
+                                                    onChange={e => setCurrentService({ ...currentService, description: e.target.value })} 
+                                                    placeholder="Brief overview..." 
+                                                    className="w-full bg-[#0f172a] border border-white/10 rounded-3xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all resize-none"
+                                                />
+                                            </div>
+
+                                            {!currentService.parent_id && (
+                                                <div className="space-y-1">
+                                                    <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Main Card Image (Grid Asset)</label>
+                                                    <input 
+                                                        value={currentService.image_url || ''} 
+                                                        onChange={e => setCurrentService({ ...currentService, image_url: e.target.value })} 
+                                                        placeholder="Image URL..." 
+                                                        className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                                    />
+                                                </div>
+                                            )}
 
                                         <div className="space-y-1">
                                             <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Execution Priority / Sort Order</label>

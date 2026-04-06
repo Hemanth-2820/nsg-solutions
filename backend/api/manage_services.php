@@ -30,8 +30,10 @@ try {
                         parent_id = :parent_id,
                         category_key = :category_key, 
                         title = :title, 
+                        tag = :tag,
                         icon = :icon, 
                         description = :description,
+                        image_url = :image_url,
                         sort_order = :sort_order
                         WHERE id = :id";
                 $stmt = $pdo->prepare($sql);
@@ -40,22 +42,26 @@ try {
                     ':parent_id' => $data['parentId'] ?? NULL,
                     ':category_key' => $data['categoryKey'] ?? '',
                     ':title' => $data['title'],
+                    ':tag' => $data['tag'] ?? '',
                     ':icon' => $data['icon'] ?? 'Briefcase',
                     ':description' => $data['description'] ?? '',
+                    ':image_url' => $data['image_url'] ?? '',
                     ':sort_order' => $data['sortOrder'] ?? 0
                 ]);
                 echo json_encode(['status' => 'success', 'message' => 'Service updated']);
             } else {
                 // ADD NEW
-                $sql = "INSERT INTO services (parent_id, category_key, title, icon, description, sort_order) 
-                        VALUES (:parent_id, :category_key, :title, :icon, :description, :sort_order)";
+                $sql = "INSERT INTO services (parent_id, category_key, title, tag, icon, description, image_url, sort_order) 
+                        VALUES (:parent_id, :category_key, :title, :tag, :icon, :description, :image_url, :sort_order)";
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([
                     ':parent_id' => $data['parentId'] ?? NULL,
                     ':category_key' => $data['categoryKey'] ?? '',
                     ':title' => $data['title'],
+                    ':tag' => $data['tag'] ?? '',
                     ':icon' => $data['icon'] ?? 'Briefcase',
                     ':description' => $data['description'] ?? '',
+                    ':image_url' => $data['image_url'] ?? '',
                     ':sort_order' => $data['sortOrder'] ?? 0
                 ]);
                 echo json_encode(['status' => 'success', 'id' => $pdo->lastInsertId()]);
