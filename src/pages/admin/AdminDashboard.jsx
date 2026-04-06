@@ -733,16 +733,18 @@ const AdminDashboard = () => {
                                                 />
                                             </div>
 
-                                            <div className="space-y-1">
-                                                <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Icon Identifier (Lucide)</label>
-                                                <input 
-                                                    required 
-                                                    value={currentService.icon} 
-                                                    onChange={e => setCurrentService({ ...currentService, icon: e.target.value })} 
-                                                    placeholder="e.g. Shield" 
-                                                    className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
-                                                />
-                                            </div>
+                                            {currentService.parent_id && (
+                                                <div className="space-y-1">
+                                                    <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Icon Identifier (Lucide)</label>
+                                                    <input 
+                                                        required 
+                                                        value={currentService.icon} 
+                                                        onChange={e => setCurrentService({ ...currentService, icon: e.target.value })} 
+                                                        placeholder="e.g. Shield" 
+                                                        className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                                    />
+                                                </div>
+                                            )}
 
                                             <div className="space-y-1">
                                                 <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Brief Narrative</label>
