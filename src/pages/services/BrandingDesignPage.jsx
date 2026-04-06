@@ -72,23 +72,23 @@ const BrandingDesignPage = () => {
     <div className="min-h-screen font-sans overflow-x-hidden bg-gradient-to-br from-[#F8FAFC] to-[#E0F2FE]">
 
       {/* HERO */}
-      <section className="pt-32 pb-20 relative">
+      <section className="pt-24 md:pt-32 pb-12 md:pb-20 relative">
         <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-pink-200 blur-[120px] opacity-30"></div>
         <div className="max-w-[1400px] mx-auto px-6">
           <Link
             to="/services"
-            className="mb-8 inline-flex items-center gap-2 text-[#007cc3] font-bold text-xs uppercase tracking-widest hover:-translate-x-1 transition"
+            className="mb-6 md:mb-8 inline-flex items-center gap-2 text-[#007cc3] font-bold text-[10px] md:text-xs uppercase tracking-widest hover:-translate-x-1 transition"
           >
             <ArrowLeft size={14} /> Back to Services
           </Link>
-
-          <h1 className="text-[3rem] md:text-[4.5rem] font-extrabold text-[#0f172a] mb-6 tracking-tight">
+ 
+          <h1 className="text-[2.2rem] sm:text-[3rem] md:text-[4.5rem] font-extrabold text-[#0f172a] mb-6 tracking-tight leading-tight">
             Branding & Design
           </h1>
-
+ 
           <div className="w-24 h-[3px] bg-gradient-to-r from-[#007cc3] to-[#60a5fa] mb-8"></div>
-
-          <p className="text-[#475569] text-[1.2rem] max-w-2xl border-l-[4px] border-[#007cc3] pl-6 leading-relaxed">
+ 
+          <p className="text-[#475569] text-[1rem] md:text-[1.2rem] max-w-2xl border-l-[4px] border-[#007cc3] pl-6 leading-relaxed">
             Crafting iconic corporate identities and visual systems that resonate with global audiences.
             We define your brand’s aesthetic essence through world-class design engineering.
           </p>

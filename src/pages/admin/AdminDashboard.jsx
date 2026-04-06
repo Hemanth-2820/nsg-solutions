@@ -496,28 +496,28 @@ const AdminDashboard = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#0f172a] text-white pt-28">
-            <header className="fixed top-0 left-0 w-full border-b border-white/10 bg-[#0f172a] z-[300] shadow-2xl h-28">
+        <div className="min-h-screen bg-[#0f172a] text-white pt-20 md:pt-28">
+            <header className="fixed top-0 left-0 w-full border-b border-white/10 bg-[#0f172a] z-[300] shadow-2xl h-20 md:h-28">
                 <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between relative">
                     <div className="flex items-center gap-4">
-                        <Link to="/" className="flex items-center gap-4">
-                            <img src={logonavbar} alt="Logo" className="h-10 w-auto" />
+                        <Link to="/" className="flex items-center gap-3 md:gap-4">
+                            <img src={logonavbar} alt="Logo" className="h-8 md:h-10 w-auto" />
                             <div className="flex flex-col">
-                                <span className="text-sm font-black uppercase text-[#007cc3]">NSG Command</span>
-                                <span className="text-[10px] text-white/30 font-bold uppercase tracking-widest leading-none">Control Panel</span>
+                                <span className="text-[12px] md:text-sm font-black uppercase text-[#007cc3]">NSG Command</span>
+                                <span className="text-[8px] md:text-[10px] text-white/30 font-bold uppercase tracking-widest leading-none">Control Panel</span>
                             </div>
                         </Link>
                     </div>
-
+ 
                     <nav className="hidden lg:flex items-center gap-2">
                         {adminTabs.map(tab => (
                             <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-white/10 text-[#007cc3]' : 'text-white/40 hover:text-white hover:bg-white/5'}`}>{tab.label}</button>
                         ))}
                     </nav>
-
-                    <div className="flex items-center gap-4 relative z-[320]">
+ 
+                    <div className="flex items-center gap-3 md:gap-4 relative z-[320]">
                         <button onClick={handleLogout} className="text-white/40 hover:text-red-400 font-bold hidden lg:flex items-center gap-2 text-[10px] uppercase tracking-widest transition-all"><LogOut size={16} /> Logout</button>
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white border border-white/10 shadow-xl">{isMenuOpen ? <XCircle size={24} /> : <Layout size={24} />}</button>
+                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden w-10 h-10 md:w-12 md:h-12 bg-white/5 rounded-xl flex items-center justify-center text-white border border-white/10 shadow-xl">{isMenuOpen ? <XCircle size={20} /> : <Layout size={20} />}</button>
                     </div>
                 </div>
 

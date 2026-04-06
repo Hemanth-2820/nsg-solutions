@@ -70,7 +70,8 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav
+    <>
+      <nav
       className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 border-b border-white/10 ${scrolled
         ? "bg-[#0A0E27]/90 backdrop-blur-md shadow-2xl"
         : "bg-black/30 backdrop-blur-md"
@@ -150,54 +151,64 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 30, stiffness: 200 }}
-            className="fixed inset-0 bg-[#0A0E27] z-[1001] flex flex-col p-8 pt-[120px]"
-          >
-            <div className="flex flex-col gap-6">
-              {mainLinks.map((link) => (
-                <div key={link.name}>
-                  <Link
-                    to={link.path}
-                    className="text-3xl font-bold text-white"
-                  >
-                    {link.name}
-                  </Link>
-
-                  {link.hasDropdown && (
-                    <div className="mt-3 pl-4 border-l border-white/10 space-y-2">
-                      {serviceSubLinks.map((sub, i) => (
-                        <Link
-                          key={i}
-                          to={sub.path}
-                          className="block text-white/60 text-lg"
-                        >
-                          {sub.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              <Link
-                to="/client-login"
-                className="mt-6 p-4 bg-[#007cc3] text-white text-center font-bold uppercase rounded-xl"
-              >
-                Client Login
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
-  );
-};
+ 
+       {/* Mobile Menu - Moved outside <nav> for isolation */}
+       <AnimatePresence>
+         {isOpen && (
+           <motion.div
+             initial={{ opacity: 0, x: '100%' }}
+             animate={{ opacity: 1, x: 0 }}
+             exit={{ opacity: 0, x: '100%' }}
+             transition={{ type: 'spring', damping: 30, stiffness: 200 }}
+             className="fixed inset-0 bg-[#0A0E27] z-[9999] flex flex-col p-8 pt-[120px] overflow-y-auto"
+           >
+             {/* Close button in mobile menu */}
+             <button
+               onClick={() => setIsOpen(false)}
+               className="absolute top-8 right-6 text-white w-12 h-12 flex items-center justify-center bg-white/5 rounded-full border border-white/10"
+             >
+               <X size={28} />
+             </button>
+ 
+             <div className="flex flex-col gap-6">
+               {mainLinks.map((link) => (
+                 <div key={link.name}>
+                   <Link
+                     to={link.path}
+                     className="text-3xl font-bold text-white hover:text-[#00a3ff] transition-colors"
+                   >
+                     {link.name}
+                   </Link>
+ 
+                   {link.hasDropdown && (
+                     <div className="mt-3 pl-4 border-l border-white/10 space-y-2">
+                       {serviceSubLinks.map((sub, i) => (
+                         <Link
+                           key={i}
+                           to={sub.path}
+                           className="block text-white/60 text-lg hover:text-white transition-colors"
+                         >
+                           {sub.name}
+                         </Link>
+                       ))}
+                     </div>
+                   )}
+                 </div>
+               ))}
+ 
+               <Link
+                 to="/client-login"
+                 className="mt-6 p-4 bg-gradient-to-r from-[#007cc3] to-[#00a3ff] text-white text-center font-bold uppercase rounded-xl shadow-lg"
+               >
+                 Client Login
+               </Link>
+             </div>
+           </motion.div>
+         )}
+       </AnimatePresence>
+     </>
+   );
+ };
 
 export default Navbar;

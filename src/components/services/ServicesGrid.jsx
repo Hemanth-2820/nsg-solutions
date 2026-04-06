@@ -65,25 +65,25 @@ const ServicesGrid = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-32 bg-gradient-to-br from-[#F8FAFC] to-[#E0F2FE] text-[#0f172a] overflow-hidden">
-
-      {/* Softer Grid Background */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="w-full h-full bg-[radial-gradient(circle,#94a3b8_1px,transparent_1px)] bg-[size:50px_50px]" />
-      </div>
-
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 relative z-10 font-sans">
-
-        {/* Section Heading */}
-        <div className="mb-24 flex items-center gap-6">
-          <div className="w-24 h-[3px] bg-gradient-to-r from-[#007cc3] to-[#60a5fa]"></div>
-          <span className="text-[#007cc3] font-black tracking-[0.3em] uppercase text-[13px]">
-            Our Capabilities Matrix
-          </span>
-        </div>
-
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+    <section className="relative py-16 md:py-32 bg-gradient-to-br from-[#F8FAFC] to-[#E0F2FE] text-[#0f172a] overflow-hidden">
+ 
+       {/* Softer Grid Background */}
+       <div className="absolute inset-0 opacity-10">
+         <div className="w-full h-full bg-[radial-gradient(circle,#94a3b8_1px,transparent_1px)] bg-[size:50px_50px]" />
+       </div>
+ 
+       <div className="max-w-[1500px] mx-auto px-6 lg:px-12 relative z-10 font-sans">
+ 
+         {/* Section Heading */}
+         <div className="mb-12 md:mb-24 flex items-center gap-6">
+           <div className="w-12 md:w-24 h-[3px] bg-gradient-to-r from-[#007cc3] to-[#60a5fa]"></div>
+           <span className="text-[#007cc3] font-black tracking-[0.3em] uppercase text-[11px] md:text-[13px]">
+             Our Capabilities Matrix
+           </span>
+         </div>
+ 
+         {/* Grid */}
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-16">
 
           {servicesData.map((service, index) => (
             <motion.div

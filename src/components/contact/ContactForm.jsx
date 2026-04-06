@@ -24,17 +24,17 @@ const ContactForm = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.9, ease: 'easeOut' }}
-            className="lg:w-[38%] bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] text-white p-12 md:p-16 flex flex-col justify-between relative overflow-hidden"
+            className="lg:w-[38%] bg-gradient-to-br from-[#1e3a8a] to-[#0f172a] text-white p-8 sm:p-12 md:p-16 flex flex-col justify-between relative overflow-hidden"
           >
             {/* Background accents */}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen pointer-events-none"></div>
             <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#5bb8e4] blur-[120px] opacity-20 rounded-full pointer-events-none"></div>
 
             <div className="relative z-10">
-              <h3 className="text-[2rem] font-infosys-heading mb-2 text-white">Strategic Node</h3>
-              <div className="w-12 h-[3px] bg-[#5bb8e4] mb-10 mt-3"></div>
+              <h3 className="text-[1.8rem] md:text-[2rem] font-infosys-heading mb-2 text-white">Strategic Node</h3>
+              <div className="w-12 h-[3px] bg-[#5bb8e4] mb-8 md:mb-10 mt-3"></div>
 
-              <div className="space-y-10">
+              <div className="space-y-8 md:space-y-10">
                 <div className="flex items-start gap-5">
                   <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0 mt-1">
                     <MapPin size={18} className="text-[#5bb8e4]" />
@@ -44,22 +44,22 @@ const ContactForm = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-5 pt-4">
+                <div className="flex items-center gap-5 pt-2 md:pt-4">
                   <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
                     <Phone size={18} className="text-[#5bb8e4]" />
                   </div>
-                  <p className="font-light text-[#cbd5e1]">+91 7349525471, +91 8688009269</p>
+                  <p className="font-light text-[#cbd5e1] text-sm md:text-base">+91 7349525471, +91 8688009269</p>
                 </div>
 
-                <div className="flex items-center gap-5 pt-4">
+                <div className="flex items-center gap-5 pt-2 md:pt-4">
                   <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
                     <Mail size={18} className="text-[#5bb8e4]" />
                   </div>
-                  <p className="font-light text-[#cbd5e1]">shankar@nsgsolutions.in</p>
+                  <p className="font-light text-[#cbd5e1] text-sm md:text-base">shankar@nsgsolutions.in</p>
                 </div>
 
                 {/* Embedded Map Section */}
-                <div className="mt-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl h-[250px]">
+                <div className="mt-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl h-[180px] md:h-[250px]">
                   <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15555.22818958226!2d77.63666065541991!3d12.913702200000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae148d390a183f%3A0x67340cf3534d4077!2sHSR%20Layout%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1711728100000!5m2!1sen!2sin" 
                     width="100%" 
@@ -109,7 +109,7 @@ const ContactForm = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.9, ease: 'easeOut', delay: 0.1 }}
-            className="lg:w-[62%] bg-white p-12 md:p-16 xl:p-20"
+            className="lg:w-[62%] bg-white p-8 sm:p-12 md:p-16 xl:p-20"
           >
             {submitted ? (
               <div className="flex flex-col items-center justify-center h-full text-center py-16">

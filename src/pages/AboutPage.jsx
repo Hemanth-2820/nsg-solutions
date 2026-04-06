@@ -70,17 +70,17 @@ const AboutPage = () => {
         bgImage={aboutbgImage}
       />
 
-      <section className="py-24">
+      <section className="py-16 md:py-24">
         <div className="max-w-[1400px] mx-auto px-6 font-sans">
-
-          <div className="flex flex-col lg:flex-row gap-20">
-            <div className="lg:w-1/2">
-              <h2 className="text-[2.5rem] md:text-[3rem] font-extrabold mb-10 text-[#111] leading-tight gsap-title tracking-tight">
-                Engineering Digital Excellence <br /> <span className="text-[#007cc3]">for Tomorrow.</span>
-              </h2>
-              <div className="h-[2px] bg-gray-200 w-full mb-10 overflow-hidden">
-                <div className="h-full bg-[#007cc3] w-0 gsap-line"></div>
-              </div>
+ 
+           <div className="flex flex-col lg:flex-row gap-10 md:gap-20">
+             <div className="lg:w-1/2">
+               <h2 className="text-[2.2rem] md:text-[3rem] font-extrabold mb-8 text-[#111] leading-tight gsap-title tracking-tight">
+                 Engineering Digital Excellence <br className="hidden md:block" /> <span className="text-[#007cc3]">for Tomorrow.</span>
+               </h2>
+               <div className="h-[2px] bg-gray-200 w-full mb-8 overflow-hidden">
+                 <div className="h-full bg-[#007cc3] w-0 gsap-line"></div>
+               </div>
               <p className="text-xl text-[#333] font-light leading-relaxed mb-6">
                 NSG Solutions Private Limited is a multi-domain company delivering IT services, video production, Animation, Designing, Digital Marketing and training.
               </p>
@@ -127,15 +127,15 @@ const AboutPage = () => {
                   transition={{ duration: 0.6, delay: i * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.05 }}
-                  className={`${metric.bg} ${metric.hover} p-10 md:p-12 text-white shadow-xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden`}
+                  className={`${metric.bg} ${metric.hover} p-8 sm:p-12 text-white shadow-xl flex flex-col justify-between transition-all duration-300 relative overflow-hidden`}
                 >
-                  <div className="opacity-40 mb-10 group-hover:opacity-100 transition-opacity">
+                  <div className="opacity-40 mb-6 group-hover:opacity-100 transition-opacity">
                     {metric.icon}
                   </div>
-
+ 
                   <div className="relative z-10">
-                    <h3 className="text-5xl md:text-6xl font-black mb-3 tracking-tighter leading-none">{metric.num}</h3>
-                    <p className="text-[11px] font-black tracking-[0.3em] uppercase opacity-80">{metric.label}</p>
+                    <h3 className="text-4xl sm:text-6xl font-black mb-3 tracking-tighter leading-none">{metric.num}</h3>
+                    <p className="text-[10px] font-black tracking-[0.3em] uppercase opacity-80">{metric.label}</p>
                   </div>
 
                   {/* Geometric Decoration */}
@@ -203,17 +203,17 @@ const AboutPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
             viewport={{ once: true }}
-            className="relative w-full py-16 md:py-24 text-center bg-gradient-to-br from-[#060B27] via-[#1E1B4B] to-[#000] border border-white/5 rounded-[3rem] overflow-hidden shadow-2xl shadow-blue-900/20"
+            className="relative w-full py-16 md:py-24 text-center bg-gradient-to-br from-[#060B27] via-[#1E1B4B] to-[#000] border border-white/5 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden shadow-2xl shadow-blue-900/20 px-6"
           >
             {/* Ambient Atmosphere Blobs */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 pointer-events-none" />
-
-            <span className="relative z-10 text-[#00a3ff] font-black tracking-[0.6em] uppercase text-[10px] mb-8 block drop-shadow-lg">
+ 
+            <span className="relative z-10 text-[#00a3ff] font-black tracking-[0.4em] md:tracking-[0.6em] uppercase text-[9px] md:text-[10px] mb-6 md:mb-8 block drop-shadow-lg">
               Our Motto
             </span>
-
-            <h2 className="relative z-10 text-4xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">
+ 
+            <h2 className="relative z-10 text-3xl sm:text-5xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">
               Innovate. Build. <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00a3ff] to-[#60a5fa] drop-shadow-sm">Grow.</span>
             </h2>
 
@@ -227,9 +227,9 @@ const AboutPage = () => {
       </section>
 
       {/* Corporate Summary Section (Why Choose Us / Strength / Future) */}
-      <section className="py-24 bg-white border-b border-gray-100 font-sans">
+      <section className="py-16 md:py-24 bg-white border-b border-gray-100 font-sans">
         <div className="max-w-[1400px] mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
 
             {/* Why Choose Us */}
             <motion.div
