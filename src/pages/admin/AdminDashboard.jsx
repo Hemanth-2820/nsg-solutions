@@ -169,7 +169,7 @@ const AdminDashboard = () => {
 
     const fetchServices = async () => {
         try {
-            const res = await fetch('https://new.nsgsolutions.in/api/get_services.php');
+            const res = await fetch(`/api/get_services.php?t=${Date.now()}`);
             const result = await res.json();
             if (result.status === 'success') {
                 console.log("Services Data Synchronized:", result.data);
@@ -191,11 +191,16 @@ const AdminDashboard = () => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id })
                     });
-                    if ((await res.json()).status === 'success') {
+                    const data = await res.json();
+                    if (data.status === 'success') {
                         showToast('Candidate record purged', 'success');
                         fetchApplications();
+                    } else {
+                        showToast(data.message || 'Purge failed', 'error');
                     }
-                } catch (err) { showToast('Sync Fail', 'error'); }
+                } catch (err) { 
+                    showToast('Sync Fail', 'error'); 
+                }
             }
         });
     };
@@ -250,9 +255,15 @@ const AdminDashboard = () => {
                         body: JSON.stringify({ id })
                     });
                     const data = await res.json();
-                    if (data.status === 'success') { showToast('Deleted!', 'success'); fetchBlogs(); }
-                    else { showToast(data.message || 'Purge failed', 'error'); }
-                } catch (err) { showToast('Server communication error', 'error'); }
+                    if (data.status === 'success') { 
+                        showToast('Deleted!', 'success'); 
+                        fetchBlogs(); 
+                    } else { 
+                        showToast(data.message || 'Purge failed', 'error'); 
+                    }
+                } catch (err) { 
+                    showToast('Server communication error', 'error'); 
+                }
             }
         });
     }
@@ -351,9 +362,15 @@ const AdminDashboard = () => {
                 try {
                     const res = await fetch(`/api/manage_solutions.php?id=${id}`, { method: 'DELETE' });
                     const data = await res.json();
-                    if (data.status === 'success') { showToast('Deleted!', 'success'); fetchSolutions(); }
-                    else { showToast(data.message || 'Purge failed', 'error'); }
-                } catch (err) { showToast('Server communication error', 'error'); }
+                    if (data.status === 'success') { 
+                        showToast('Deleted!', 'success'); 
+                        fetchSolutions(); 
+                    } else { 
+                        showToast(data.message || 'Purge failed', 'error'); 
+                    }
+                } catch (err) { 
+                    showToast('Server communication error', 'error'); 
+                }
             }
         });
     }
@@ -395,11 +412,26 @@ const AdminDashboard = () => {
     }
 
     const handleDeleteHighlight = async (id) => {
-        if (!window.confirm('Delete highlight?')) return;
-        try {
-            const res = await fetch(`/api/manage_highlights.php?id=${id}`, { method: 'DELETE' });
-            if ((await res.json()).status === 'success') { showToast('Deleted!', 'success'); fetchHighlights(); }
-        } catch (err) { showToast('Fails', 'error'); }
+        setConfirm({
+            isOpen: true,
+            title: 'Delete this highlight?',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch(`/api/manage_highlights.php?id=${id}`, { 
+                        method: 'DELETE' 
+                    });
+                    const data = await res.json();
+                    if (data.status === 'success') { 
+                        showToast('Deleted!', 'success'); 
+                        fetchHighlights(); 
+                    } else {
+                        showToast(data.message || 'Purge failed', 'error');
+                    }
+                } catch (err) { 
+                    showToast('Fails', 'error'); 
+                }
+            }
+        });
     }
 
     const handleDeleteInquiry = async (id) => {
@@ -461,11 +493,16 @@ const AdminDashboard = () => {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id })
                     });
-                    if ((await res.json()).status === 'success') {
+                    const data = await res.json();
+                    if (data.status === 'success') {
                         showToast('Purged Admin Registry', 'success');
                         fetchTestimonials();
+                    } else {
+                        showToast(data.message || 'Purge Fail', 'error');
                     }
-                } catch (err) { showToast('Purge Fail', 'error'); }
+                } catch (err) { 
+                    showToast('Purge Fail', 'error'); 
+                }
             }
         });
     }
@@ -478,8 +515,10 @@ const AdminDashboard = () => {
                 parentId: currentService.parent_id || null,
                 categoryKey: currentService.category_key,
                 title: currentService.title,
+                tag: currentService.tag,
                 icon: currentService.icon,
                 description: currentService.description,
+                image_url: currentService.image_url,
                 sortOrder: currentService.sort_order
             };
             const res = await fetch('/api/manage_services.php', {
@@ -503,12 +542,21 @@ const AdminDashboard = () => {
             title: 'Decommission this service and all sub-offerings?',
             onConfirm: async () => {
                 try {
-                    const res = await fetch(`/api/manage_services.php?id=${id}`, { method: 'DELETE' });
-                    if ((await res.json()).status === 'success') {
+                    const res = await fetch(`/api/manage_services.php?action=delete`, { 
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id, action: 'delete' })
+                    });
+                    const data = await res.json();
+                    if (data.status === 'success') {
                         showToast('Service Decommissioned', 'success');
                         fetchServices();
+                    } else {
+                        showToast(data.message || 'Purge failed', 'error');
                     }
-                } catch (err) { showToast('Purge Fail', 'error'); }
+                } catch (err) { 
+                    showToast('Purge Fail', 'error'); 
+                }
             }
         });
     };
@@ -1364,9 +1412,10 @@ const AdminDashboard = () => {
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        confirm.onConfirm();
+                                    onClick={async () => {
+                                        const action = confirm.onConfirm;
                                         setConfirm({ ...confirm, isOpen: false });
+                                        if (action) await action();
                                     }}
                                     className="flex-1 py-5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-black uppercase text-[11px] tracking-widest transition-all shadow-xl shadow-red-500/20"
                                 >
