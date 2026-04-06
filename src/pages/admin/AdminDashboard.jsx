@@ -1087,154 +1087,162 @@ const AdminDashboard = () => {
 
                     {activeTab === 'applications' && (
                         <motion.div key="apps" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}>
-                            <div className="flex justify-between items-end mb-12">
-                                <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Deterministic Candidates</h2>
-                                <div className="bg-white/5 px-8 py-5 rounded-2xl border border-white/10 text-center shadow-lg"><span className="block text-[10px] uppercase font-black text-[#007cc3] mb-1">Total Intelligence</span><span className="text-3xl font-black tracking-tighter">{applications.length}</span></div>
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+                                <h2 className="text-[2rem] md:text-3xl font-black uppercase italic tracking-tight leading-tight">Deterministic Candidates</h2>
+                                <div className="bg-white/5 px-8 py-5 rounded-2xl border border-white/10 text-center shadow-lg w-full md:w-auto"><span className="block text-[10px] uppercase font-black text-[#007cc3] mb-1">Total Intelligence</span><span className="text-3xl font-black tracking-tighter">{applications.length}</span></div>
                             </div>
-                            <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
-                                <table className="w-full text-left border-collapse">
-                                    <thead className="bg-[#0f172a] text-[11px] font-black uppercase tracking-[0.2em] text-white/50 border-b border-white/10">
-                                        <tr>
-                                            <th className="px-10 py-10">Candidate Identity</th>
-                                            <th className="px-10 py-10">Target Role</th>
-                                            <th className="px-10 py-10">Digital Presence</th>
-                                            <th className="px-10 py-10">Professional Narrative</th>
-                                            <th className="px-10 py-10 text-right">Data Extraction</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-white/10">
-                                        {applications.map(app => (
-                                            <tr key={app.id} className="hover:bg-white/[0.03] transition-all group">
-                                                <td className="px-10 py-10">
-                                                    <div className="font-bold text-xl text-white mb-2">{app.name}</div>
-                                                    <div className="flex flex-col gap-1.5">
-                                                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#007cc3] flex items-center gap-2"><Mail size={12} /> {app.email}</span>
-                                                        <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 flex items-center gap-2"><Phone size={12} /> {app.phone || 'N/A'}</span>
+
+                            <div className="grid grid-cols-1 gap-6">
+                                {applications.map(app => (
+                                    <div key={app.id} className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl backdrop-blur-3xl hover:bg-white/[0.08] transition-all group relative overflow-hidden">
+                                        <div className="flex flex-col lg:flex-row justify-between gap-8">
+                                            {/* Left Section: Identity */}
+                                            <div className="flex-1">
+                                                <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+                                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#007cc3] to-blue-600 flex items-center justify-center text-white font-black text-2xl shadow-lg uppercase italic shrink-0">
+                                                        {app.name?.[0]}
                                                     </div>
-                                                </td>
-                                                <td className="px-10 py-10">
-                                                    <div className="inline-flex px-5 py-2.5 bg-[#007cc3]/20 text-[#007cc3] text-[10px] font-black uppercase tracking-widest rounded-xl border border-[#007cc3]/30">
-                                                        {app.job_title || 'General Pipeline'}
+                                                    <div>
+                                                        <h3 className="text-2xl font-black text-white tracking-tighter mb-1 uppercase">{app.name}</h3>
+                                                        <div className="flex flex-wrap gap-4">
+                                                            <span className="text-[11px] font-bold uppercase tracking-wider text-[#007cc3] flex items-center gap-2"><Mail size={12} /> {app.email}</span>
+                                                            <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 flex items-center gap-2"><Phone size={12} /> {app.phone || 'N/A'}</span>
+                                                        </div>
                                                     </div>
-                                                </td>
-                                                <td className="px-10 py-10">
-                                                    {app.portfolio_url ? (
-                                                        <a href={app.portfolio_url} target="_blank" className="inline-flex items-center gap-2 text-[11px] font-black uppercase text-white/60 hover:text-white transition-all underline decoration-[#007cc3] decoration-2 underline-offset-4">
-                                                            <Globe size={14} /> View Portfolio
-                                                        </a>
-                                                    ) : (
-                                                        <span className="text-[11px] font-bold text-white/10 uppercase tracking-widest">No Link Provided</span>
-                                                    )}
-                                                </td>
-                                                <td className="px-10 py-10">
-                                                    <div className="max-w-[320px]">
-                                                        <p className="text-[13px] text-white/60 leading-relaxed font-medium italic border-l-2 border-[#007cc3]/30 pl-4 py-1" title={app.message}>
-                                                            {app.message ? `"${app.message}"` : 'No mission statement provided.'}
-                                                        </p>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8 pt-8 border-t border-white/5">
+                                                    <div>
+                                                        <span className="text-[10px] font-black text-[#007cc3] uppercase tracking-widest block mb-2">Target Role</span>
+                                                        <div className="inline-flex px-4 py-2 bg-white/5 text-white/80 text-[11px] font-bold uppercase tracking-widest rounded-xl border border-white/10 italic">
+                                                            {app.job_title || 'General Pipeline'}
+                                                        </div>
                                                     </div>
-                                                </td>
-                                                <td className="px-10 py-10 text-right">
-                                                    <div className="flex justify-end items-center gap-4">
-                                                        <a href={`https://new.nsgsolutions.in/${app.resume_path}`} target="_blank" className="h-14 px-8 bg-white/5 hover:bg-[#007cc3] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl border border-white/10 inline-flex items-center gap-3">
-                                                            <Download size={16} /> Download CV
-                                                        </a>
-                                                        <button
-                                                            onClick={() => handleDeleteApplication(app.id)}
-                                                            className="w-14 h-14 flex items-center justify-center bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all shadow-lg"
-                                                            title="Purge Application"
-                                                        >
-                                                            <Trash2 size={20} />
-                                                        </button>
+                                                    <div>
+                                                        <span className="text-[10px] font-black text-[#007cc3] uppercase tracking-widest block mb-2">Digital Presence</span>
+                                                        {app.portfolio_url ? (
+                                                            <a href={app.portfolio_url} target="_blank" className="inline-flex items-center gap-2 text-[11px] font-black uppercase text-white/60 hover:text-white transition-all underline decoration-[#007cc3] decoration-2 underline-offset-4">
+                                                                <Globe size={14} /> View Portfolio
+                                                            </a>
+                                                        ) : (
+                                                            <span className="text-[11px] font-bold text-white/10 uppercase tracking-widest">No Link Provided</span>
+                                                        )}
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                                </div>
+                                            </div>
+
+                                            {/* Middle Section: Message */}
+                                            <div className="lg:w-1/3 lg:border-l lg:border-white/5 lg:pl-8">
+                                                <span className="text-[10px] font-black text-[#007cc3] uppercase tracking-widest block mb-4">Professional Narrative</span>
+                                                <p className="text-[13px] text-white/60 leading-relaxed font-medium italic border-l-2 border-[#007cc3]/30 pl-4 py-1">
+                                                    {app.message ? `"${app.message}"` : 'No mission statement provided.'}
+                                                </p>
+                                            </div>
+
+                                            {/* Right Section: Actions */}
+                                            <div className="flex flex-row lg:flex-col justify-end lg:justify-center items-center gap-4 lg:border-l lg:border-white/5 lg:pl-8">
+                                                <a href={`https://new.nsgsolutions.in/${app.resume_path}`} target="_blank" className="h-14 px-8 bg-[#007cc3] hover:bg-[#0088d8] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl flex items-center gap-3 shrink-0">
+                                                    <Download size={16} /> Download CV
+                                                </a>
+                                                <button
+                                                    onClick={() => handleDeleteApplication(app.id)}
+                                                    className="w-14 h-14 flex items-center justify-center bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all shadow-lg shrink-0 border border-red-500/10"
+                                                >
+                                                    <Trash2 size={20} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {applications.length === 0 && (
+                                    <div className="py-20 text-center bg-white/5 rounded-[40px] border border-white/5 opacity-30 text-[12px] font-black tracking-widest uppercase italic">No managed applications found in the matrix.</div>
+                                )}
                             </div>
                         </motion.div>
                     )}
 
                     {activeTab === 'inquiries' && (
                         <motion.div key="leads" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
-                            <div className="flex justify-between items-center mb-12">
-                                <h2 className="text-3xl font-black uppercase italic mb-2 tracking-tight">Intelligence Inbound</h2>
-                                <div className="bg-[#007cc3] px-8 py-5 rounded-2xl shadow-xl shadow-blue-500/20 text-center border border-white/10"><span className="block text-[10px] uppercase font-black text-white/50 mb-1">Global Intelligence</span><span className="text-3xl font-black tracking-tighter">{inquiries.length}</span></div>
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+                                <h2 className="text-[2rem] md:text-3xl font-black uppercase italic mb-2 tracking-tight leading-tight">Intelligence Inbound</h2>
+                                <div className="bg-[#007cc3] px-8 py-5 rounded-2xl shadow-xl shadow-blue-500/20 text-center border border-white/10 w-full md:w-auto"><span className="block text-[10px] uppercase font-black text-white/50 mb-1">Global Intelligence</span><span className="text-3xl font-black tracking-tighter">{inquiries.length}</span></div>
                             </div>
-                            <div className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl backdrop-blur-3xl">
-                                <table className="w-full text-left">
-                                    <thead className="bg-[#0f172a] text-[9px] font-black uppercase tracking-[0.2em] text-white/10 border-b border-white/5">
-                                        <tr>
-                                            <th className="px-10 py-10">Client Identity</th>
-                                            <th className="px-10 py-10">Project Scope</th>
-                                            <th className="px-10 py-10">Intelligence Detail</th>
-                                            <th className="px-10 py-10 text-right">Archival Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-white/5">
-                                        {inquiries.map(lead => (
-                                            <tr key={lead.id} className="hover:bg-white/[0.03] transition-all group border-b border-white/[0.02] last:border-0">
-                                                <td className="px-10 py-10">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#007cc3] to-[#1baade] flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-500/10 uppercase italic">
-                                                            {lead.first_name?.[0] || 'U'}
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-black text-xl text-white tracking-tighter mb-0.5">{lead.first_name} {lead.last_name}</div>
-                                                            <div className="text-[10px] font-bold text-white/40 uppercase tracking-[0.1em] flex items-center gap-2">
-                                                                <span className="text-[#007cc3] tracking-normal lowercase">{lead.email}</span>
-                                                                <span className="w-1 h-1 rounded-full bg-white/10"></span>
-                                                                <span>{lead.phone}</span>
-                                                            </div>
+
+                            <div className="grid grid-cols-1 gap-6">
+                                {inquiries.map(lead => (
+                                    <div key={lead.id} className="bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl backdrop-blur-3xl hover:bg-white/[0.08] transition-all group relative overflow-hidden">
+                                        <div className="flex flex-col lg:flex-row justify-between gap-8">
+                                            {/* Client Identity */}
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-5 mb-6">
+                                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#007cc3] to-[#1baade] flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/10 uppercase italic shrink-0">
+                                                        {lead.first_name?.[0] || 'U'}
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-black text-2xl text-white tracking-tighter mb-1 uppercase italic">{lead.first_name} {lead.last_name}</div>
+                                                        <div className="flex flex-wrap gap-3">
+                                                            <span className="text-[10px] font-bold text-[#1baade] uppercase tracking-wider">{lead.email}</span>
+                                                            <span className="w-1 h-1 rounded-full bg-white/10 self-center"></span>
+                                                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{lead.phone}</span>
                                                         </div>
                                                     </div>
-                                                </td>
-                                                <td className="px-10 py-10">
-                                                    <div className="inline-block px-4 py-2 bg-[#007cc3]/10 border border-[#007cc3]/30 rounded-xl text-[#1baade] text-[10px] font-black uppercase tracking-widest mb-2 shadow-sm italic">
-                                                        {lead.project_name}
-                                                    </div>
-                                                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/20 flex items-center gap-2">
-                                                        <Briefcase size={10} className="text-white/10" /> {lead.company} <span className="text-white/5 mx-1">/</span> {lead.role}
-                                                    </div>
-                                                </td>
-                                                <td className="px-10 py-10 max-w-[400px]">
-                                                    <div className="relative group/msg">
-                                                        <div className="bg-white/[0.03] p-5 rounded-3xl border border-white/5 text-[11px] font-medium text-white/80 italic leading-relaxed mb-3 group-hover:bg-white/[0.05] transition-colors relative overflow-hidden">
-                                                            <div className="absolute top-0 left-0 w-1 h-full bg-[#007cc3]/50"></div>
-                                                            "{lead.message}"
-                                                        </div>
-                                                        <div className="flex items-center gap-4">
-                                                            <div className="text-[9px] font-black uppercase text-[#1baade] tracking-[0.2em] flex items-center gap-2 bg-[#1baade]/10 px-3 py-1.5 rounded-full border border-[#1baade]/20">
-                                                                <MapPin size={10} /> {lead.country || 'Global'}
-                                                            </div>
-                                                            {lead.website && (
-                                                                <a href={lead.website} target="_blank" rel="noopener noreferrer" className="text-[9px] font-black uppercase text-white/30 tracking-[0.2em] hover:text-[#007cc3] transition-colors flex items-center gap-2">
-                                                                    <Globe size={10} /> {lead.website.replace(/^https?:\/\//, '')}
-                                                                </a>
-                                                            )}
+                                                </div>
+
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 pt-8 border-t border-white/5">
+                                                    <div>
+                                                        <span className="text-[10px] font-black text-[#007cc3] uppercase tracking-widest block mb-2">Project Scope</span>
+                                                        <div className="inline-block px-4 py-2 bg-[#007cc3]/10 border border-[#007cc3]/30 rounded-xl text-[#1baade] text-[10px] font-black uppercase tracking-widest mb-2 shadow-sm italic">
+                                                            {lead.project_name}
                                                         </div>
                                                     </div>
-                                                </td>
-                                                <td className="px-10 py-10 text-right">
-                                                    <div className="flex flex-col items-end gap-6">
-                                                        <div className="flex flex-col items-end">
-                                                            <div className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-1 italic">Logged Entry</div>
-                                                            <div className="text-sm font-black text-white/60 tracking-tighter">{new Date(lead.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                                                    <div>
+                                                        <span className="text-[10px] font-black text-[#007cc3] uppercase tracking-widest block mb-2">Corporate Context</span>
+                                                        <div className="text-[11px] font-black uppercase tracking-[0.1em] text-white/60">
+                                                            {lead.company} <span className="text-white/20 mx-1">/</span> {lead.role}
                                                         </div>
-                                                        <button
-                                                            onClick={() => handleDeleteInquiry(lead.id)}
-                                                            className="flex items-center gap-5 px-6 py-3 bg-red-500/5 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all border border-red-500/10 hover:border-red-500 shadow-lg group-hover:translate-x-0 translate-x-4 opacity-0 group-hover:opacity-100"
-                                                            title="Purge Entry"
-                                                        >
-                                                            <span className="text-[9px] font-black uppercase tracking-widest">Purge Registry</span>
-                                                            <Trash2 size={14} />
-                                                        </button>
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                                </div>
+                                            </div>
+
+                                            {/* Intelligence Detail */}
+                                            <div className="lg:w-1/3 lg:border-l lg:border-white/5 lg:pl-8">
+                                                <span className="text-[10px] font-black text-[#007cc3] uppercase tracking-widest block mb-4">Intelligence Detail</span>
+                                                <div className="bg-white/[0.03] p-5 rounded-3xl border border-white/5 text-[12px] font-medium text-white/80 italic leading-relaxed mb-4 relative overflow-hidden">
+                                                    <div className="absolute top-0 left-0 w-1 h-full bg-[#007cc3]/50"></div>
+                                                    "{lead.message}"
+                                                </div>
+                                                <div className="flex flex-wrap items-center gap-4">
+                                                    <div className="text-[9px] font-black uppercase text-[#1baade] tracking-[0.2em] flex items-center gap-2 bg-[#1baade]/10 px-3 py-1.5 rounded-full border border-[#1baade]/20">
+                                                        <MapPin size={10} /> {lead.country || 'Global'}
+                                                    </div>
+                                                    {lead.website && (
+                                                        <a href={lead.website} target="_blank" rel="noopener noreferrer" className="text-[9px] font-black uppercase text-white/30 tracking-[0.2em] hover:text-[#007cc3] transition-colors flex items-center gap-2">
+                                                            <Globe size={10} /> {lead.website.replace(/^https?:\/\//, '')}
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Timestamp & Actions */}
+                                            <div className="flex flex-row lg:flex-col justify-between lg:justify-center items-center gap-6 lg:border-l lg:border-white/5 lg:pl-8 lg:min-w-[150px]">
+                                                <div className="text-right lg:text-center">
+                                                    <div className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em] mb-1 italic">Logged Entry</div>
+                                                    <div className="text-[13px] font-black text-white/60 tracking-tighter">{new Date(lead.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleDeleteInquiry(lead.id)}
+                                                    className="w-14 h-14 flex items-center justify-center bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all border border-red-500/10 hover:border-red-500 shadow-lg shrink-0"
+                                                    title="Purge Entry"
+                                                >
+                                                    <Trash2 size={20} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                {inquiries.length === 0 && (
+                                    <div className="py-20 text-center bg-white/5 rounded-[40px] border border-white/5 opacity-30 text-[12px] font-black tracking-widest uppercase italic">No managed inquiries found in the database.</div>
+                                )}
                             </div>
                         </motion.div>
                     )}
