@@ -21,6 +21,7 @@ const AdminDashboard = () => {
     const [solutions, setSolutions] = useState({});
     const [inquiries, setInquiries] = useState([]);
     const [highlights, setHighlights] = useState({ left: [], right: [] });
+    const [services, setServices] = useState({ main: [], sub: {}, all_sub: [] });
     const [loading, setLoading] = useState(true);
     const [statusMessage, setStatusMessage] = useState(null);
 
@@ -39,6 +40,8 @@ const AdminDashboard = () => {
     const [isEditingTestimonial, setIsEditingTestimonial] = useState(false);
     const [blogImageFile, setBlogImageFile] = useState(null);
     const [currentTestimonial, setCurrentTestimonial] = useState({ client_name: '', service_name: '', content: '', rating: 5 });
+    const [isEditingService, setIsEditingService] = useState(false);
+    const [currentService, setCurrentService] = useState({ parent_id: '', category_key: 'itservices', title: '', icon: 'Briefcase', description: '', sort_order: 0 });
 
     const navigate = useNavigate();
 
@@ -67,7 +70,11 @@ const AdminDashboard = () => {
             else if (activeTab === 'solutions') await fetchSolutions();
             else if (activeTab === 'inquiries') await fetchInquiries();
             else if (activeTab === 'highlights') await fetchHighlights();
-        } catch (err) { console.error(err); }
+            else if (activeTab === 'services') await fetchServices();
+        } catch (err) { 
+            console.error(err); 
+            showToast('Logic Error: Failed to synchronize matrix', 'error');
+        }
         setLoading(false);
     };
 
@@ -124,6 +131,19 @@ const AdminDashboard = () => {
             if (result.data.left) norm.left = result.data.left.map(h => ({ ...h, displayImg: normalizeImg(h.image_url) }));
             if (result.data.right) norm.right = result.data.right.map(h => ({ ...h, displayImg: normalizeImg(h.image_url) }));
             setHighlights(norm);
+        }
+    };
+
+    const fetchServices = async () => {
+        try {
+            const res = await fetch('https://new.nsgsolutions.in/api/get_services.php');
+            const result = await res.json();
+            if (result.status === 'success') {
+                console.log("Services Data Synchronized:", result.data);
+                setServices(result.data);
+            }
+        } catch (err) {
+            console.error("Fetch Services Error:", err);
         }
     };
 
@@ -410,6 +430,49 @@ const AdminDashboard = () => {
         });
     }
 
+    const handleSaveService = async (e) => {
+        e.preventDefault();
+        try {
+            const payload = {
+                id: currentService.id,
+                parentId: currentService.parent_id || null,
+                categoryKey: currentService.category_key,
+                title: currentService.title,
+                icon: currentService.icon,
+                description: currentService.description,
+                sortOrder: currentService.sort_order
+            };
+            const res = await fetch('/api/manage_services.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                showToast(currentService.id ? 'Service Reconfigured' : 'New Service Engaged', 'success');
+                setIsEditingService(false);
+                setCurrentService({ parent_id: '', category_key: 'itservices', title: '', icon: 'Briefcase', description: '', sort_order: 0 });
+                fetchServices();
+            }
+        } catch (err) { showToast('Sync Fail', 'error'); }
+    };
+
+    const handleDeleteService = async (id) => {
+        setConfirm({
+            isOpen: true,
+            title: 'Decommission this service and all sub-offerings?',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch(`/api/manage_services.php?id=${id}`, { method: 'DELETE' });
+                    if ((await res.json()).status === 'success') {
+                        showToast('Service Decommissioned', 'success');
+                        fetchServices();
+                    }
+                } catch (err) { showToast('Purge Fail', 'error'); }
+            }
+        });
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('nsg_admin_user');
         navigate('/admin-login');
@@ -423,6 +486,7 @@ const AdminDashboard = () => {
 
     const adminTabs = [
         { id: 'testimonials', label: 'Testimonials', icon: <CheckCircle size={18} /> },
+        { id: 'services', label: 'Services', icon: <Globe size={18} /> },
         { id: 'solutions', label: 'Solutions', icon: <Briefcase size={18} /> },
         { id: 'highlights', label: 'Highlights', icon: <Zap size={18} /> },
         { id: 'inquiries', label: 'Inquiries', icon: <Send size={18} /> },
@@ -473,6 +537,139 @@ const AdminDashboard = () => {
 
             <main className="max-w-[1400px] mx-auto px-6 py-12">
                 <AnimatePresence mode="wait">
+                    {activeTab === 'services' && (
+                        <motion.div key="services" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                            <div className="flex justify-between items-center mb-10">
+                                <h2 className="text-3xl font-black uppercase italic tracking-tight">Services Matrix</h2>
+                                <button onClick={() => { 
+                                    setIsEditingService(false); 
+                                    setCurrentService({ parent_id: '', category_key: 'itservices', title: '', icon: 'Briefcase', description: '', sort_order: 0 }); 
+                                }} className="bg-[#007cc3] text-white px-8 py-4 rounded-xl font-black uppercase text-[10px] tracking-widest flex items-center gap-3 transition-all"><Plus size={18} /> Add Entry</button>
+                            </div>
+
+                            <div className="grid lg:grid-cols-[1fr_450px] gap-12">
+                                <div className="space-y-12">
+                                    {/* Main Services */}
+                                    <div className="bg-white/5 p-8 rounded-[40px] border border-white/10 shadow-2xl">
+                                        <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 tracking-widest flex items-center gap-3"><Globe size={16} /> Main Categories</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {services.main.map(main => (
+                                                <div key={main.id} className="bg-[#0f172a] p-6 rounded-3xl border border-white/5 group relative shadow-xl overflow-hidden hover:border-[#007cc3]/30 transition-all">
+                                                    <div className="flex justify-between items-start mb-4">
+                                                        <div className="bg-white/5 p-3 rounded-xl text-[#007cc3]"><Briefcase size={20} /></div>
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => { setIsEditingService(true); setCurrentService(main); }} className="p-2 hover:text-white text-white/30"><Edit2 size={16} /></button>
+                                                            <button onClick={() => handleDeleteService(main.id)} className="p-2 hover:text-red-400 text-white/30"><Trash2 size={16} /></button>
+                                                        </div>
+                                                    </div>
+                                                    <h4 className="font-black uppercase text-sm mb-6">{main.title}</h4>
+                                                    
+                                                    {/* Child List */}
+                                                    <div className="space-y-2 mb-4">
+                                                        <span className="text-[8px] font-black text-[#007cc3] uppercase tracking-widest">Offerings</span>
+                                                        {(services.sub[main.id] || []).map(sub => (
+                                                            <div key={sub.id} className="flex justify-between items-center bg-white/5 px-4 py-2 rounded-xl border border-white/5 group/sub">
+                                                                <span className="text-xs font-bold text-white/60">{sub.title}</span>
+                                                                <div className="flex gap-2 opacity-0 group-hover/sub:opacity-100 transition-opacity">
+                                                                    <button onClick={() => { setIsEditingService(true); setCurrentService(sub); }} className="p-1 hover:text-[#007cc3]"><Edit2 size={12} /></button>
+                                                                    <button onClick={() => handleDeleteService(sub.id)} className="p-1 hover:text-red-400"><Trash2 size={12} /></button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                        {(!services.sub[main.id] || services.sub[main.id].length === 0) && (
+                                                            <p className="text-[10px] text-white/20 italic">No sub-offerings managed.</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* FORM SIDEBAR */}
+                                <form onSubmit={handleSaveService} className="bg-white/5 p-8 rounded-[40px] border border-white/10 h-fit sticky top-40 shadow-2xl overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#007cc3]/5 rounded-full -translate-y-16 translate-x-16 blur-2xl"></div>
+                                    <h3 className="uppercase text-[11px] font-black text-[#007cc3] mb-8 border-b border-white/5 pb-4 tracking-[0.2em] flex items-center gap-3">
+                                        {isEditingService ? <Edit2 size={16} /> : <Plus size={16} />} {isEditingService ? 'Service Modification' : 'Manual Registry'}
+                                    </h3>
+                                    
+                                    <div className="space-y-6 relative z-10">
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Entry Hierarchy</label>
+                                            <select 
+                                                value={currentService.parent_id || ''} 
+                                                onChange={e => setCurrentService({ ...currentService, parent_id: e.target.value })} 
+                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                            >
+                                                <option value="">Main Category (Top Level)</option>
+                                                {services.main.map(m => (
+                                                    <option key={m.id} value={m.id}>Sub-Service for: {m.title}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Internal Category Key</label>
+                                            <input 
+                                                required 
+                                                value={currentService.category_key} 
+                                                onChange={e => setCurrentService({ ...currentService, category_key: e.target.value })} 
+                                                placeholder="e.g. itservices, branding" 
+                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Service Title</label>
+                                            <input 
+                                                required 
+                                                value={currentService.title} 
+                                                onChange={e => setCurrentService({ ...currentService, title: e.target.value })} 
+                                                placeholder="e.g. Cloud Architecture" 
+                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Icon Identifier (Lucide)</label>
+                                            <input 
+                                                required 
+                                                value={currentService.icon} 
+                                                onChange={e => setCurrentService({ ...currentService, icon: e.target.value })} 
+                                                placeholder="e.g. Code, Zap, Globe" 
+                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-[9px] font-black uppercase text-white/30 ml-4 tracking-widest">Execution Priority / Sort Order</label>
+                                            <input 
+                                                type="number"
+                                                value={currentService.sort_order} 
+                                                onChange={e => setCurrentService({ ...currentService, sort_order: parseInt(e.target.value) })} 
+                                                className="w-full bg-[#0f172a] border border-white/10 rounded-2xl px-6 py-4 text-sm outline-none focus:border-[#007cc3] transition-all"
+                                            />
+                                        </div>
+
+                                        <button type="submit" className="w-full bg-[#007cc3] py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest shadow-xl flex items-center justify-center gap-3 mt-4 transition-all">
+                                            <Send size={18} /> {isEditingService ? 'Synchronize Registry' : 'Inject Command'}
+                                        </button>
+                                        
+                                        {isEditingService && (
+                                            <button 
+                                                type="button" 
+                                                onClick={() => setIsEditingService(false)} 
+                                                className="w-full text-[9px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all pt-4"
+                                            >
+                                                Cancel Operation
+                                            </button>
+                                        )}
+                                    </div>
+                                </form>
+                            </div>
+                        </motion.div>
+                    )}
+
                     {activeTab === 'testimonials' && (
                         <motion.div key="testimonials" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                             <div className="flex justify-between items-center mb-10">

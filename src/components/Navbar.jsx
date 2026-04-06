@@ -28,14 +28,46 @@ const Navbar = () => {
     { name: 'Contact', path: '/contact' }
   ];
 
-  const serviceSubLinks = [
+  const [serviceSubLinks, setServiceSubLinks] = useState([
     { name: 'IT Services', path: '/services/it' },
     { name: 'Video Production', path: '/services/creative' },
     { name: 'Digital Marketing', path: '/services/marketing' },
     { name: 'Publishing Solutions', path: 'https://nsgpublishers.com', external: true },
     { name: 'Branding & Design', path: '/solutions/branding' },
     { name: 'Enterprise Strategy', path: '/services/enterprise' }
-  ];
+  ]);
+
+  useEffect(() => {
+    const fetchNavbarServices = async () => {
+      try {
+        const response = await fetch('https://new.nsgsolutions.in/api/get_services.php');
+        if (!response.ok) return;
+        const result = await response.json();
+        if (result.status === 'success' && result.data.main) {
+          const dynamicLinks = result.data.main.map(m => {
+            let path = `/services/${m.category_key}`;
+            let external = false;
+
+            // Maintain specific existing routes
+            if (m.category_key === 'itservices') path = '/services/it';
+            else if (m.category_key === 'videoproduction') path = '/services/creative';
+            else if (m.category_key === 'digitalmarketing') path = '/services/marketing';
+            else if (m.category_key === 'branding') path = '/solutions/branding';
+            else if (m.category_key === 'publishing') {
+              path = 'https://nsgpublishers.com';
+              external = true;
+            }
+
+            return { name: m.title, path, external };
+          });
+          setServiceSubLinks(dynamicLinks);
+        }
+      } catch (err) {
+        console.error("Navbar dynamic fetch failed", err);
+      }
+    };
+    fetchNavbarServices();
+  }, []);
 
   return (
     <nav
