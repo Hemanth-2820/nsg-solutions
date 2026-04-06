@@ -40,8 +40,8 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 border-b border-white/10 ${scrolled
-          ? "bg-[#0A0E27]/90 backdrop-blur-md shadow-2xl"
-          : "bg-black/30 backdrop-blur-md"
+        ? "bg-[#0A0E27]/90 backdrop-blur-md shadow-2xl"
+        : "bg-black/30 backdrop-blur-md"
         }`}
     >
       {/* NAVBAR HEIGHT FIXED HERE */}

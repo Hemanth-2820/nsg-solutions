@@ -37,7 +37,7 @@ const VerticalCarousel = () => {
   }
 
   return (
-    <div 
+    <div
       className="relative w-full h-[450px] lg:h-[650px] overflow-hidden flex lg:gap-6 p-2 lg:p-6 bg-white/5 backdrop-blur-[20px] rounded-[2rem] lg:rounded-[2.5rem] border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.5)]"
       style={{
         maskImage: 'linear-gradient(to bottom, transparent, black 10%, black 90%, transparent)',
@@ -206,7 +206,7 @@ const HeroSection = () => {
             <div className="absolute inset-0 bg-blue-600/20 blur-[100px] rounded-full scale-90 group-hover:scale-100 transition-transform duration-1000"></div>
 
             <div className="h-[450px] lg:h-[650px] w-full relative">
-               <VerticalCarousel />
+              <VerticalCarousel />
             </div>
           </motion.div>
         </div>
