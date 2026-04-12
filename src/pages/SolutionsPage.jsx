@@ -47,7 +47,7 @@ const Interactive3DHero = () => (
 
     <FloatingParticles />
 
-    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-[160px] relative z-10 flex flex-col lg:flex-row justify-between h-full items-center font-sans">
+    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-[180px] relative z-10 flex flex-col lg:flex-row justify-between h-full items-center font-sans">
 
       {/* LEFT CONTENT COLUMN */}
       <div className="w-full lg:w-[60%] flex flex-col items-start relative z-20">

@@ -66,7 +66,7 @@ const EnterpriseStrategyPage = () => {
     <div className="min-h-screen font-sans overflow-x-hidden bg-gradient-to-br from-[#F8FAFC] to-[#E0F2FE]">
 
       {/* HERO */}
-      <section className="pt-[160px] pb-20 relative">
+      <section className="pt-[180px] pb-20 relative">
         <div className="absolute right-0 top-0 w-[400px] h-[400px] bg-slate-300 blur-[120px] opacity-30"></div>
         <div className="max-w-[1400px] mx-auto px-6">
           <Link
