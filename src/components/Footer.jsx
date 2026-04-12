@@ -69,7 +69,7 @@ const Footer = () => {
             <ul className="space-y-2 md:space-y-4 font-bold text-sm">
               {[
                 { name: 'Client Login', path: '/client-login' },
-                { name: 'Privacy Policy', path: '#' },
+                { name: 'Privacy Policy', path: '/privacy-policy' },
                 { name: 'Support', path: '/contact' }
               ].map((item) => (
                 <li key={item.name} className="text-infosys-dark hover:text-[#007cc3] cursor-pointer transition-all duration-300">
@@ -82,12 +82,9 @@ const Footer = () => {
         </div>
         
         <div className="flex flex-col md:flex-row justify-between items-center text-[10px] font-black text-gray-400 tracking-[0.1em] uppercase">
-          <p>Copyright &copy; {new Date().getFullYear()} NSG Solutions Ltd. All Rights Reserved.</p>
+          <p>Copyright &copy; {new Date().getFullYear()} NSG Solutions Pvt Ltd. All Rights Reserved.</p>
           <div className="flex gap-8 mt-6 md:mt-0">
-             <span className="hover:text-[#007cc3] cursor-pointer transition-colors">Terms of Use</span>
-             <span className="hover:text-[#007cc3] cursor-pointer transition-colors">Privacy Policy</span>
-             <span className="hover:text-[#007cc3] cursor-pointer transition-colors">Cookie Policy</span>
-             <span className="hover:text-[#007cc3] cursor-pointer transition-colors">Safe Harbour</span>
+             <Link to="/privacy-policy" className="hover:text-[#007cc3] cursor-pointer transition-colors">Privacy Policy</Link>
           </div>
         </div>
 

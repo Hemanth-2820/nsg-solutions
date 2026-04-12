@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Target, Flag, Users, Activity, CheckCircle2, ShieldCheck, Rocket, Zap, Globe, Layers, ArrowRight } from 'lucide-react';
 import { gsap } from 'gsap';
 import { motion } from 'framer-motion';
@@ -41,6 +42,8 @@ const InnerPageHero = ({ title, subtitle, bgImage }) => (
 const AboutPage = () => {
   const comp = useRef(null);
 
+  const location = useLocation();
+
   useEffect(() => {
     // Top-tier Corporate GSAP stagger setup
     const ctx = gsap.context(() => {
@@ -59,11 +62,23 @@ const AboutPage = () => {
       });
     }, comp);
 
+    // Handle scroll to hash
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        // SMALL DELAY to ensure content is rendered
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+
     return () => ctx.revert();
-  }, []);
+  }, [location]);
 
   return (
-    <div className="min-h-screen bg-white" ref={comp}>
+    <div className="min-h-screen bg-white" ref={comp} id="who-we-are">
       <InnerPageHero
         title="Who We Are"
         subtitle="We navigate global enterprises through their digital transformation. Driven by innovation, engineered perfectly."
@@ -214,7 +229,7 @@ const AboutPage = () => {
             </span>
 
             <h2 className="relative z-10 text-3xl sm:text-5xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">
-              Innovate. Build. <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00a3ff] to-[#60a5fa] drop-shadow-sm">Grow.</span>
+              Innovate. <span className="text-[#7B68EE]">Build.</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00a3ff] to-[#60a5fa] drop-shadow-sm">Grow.</span>
             </h2>
 
             <div className="relative z-10 flex justify-center gap-6 mt-10">
@@ -313,11 +328,17 @@ const AboutPage = () => {
       </section>
 
       {/* Placeholders handled by the Developer (Rahul) */}
-      {/* Leadership Collective Section */}
-      <LeadershipSection />
+      <div id="leadership">
+        <LeadershipSection />
+      </div>
 
-      <TeamSection />
-      <OfficeGallery />
+      <div id="team">
+        <TeamSection />
+      </div>
+
+      <div id="gallery">
+        <OfficeGallery />
+      </div>
     </div>
   );
 };

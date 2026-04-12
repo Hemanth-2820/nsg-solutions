@@ -123,7 +123,7 @@ const HeroSection = () => {
 
   return (
     <section
-      className="relative w-full min-h-0 lg:min-h-screen flex items-center overflow-hidden pt-[280px] lg:pt-0"
+      className="relative w-full min-h-screen flex flex-col overflow-hidden"
       style={{ background: 'linear-gradient(135deg, #0B0F2F, #1A1F5A, #2C1983)' }}
     >
 
@@ -152,10 +152,10 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay"></div>
       </div>
 
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full relative z-10 flex flex-col lg:flex-row lg:justify-between items-center h-full gap-8 lg:gap-20">
+      <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full relative z-10 flex flex-col lg:flex-row lg:justify-between items-center h-full pt-[280px] lg:pt-[180px] flex-grow gap-8 lg:gap-20">
 
         {/* TEXT CONTENT COLUMN */}
-        <div className="lg:w-1/2 flex flex-col justify-center items-center lg:items-start min-h-0 lg:min-h-screen text-center lg:text-left">
+        <div className="lg:w-1/2 flex flex-col justify-center items-center lg:items-start text-center lg:text-left h-full">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
@@ -183,13 +183,13 @@ const HeroSection = () => {
               </div>
 
               {/* Bold Typography Title - Sleek & Compact */}
-              <h1 className="text-[1.8rem] sm:text-[2.5rem] md:text-[3.8rem] lg:text-[3.5rem] xl:text-[4.5rem] font-black text-white leading-tight md:leading-[0.95] tracking-tighter mb-6 md:mb-12">
+              <h1 className="text-[1.8rem] sm:text-[2.5rem] md:text-[3.8rem] lg:text-[3.5rem] xl:text-[4.5rem] font-black text-white leading-tight md:leading-[1.3] tracking-tighter mb-6 md:mb-12 pb-4">
                 {slides[currentSlide].title.split(' ').map((word, index) => {
                   const isHighlight = slides[currentSlide].highlight.includes(word);
                   return (
                     <span
                       key={index}
-                      className={`inline-block mr-2 md:mr-4 ${isHighlight ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-blue-600" : "text-white"}`}
+                      className={`inline-block mr-2 md:mr-4 pb-2 ${isHighlight ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-blue-600" : "text-white"}`}
                     >
                       {word}
                     </span>

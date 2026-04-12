@@ -9,6 +9,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isServicesHovered, setIsServicesHovered] = useState(false);
+  const [isAboutHovered, setIsAboutHovered] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -21,12 +22,19 @@ const Navbar = () => {
 
   const mainLinks = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
+    { name: 'About', path: '/about', hasDropdown: true },
     { name: 'Services', path: '/services', hasDropdown: true },
     { name: 'Solutions', path: '/solutions' },
     { name: 'Blog', path: '/blog' },
     { name: 'Careers', path: '/careers' },
     { name: 'Contact', path: '/contact' }
+  ];
+
+  const aboutSubLinks = [
+    { name: 'Who We Are', path: '/about' },
+    { name: 'Leadership Core', path: '/about#leadership' },
+    { name: 'Our Talent', path: '/about#team' },
+    { name: 'Inside NSG Solutions', path: '/about#gallery' }
   ];
 
   const [serviceSubLinks, setServiceSubLinks] = useState([
@@ -100,13 +108,22 @@ const Navbar = () => {
           <div className="hidden xl:flex items-center space-x-10">
             {mainLinks.map((link, idx) => {
               const isActive = location.pathname === link.path;
+              const isAbout = link.name === 'About';
+              const isServices = link.name === 'Services';
+              const showDropdown = (isAbout && isAboutHovered) || (isServices && isServicesHovered);
 
               return (
                 <div
                   key={idx}
                   className="relative group py-6"
-                  onMouseEnter={() => link.hasDropdown && setIsServicesHovered(true)}
-                  onMouseLeave={() => link.hasDropdown && setIsServicesHovered(false)}
+                  onMouseEnter={() => {
+                    if (isAbout) setIsAboutHovered(true);
+                    if (isServices) setIsServicesHovered(true);
+                  }}
+                  onMouseLeave={() => {
+                    if (isAbout) setIsAboutHovered(false);
+                    if (isServices) setIsServicesHovered(false);
+                  }}
                 >
                   <Link
                     to={link.path}
@@ -118,13 +135,13 @@ const Navbar = () => {
                   </Link>
 
                   {/* Dropdown */}
-                  {link.hasDropdown && isServicesHovered && (
+                  {link.hasDropdown && showDropdown && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="absolute top-full left-1/2 -translate-x-1/2 w-72 bg-black/80 backdrop-blur-xl border border-white/10 p-3 rounded-2xl shadow-2xl"
                     >
-                      {serviceSubLinks.map((sub, i) => (
+                      {(isAbout ? aboutSubLinks : serviceSubLinks).map((sub, i) => (
                         <Link
                           key={i}
                           to={sub.external ? { pathname: sub.path } : sub.path}
@@ -132,7 +149,7 @@ const Navbar = () => {
                           className="flex items-center gap-4 p-4 text-white/50 hover:text-[#00a3ff] hover:bg-white/5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all"
                         >
                           <div className="p-2 bg-white/5 rounded-lg text-inherit">
-                            {getDynamicIcon(sub.icon)}
+                            {getDynamicIcon(sub.icon || (isAbout ? 'users' : 'chevron-right'))}
                           </div>
                           {sub.name}
                         </Link>
@@ -193,7 +210,7 @@ const Navbar = () => {
 
                   {link.hasDropdown && (
                     <div className="mt-3 pl-4 border-l border-white/10 space-y-2">
-                      {serviceSubLinks.map((sub, i) => (
+                      {(link.name === 'About' ? aboutSubLinks : serviceSubLinks).map((sub, i) => (
                         <Link
                           key={i}
                           to={sub.path}

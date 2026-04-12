@@ -18,6 +18,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLoginPage from './pages/admin/AdminLoginPage';
 import BlogPage from './pages/BlogPage';
 import CareersApplyPage from './pages/CareersApplyPage';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 import ITServices from './components/solutions/ITServices';
 import VideoProduction from './components/solutions/VideoProduction';
@@ -66,6 +67,7 @@ function App() {
             <Route path="/careers/apply/:role" element={<CareersApplyPage />} />
             <Route path="/client-login" element={<ClientLoginPage />} />
             <Route path="/submit-review" element={<SubmitReviewPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
             <Route path="/admin-portal" element={<AdminDashboard />} />
             <Route path="/admin-login" element={<AdminLoginPage />} />
