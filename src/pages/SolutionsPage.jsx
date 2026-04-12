@@ -35,7 +35,7 @@ const FloatingParticles = () => {
 };
 
 const Interactive3DHero = () => (
-  <section className="relative w-full h-[100vh] flex items-center bg-[#0a0f16] overflow-hidden">
+  <section className="relative w-full min-h-screen flex items-center bg-[#0a0f16] overflow-hidden">
     {/* Deep Layered Premium Background */}
     <div className="absolute inset-0 z-0">
       <div className="absolute inset-0 bg-gradient-to-br from-[#0a0f16] to-[#050505] opacity-100"></div>
@@ -47,7 +47,7 @@ const Interactive3DHero = () => (
 
     <FloatingParticles />
 
-    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-[180px] relative z-10 flex flex-col lg:flex-row justify-between h-full items-center font-sans">
+    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-[280px] relative z-10 flex flex-col lg:flex-row justify-between h-full items-center font-sans">
 
       {/* LEFT CONTENT COLUMN */}
       <div className="w-full lg:w-[60%] flex flex-col items-start relative z-20">

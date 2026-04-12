@@ -8,7 +8,7 @@ import OfficeGallery from '../components/about/OfficeGallery';
 import aboutbgImage from '../assets/about-bgImage.png';
 
 const InnerPageHero = ({ title, subtitle, bgImage }) => (
-  <section className="relative w-full min-h-[500px] md:h-[700px] flex items-center bg-[#111] pt-[180px]">
+  <section className="relative w-full min-h-[500px] md:h-[700px] flex items-center bg-[#111] pt-[280px]">
 
     <div className="absolute inset-0 z-0">
       <img

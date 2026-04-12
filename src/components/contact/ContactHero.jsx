@@ -10,7 +10,7 @@ const ContactHero = () => (
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(91,184,228,0.2),transparent_55%)]"></div>
     </div>
 
-    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-[220px] relative z-10">
+    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-[280px] relative z-10">
 
 
       <div className="overflow-hidden pb-3">
