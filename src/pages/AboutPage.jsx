@@ -72,15 +72,15 @@ const AboutPage = () => {
 
       <section className="py-16 md:py-24">
         <div className="max-w-[1400px] mx-auto px-6 font-sans">
- 
-           <div className="flex flex-col lg:flex-row gap-10 md:gap-20">
-             <div className="lg:w-1/2">
-               <h2 className="text-[2.2rem] md:text-[3rem] font-extrabold mb-8 text-[#111] leading-tight gsap-title tracking-tight">
-                 Engineering Digital Excellence <br className="hidden md:block" /> <span className="text-[#007cc3]">for Tomorrow.</span>
-               </h2>
-               <div className="h-[2px] bg-gray-200 w-full mb-8 overflow-hidden">
-                 <div className="h-full bg-[#007cc3] w-0 gsap-line"></div>
-               </div>
+
+          <div className="flex flex-col lg:flex-row gap-10 md:gap-20">
+            <div className="lg:w-1/2">
+              <h2 className="text-[2.2rem] md:text-[3rem] font-extrabold mb-8 text-[#111] leading-tight gsap-title tracking-tight">
+                Engineering Digital Excellence <br className="hidden md:block" /> <span className="text-[#007cc3]">for Tomorrow.</span>
+              </h2>
+              <div className="h-[2px] bg-gray-200 w-full mb-8 overflow-hidden">
+                <div className="h-full bg-[#007cc3] w-0 gsap-line"></div>
+              </div>
               <p className="text-xl text-[#333] font-light leading-relaxed mb-6">
                 NSG Solutions Private Limited is a multi-domain company delivering IT services, video production, Animation, Designing, Digital Marketing and training.
               </p>
@@ -132,7 +132,7 @@ const AboutPage = () => {
                   <div className="opacity-40 mb-6 group-hover:opacity-100 transition-opacity">
                     {metric.icon}
                   </div>
- 
+
                   <div className="relative z-10">
                     <h3 className="text-4xl sm:text-6xl font-black mb-3 tracking-tighter leading-none">{metric.num}</h3>
                     <p className="text-[10px] font-black tracking-[0.3em] uppercase opacity-80">{metric.label}</p>
@@ -208,11 +208,11 @@ const AboutPage = () => {
             {/* Ambient Atmosphere Blobs */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
             <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] translate-x-1/2 translate-y-1/2 pointer-events-none" />
- 
+
             <span className="relative z-10 text-[#00a3ff] font-black tracking-[0.4em] md:tracking-[0.6em] uppercase text-[9px] md:text-[10px] mb-6 md:mb-8 block drop-shadow-lg">
               Our Motto
             </span>
- 
+
             <h2 className="relative z-10 text-3xl sm:text-5xl md:text-8xl font-black text-white tracking-tighter leading-none mb-6">
               Innovate. Build. <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00a3ff] to-[#60a5fa] drop-shadow-sm">Grow.</span>
             </h2>

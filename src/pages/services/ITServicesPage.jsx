@@ -29,7 +29,7 @@ const ITServicesPage = () => {
       try {
         const response = await fetch('/api/get_services.php');
         const result = await response.json();
-        
+
         if (result.status === 'success') {
           // Find the IT Services main category ID (should be 1 or matching the key)
           const itCategory = result.data.main.find(m => m.category_key === 'itservices');
@@ -58,7 +58,7 @@ const ITServicesPage = () => {
 
   const getDynamicIcon = (iconName) => {
     if (!iconName) return <LucideIcons.Zap size={30} />;
-    
+
     // Normalize string to PascalCase for Lucide: 'cloud' -> 'Cloud', 'cloud_cog' -> 'CloudCog'
     const pascalName = iconName
       .split(/[-_\s]+/)

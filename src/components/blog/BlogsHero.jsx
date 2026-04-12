@@ -5,21 +5,21 @@ import blogBanner from '../../assets/generated/bolg-banner.jpeg';
 const Particle = ({ delay }) => (
   <motion.div
     initial={{ y: 0, x: 0, opacity: 0 }}
-    animate={{ 
-      y: [0, -100, -200], 
+    animate={{
+      y: [0, -100, -200],
       x: [0, 50, -50, 0],
-      opacity: [0, 0.4, 0] 
+      opacity: [0, 0.4, 0]
     }}
-    transition={{ 
-      duration: 10 + Math.random() * 10, 
-      repeat: Infinity, 
+    transition={{
+      duration: 10 + Math.random() * 10,
+      repeat: Infinity,
       delay: delay,
       ease: "linear"
     }}
     className="absolute w-1 h-1 bg-[#007cc3] rounded-full blur-[1px]"
-    style={{ 
-      left: `${Math.random() * 100}%`, 
-      top: `${Math.random() * 100}%` 
+    style={{
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`
     }}
   />
 );
@@ -32,13 +32,13 @@ const BlogsHero = () => {
   return (
     <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-black pt-[180px]">
       {/* Background Image with Parallax */}
-      <motion.div 
+      <motion.div
         style={{ y: y1 }}
         className="absolute inset-0 z-0"
       >
-        <img 
-          src={blogBanner} 
-          alt="NSG Technical Blog" 
+        <img
+          src={blogBanner}
+          alt="NSG Technical Blog"
           className="w-full h-full object-cover scale-110 opacity-70"
         />
         <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px]" />
@@ -50,7 +50,7 @@ const BlogsHero = () => {
           <Particle key={i} delay={i * 0.5} />
         ))}
       </div>
-      
+
       <div className="relative z-20 max-w-7xl mx-auto px-6 text-center">
 
 
@@ -67,8 +67,8 @@ const BlogsHero = () => {
             </motion.span>
           ))}
         </h1>
-        
-        <motion.p 
+
+        <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.8 }}
