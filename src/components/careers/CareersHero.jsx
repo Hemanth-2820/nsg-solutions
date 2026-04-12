@@ -25,7 +25,7 @@ const CareersHero = () => {
     <>
       <ApplicationFormModal isOpen={showForm} onClose={() => setShowForm(false)} />
 
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden pt-[160px] md:pt-0">
         {/* Background Image with Parallax */}
         <motion.div style={{ y: y1 }} className="absolute inset-0 z-0">
           <img src={nsgCareers} alt="Careers at NSG" className="w-full h-full object-cover scale-110" />
