@@ -81,7 +81,7 @@ const stats = [
 ];
 
 const AboutMNCLevel = () => (
-  <section className="bg-[#f1f5f9] py-28 relative overflow-hidden">
+  <section className="bg-[#f1f5f9] py-12 md:py-28 relative overflow-hidden">
     <div className="max-w-[1500px] mx-auto px-6 lg:px-12 relative z-10 transition-all">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (

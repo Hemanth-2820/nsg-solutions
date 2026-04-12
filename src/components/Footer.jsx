@@ -5,10 +5,10 @@ import logo from '../assets/logo.png';
 
 const Footer = () => {
   return (
-    <footer className="bg-infosys-gray text-infosys-dark pt-28 pb-12 snap-section flex flex-col justify-end border-t border-gray-200">
+    <footer className="bg-infosys-gray text-infosys-dark pt-12 md:pt-28 pb-12 snap-section flex flex-col justify-end border-t border-gray-200">
       <div className="max-w-[1600px] w-full mx-auto px-6 lg:px-12">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16 border-b border-gray-300 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 md:gap-12 mb-10 md:mb-16 border-b border-gray-300 pb-12 md:pb-20">
           
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-8 group">
@@ -26,8 +26,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-[12px] font-black mb-8 text-gray-500 uppercase tracking-[0.2em]">Explore</h4>
-            <ul className="space-y-4 font-bold text-sm">
+            <h4 className="text-[12px] font-black mb-4 md:mb-8 text-gray-500 uppercase tracking-[0.2em]">Explore</h4>
+            <ul className="space-y-2 md:space-y-4 font-bold text-sm">
               {[
                 { name: 'Home', path: '/' },
                 { name: 'About Us', path: '/about' },
@@ -43,8 +43,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-[12px] font-black mb-8 text-gray-500 uppercase tracking-[0.2em]">Our Services</h4>
-            <ul className="space-y-4 font-bold text-sm">
+            <h4 className="text-[12px] font-black mb-4 md:mb-8 text-gray-500 uppercase tracking-[0.2em]">Our Services</h4>
+            <ul className="space-y-2 md:space-y-4 font-bold text-sm">
               {[
                 { name: 'IT Services', path: '/services/it' },
                 { name: 'Video Production', path: '/services/creative' },
@@ -65,8 +65,8 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="text-[12px] font-black mb-8 text-gray-500 uppercase tracking-[0.2em]">Quick Links</h4>
-            <ul className="space-y-4 font-bold text-sm">
+            <h4 className="text-[12px] font-black mb-4 md:mb-8 text-gray-500 uppercase tracking-[0.2em]">Quick Links</h4>
+            <ul className="space-y-2 md:space-y-4 font-bold text-sm">
               {[
                 { name: 'Client Login', path: '/client-login' },
                 { name: 'Privacy Policy', path: '#' },

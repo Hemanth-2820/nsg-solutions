@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://new.nsgsolutions.in/',
+        target: 'https://nsgsolutions.in/',
         changeOrigin: true,
         secure: false, // Set to true if you have a valid SSL certificate
         rewrite: (path) => path.replace(/^\/api/, '/api'),

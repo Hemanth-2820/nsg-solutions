@@ -48,7 +48,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchNavbarServices = async () => {
       try {
-        const response = await fetch('https://new.nsgsolutions.in/api/get_services.php');
+        const response = await fetch('https://nsgsolutions.in/api/get_services.php');
         if (!response.ok) return;
         const result = await response.json();
         if (result.status === 'success' && result.data.main) {

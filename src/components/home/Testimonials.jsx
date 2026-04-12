@@ -151,17 +151,17 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="relative bg-black py-20 lg:py-0 lg:h-[150vh]">
+    <section className="relative bg-black py-12 md:py-20 lg:py-0 lg:h-[150vh]">
 
       {/* STICKY TEXT LAYER (STAYS PINNED) - HIDDEN OR STATIC ON MOBILE */}
-      <div className="relative lg:sticky top-0 h-auto lg:h-screen w-full flex items-center justify-center -z-0 overflow-hidden px-10 py-10 lg:py-0">
+      <div className="relative lg:sticky top-0 h-auto lg:h-screen w-full flex items-center justify-center -z-0 overflow-hidden px-10 py-6 lg:py-0">
         <h2 className="text-[2.5rem] sm:text-[4rem] md:text-[6rem] lg:text-[8rem] font-bold text-transparent bg-clip-text bg-gradient-to-br from-blue-600 via-white to-blue-400 tracking-tighter leading-[0.9] text-center select-none uppercase pointer-events-none opacity-30">
           VOICES OF <br /> SUCCESS
         </h2>
       </div>
 
       {/* HORIZONTAL CAROUSEL LAYER (FLOWS OVER THE STICKY TEXT) */}
-      <div className="relative z-10 w-full lg:-mt-[60vh] pb-10 lg:pb-32 overflow-hidden">
+      <div className="relative z-10 w-full lg:-mt-[60vh] pb-6 lg:pb-32 overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 relative flex flex-col items-center">
 
           <div className="flex items-center w-full justify-center gap-6 sm:gap-10">
@@ -177,7 +177,7 @@ const Testimonials = () => {
             {/* SCROLLING CARDS CONTAINER */}
             <div
               ref={containerRef}
-              className="flex gap-10 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 sm:px-10 py-10 w-full max-w-[1100px]"
+              className="flex gap-10 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-4 sm:px-10 py-6 w-full max-w-[1100px]"
             >
               {allTestimonials.map((item) => (
                 <TestimonialCard key={item.id} item={item} />
