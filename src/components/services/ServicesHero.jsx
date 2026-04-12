@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
 const ServicesHero = ({ title, subtitle }) => (
-  <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center bg-gradient-to-br from-[#F8FAFC] to-[#E0F2FE] overflow-hidden pt-[280px]">
+  <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center bg-gradient-to-br from-[#F8FAFC] to-[#E0F2FE] overflow-hidden pt-[280px] lg:pt-[180px]">
 
     {/* Subtle texture */}
     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/white-diamond.png')] opacity-10"></div>

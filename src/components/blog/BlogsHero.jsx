@@ -30,7 +30,7 @@ const BlogsHero = () => {
   const words = "Insights, Ideas & Innovation".split(" ");
 
   return (
-    <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-black pt-[180px]">
+    <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-black pt-[280px] lg:pt-[180px]">
       {/* Background Image with Parallax */}
       <motion.div
         style={{ y: y1 }}
