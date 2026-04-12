@@ -85,14 +85,14 @@ const Navbar = () => {
         }`}
     >
       {/* NAVBAR HEIGHT FIXED HERE */}
-      <div className="max-w-[1550px] mx-auto px-6 h-[100px] flex items-center justify-between">
+      <div className="max-w-full mx-auto px-6 h-[160px] md:h-[180px] flex items-center justify-between">
 
         {/* Logo */}
         <Link to="/" className="flex-shrink-0">
           <img
             src={logonavbar}
             alt="NSG Solutions"
-            className="h-[70px] md:h-[85px] w-auto transition-transform hover:scale-105"
+            className="h-[130px] md:h-[150px] w-auto transition-transform hover:scale-105"
           />
         </Link>
 
@@ -157,7 +157,7 @@ const Navbar = () => {
           onClick={() => setIsOpen(!isOpen)}
           className="xl:hidden w-10 h-10 flex items-center justify-center text-white"
         >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
+          {isOpen ? <X size={32} /> : <Menu size={32} />}
         </button>
       </div>
 
