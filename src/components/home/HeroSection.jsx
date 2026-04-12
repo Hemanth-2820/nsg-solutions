@@ -123,7 +123,7 @@ const HeroSection = () => {
 
   return (
     <section
-      className="relative w-full min-h-0 flex items-center overflow-hidden pt-[280px] lg:pt-[180px]"
+      className="relative w-full min-h-0 lg:min-h-screen flex items-center overflow-hidden pt-[280px] lg:pt-0"
       style={{ background: 'linear-gradient(135deg, #0B0F2F, #1A1F5A, #2C1983)' }}
     >
 
