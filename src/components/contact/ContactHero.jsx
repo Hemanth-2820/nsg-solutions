@@ -3,14 +3,14 @@ import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
 const ContactHero = () => (
-  <section className="relative w-full h-[55vh] flex items-center bg-[#0a0f16] overflow-hidden">
+  <section className="relative w-full h-[60vh] bg-[#0a0f16] overflow-hidden">
     <div className="absolute inset-0 z-0">
       <div className="absolute inset-0 bg-gradient-to-br from-[#1e3a8a] to-[#0f172a]"></div>
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 mix-blend-screen"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(91,184,228,0.2),transparent_55%)]"></div>
     </div>
 
-    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-[180px] relative z-10 h-full flex flex-col justify-center">
+    <div className="max-w-[1500px] mx-auto px-6 lg:px-12 w-full pt-[220px] relative z-10">
 
 
       <div className="overflow-hidden pb-3">
@@ -30,7 +30,6 @@ const ContactHero = () => (
         transition={{ duration: 0.8, delay: 0.4 }}
         className="border-l-[3px] border-[#5bb8e4] pl-6 text-[#cbd5e1] text-[1.2rem] md:text-[1.4rem] font-light max-w-2xl leading-relaxed mt-6"
       >
-        Embark on your digital transformation journey. Our global experts are ready to accelerate your business.
       </motion.p>
     </div>
   </section>
