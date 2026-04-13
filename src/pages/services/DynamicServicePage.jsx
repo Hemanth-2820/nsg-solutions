@@ -25,7 +25,7 @@ const DynamicServicePage = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('/api/get_services.php');
+        const response = await fetch('/api/get_services.php?v=' + Date.now());
         const result = await response.json();
         
         if (result.status === 'success') {

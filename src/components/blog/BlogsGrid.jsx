@@ -59,7 +59,7 @@ const BlogsGrid = ({ activeCategory }) => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('/api/get_blogs.php');
+        const response = await fetch('/api/get_blogs.php?v=' + Date.now());
         const result = await response.json();
         if (result.status === 'success') {
           // Robust Image Normalization
