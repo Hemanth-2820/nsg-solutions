@@ -15,8 +15,9 @@ const ITServices = () => {
     if (img.startsWith('http')) return img;
     let clean = img;
     if (!clean.startsWith('/')) clean = '/' + clean;
-    return `https://new.nsgsolutions.in${clean}`;
+    return `https://nsgsolutions.in${clean}`;
   }
+
 
   useEffect(() => {
     const fetchProjects = async () => {

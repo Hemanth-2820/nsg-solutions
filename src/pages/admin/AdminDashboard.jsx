@@ -1269,7 +1269,7 @@ const AdminDashboard = () => {
 
                                             {/* Right Section: Actions */}
                                             <div className="flex flex-row lg:flex-col justify-end lg:justify-center items-center gap-4 lg:border-l lg:border-white/5 lg:pl-8">
-                                                <a href={`https://new.nsgsolutions.in/${app.resume_path}`} target="_blank" className="h-14 px-8 bg-[#007cc3] hover:bg-[#0088d8] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl flex items-center gap-3 shrink-0">
+                                                <a href={`https://nsgsolutions.in/${app.resume_path}`} target="_blank" className="h-14 px-8 bg-[#007cc3] hover:bg-[#0088d8] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl flex items-center gap-3 shrink-0">
                                                     <Download size={16} /> Download CV
                                                 </a>
                                                 <button

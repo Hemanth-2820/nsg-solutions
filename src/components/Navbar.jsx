@@ -100,7 +100,7 @@ const Navbar = () => {
             <img
               src={logonavbar}
               alt="NSG Solutions"
-              className="h-[130px] md:h-[150px] w-auto transition-transform hover:scale-105"
+              className="h-[90px] md:h-[150px] w-auto transition-transform hover:scale-105"
             />
           </Link>
 

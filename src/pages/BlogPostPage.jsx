@@ -19,7 +19,7 @@ const BlogPostPage = () => {
           let img = result.data.image;
           if (!img.startsWith('http')) {
             if (!img.startsWith('/')) img = '/' + img;
-            img = `https://new.nsgsolutions.in${img}`;
+            img = `https://nsgsolutions.in${img}`;
           }
           const processedPost = {
             ...result.data,

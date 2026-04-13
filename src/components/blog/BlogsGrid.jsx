@@ -67,7 +67,7 @@ const BlogsGrid = ({ activeCategory }) => {
             let img = blog.image;
             if (!img.startsWith('http')) {
               if (!img.startsWith('/')) img = '/' + img;
-              img = `https://new.nsgsolutions.in${img}`;
+              img = `https://nsgsolutions.in${img}`;
             }
             return { ...blog, image: img };
           });
