@@ -7,10 +7,24 @@
   RewriteCond %{HTTP_HOST} !^www\. [NC]
   RewriteRule ^(.*)$ https://www.nsgsolutions.in/$1 [L,R=301]
 
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-l
-  RewriteRule . /index.html [L]
+  # -------------------------------------------------------------
+  # [ACTIVE] OPTION A: UNDER CONSTRUCTION MODE
+  # Serves under-construction.html for all page requests,
+  # but allows static assets (images, css, js, icons) to load perfectly.
+  # -------------------------------------------------------------
+  RewriteCond %{REQUEST_URI} !/under-construction\.html$
+  RewriteCond %{REQUEST_URI} !\.(css|js|jpe?g|png|gif|svg|ico|woff2?|ttf|eot)$ [NC]
+  RewriteRule . /under-construction.html [L]
+
+  # -------------------------------------------------------------
+  # [DISABLED] OPTION B: LIVE SITE MODE
+  # Standard Single Page Application (SPA) Routing for React.
+  # TO GO LIVE: Comment out Option A above and uncomment the 4 lines below:
+  # -------------------------------------------------------------
+  # RewriteRule ^index\.html$ - [L]
+  # RewriteCond %{REQUEST_FILENAME} !-f
+  # RewriteCond %{REQUEST_FILENAME} !-d
+  # RewriteCond %{REQUEST_FILENAME} !-l
+  # RewriteRule . /index.html [L]
 </IfModule>
 

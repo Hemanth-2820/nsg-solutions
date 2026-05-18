@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSG Solutions – Under Construction</title>
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3" />
+    <link rel="icon" type="image/png" href="/favicon.png?v=3" />
+    
+    <style>
+        :root {
+            --bg-color: #0a0f16;
+            --bg-darker: #05080c;
+            --brand-blue: #007cc3;
+            --brand-blue-glow: rgba(0, 124, 195, 0.4);
+            --brand-blue-hover: #0093e6;
+            --text-primary: #ffffff;
+            --text-secondary: #8a99ad;
+            --text-muted: #4e5d72;
+            --card-bg: rgba(16, 24, 39, 0.6);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 124, 195, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(97, 0, 130, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(10, 15, 22, 1) 0%, var(--bg-darker) 100%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3rem 1.5rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient grid pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 0);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            width: 100%;
+            max-w-6xl;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            margin-bottom: 2rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+
+
+        .logo-text {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: white;
+        }
+
+        .logo-text span {
+            color: var(--brand-blue);
+        }
+
+        .badge-upgrade {
+            background: rgba(0, 124, 195, 0.1);
+            border: 1px solid rgba(0, 124, 195, 0.2);
+            color: #5bb8e4;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .badge-upgrade::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #5bb8e4;
+            border-radius: 50%;
+            animation: blink 1.5s infinite ease-in-out;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            max-width: 900px;
+            margin: 3rem 0;
+            z-index: 10;
+        }
+
+        .status-tag {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--brand-blue);
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, rgba(0, 124, 195, 0.15), transparent);
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            border-left: 3px solid var(--brand-blue);
+            display: inline-block;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 5rem;
+            }
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--brand-blue) 0%, #5bb8e4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin-bottom: 3.5rem;
+            font-weight: 300;
+        }
+
+        /* Stunning Architecture Spin Visual */
+        .visual-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .visual-ring {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ring-outer {
+            width: 200px;
+            height: 200px;
+            border: 2px dashed rgba(0, 124, 195, 0.2);
+            border-top: 2px solid var(--brand-blue);
+            border-bottom: 2px solid var(--brand-blue);
+            animation: spin 20s linear infinite;
+        }
+
+        .ring-middle {
+            width: 150px;
+            height: 150px;
+            border: 2px dashed rgba(91, 184, 228, 0.15);
+            border-left: 2px solid #5bb8e4;
+            border-right: 2px solid #5bb8e4;
+            animation: spin 12s linear infinite reverse;
+        }
+
+        .ring-inner {
+            width: 100px;
+            height: 100px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            animation: spin 6s linear infinite;
+        }
+
+        .visual-core {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, var(--brand-blue) 0%, rgba(10, 15, 22, 1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 35px var(--brand-blue-glow);
+            z-index: 2;
+        }
+
+        .ambient-logo-bg {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            filter: blur(16px);
+            opacity: 0.22;
+            z-index: 1;
+            pointer-events: none;
+            animation: pulse-ambient 4s ease-in-out infinite;
+        }
+
+        .core-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            filter: blur(0.8px);
+            opacity: 0.85;
+            z-index: 3;
+        }
+
+        /* Pillars of NSG */
+        .features-grid {
+            display: grid;
+            grid-template-cols: 1fr;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 850px;
+            margin-bottom: 4rem;
+        }
+
+        @media (min-width: 600px) {
+            .features-grid {
+                grid-template-cols: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            text-align: left;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 124, 195, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 124, 195, 0.1);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(0, 124, 195, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-blue);
+        }
+
+        .feature-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Glass Contact Box */
+        .cta-section {
+            background: linear-gradient(180deg, rgba(16, 24, 39, 0.4) 0%, rgba(5, 8, 12, 0.8) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            width: 100%;
+            max-w: 680px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .cta-title {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .cta-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 600px) {
+            .contact-info {
+                flex-direction: row;
+                gap: 2.5rem;
+            }
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            color: var(--brand-blue);
+            transform: translateY(-2px);
+        }
+
+        .contact-item svg {
+            width: 20px;
+            height: 20px;
+            color: var(--brand-blue);
+        }
+
+        footer {
+            width: 100%;
+            max-w-6xl;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 10;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            footer {
+                flex-direction: row;
+            }
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .socials {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--brand-blue);
+            color: white;
+            border-color: var(--brand-blue);
+            transform: scale(1.15) translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 124, 195, 0.4);
+        }
+
+        .social-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+        
+        .social-link.linkedin svg, 
+        .social-link.instagram svg {
+            fill: none; /* Keep stroke for LinkedIn/Instagram icons */
+        }
+
+        /* Animations */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes float-gear {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-4px) rotate(30deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes float-logo {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.85; }
+            50% { transform: translateY(-3px) rotate(5deg); opacity: 0.98; }
+            100% { transform: translateY(0px) rotate(0deg); opacity: 0.85; }
+        }
+
+        @keyframes pulse-ambient {
+            0%, 100% { opacity: 0.18; transform: scale(1); filter: blur(16px); }
+            50% { opacity: 0.28; transform: scale(1.08); filter: blur(14px); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 124, 195, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(0, 124, 195, 0.7); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo-container">
+
+            <div class="logo-text">NSG <span>Solutions</span></div>
+        </a>
+        <div class="badge-upgrade">System Update</div>
+    </header>
+
+    <main>
+        <div class="status-tag">Under Construction</div>
+        
+        <div class="visual-container">
+            <img src="favicon.png" class="ambient-logo-bg" alt="" />
+            <div class="visual-ring ring-outer"></div>
+            <div class="visual-ring ring-middle"></div>
+            <div class="visual-ring ring-inner"></div>
+            <div class="visual-core">
+                <img src="favicon.png" class="core-logo" alt="NSG Logo" />
+            </div>
+        </div>
+
+        <h1>Engineering<br><span>Digital Excellence</span></h1>
+        
+        <p class="tagline">
+            We are currently executing a core system architecture upgrade to deliver a state-of-the-art enterprise digital experience. Our live platform is coming online very soon.
+        </p>
+
+        <!-- Capabilities Pillars -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3>Enterprise Scale</h3>
+                <p>Developing hyper-scalable cloud solutions, advanced security matrices, and high-performance digital engineering platforms.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                    </svg>
+                </div>
+                <h3>AI & Automation</h3>
+                <p>Architecting intelligent automation systems, secure ML integrations, and forward-looking data environments.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                        <polyline points="2 17 12 22 22 17"/>
+                        <polyline points="2 12 12 17 22 12"/>
+                    </svg>
+                </div>
+                <h3>Creative Production</h3>
+                <p>Forging premier branding systems, ultra-responsive modern user interfaces, and engaging high-end cinema marketing campaigns.</p>
+            </div>
+        </div>
+
+        <!-- Contact glassmorphism container -->
+        <div class="cta-section">
+            <h2 class="cta-title">Need to Reach Us Immediately?</h2>
+            <p class="cta-desc">Get in touch with our operations team directly for urgent client support and business inquiries.</p>
+            
+            <div class="contact-info">
+                <a href="mailto:info@nsgsolutions.in" class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                    info@nsgsolutions.in
+                </a>
+                
+                <a href="tel:+917349525471" class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    +91 73495 25471
+                </a>
+                
+                <a href="tel:+918688009269" class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    +91 86880 09269
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p class="copyright">Copyright &copy; 2026 NSG Solutions Pvt Ltd. All Rights Reserved.</p>
+        
+        <div class="socials">
+            <a href="https://www.linkedin.com/company/nsg-solutions/" target="_blank" rel="noopener noreferrer" class="social-link linkedin" title="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                    <rect x="2" y="9" width="4" height="12"/>
+                    <circle cx="4" cy="4" r="2"/>
+                </svg>
+            </a>
+            <a href="https://www.youtube.com/@santhosh_official2" target="_blank" rel="noopener noreferrer" class="social-link" title="YouTube">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.525 3.545 12 3.545 12 3.545s-7.525 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.025 0 12 0 12s0 3.975.502 5.837a3.003 3.003 0 0 0 2.11 2.11C4.475 20.455 12 20.455 12 20.455s7.525 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.975 24 12 24 12s0-3.975-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+            </a>
+            <a href="https://www.facebook.com/people/NSG-Solutions/61575743870267/" target="_blank" rel="noopener noreferrer" class="social-link" title="Facebook">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+            </a>
+            <a href="https://www.instagram.com/nsgsolutions?utm_source=qr&igsh=MTBuN21xdW96d3VieQ%3D%3D" target="_blank" rel="noopener noreferrer" class="social-link instagram" title="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+            </a>
+        </div>
+    </footer>
+
+</body>
+</html>
